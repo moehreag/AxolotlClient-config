@@ -116,8 +116,8 @@ public class OptionsScreenBuilder extends Screen {
 			}
 
 			@Override
-			public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-				super.render(graphics, mouseX, mouseY, delta);
+			public void drawWidget(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+				super.drawWidget(graphics, mouseX, mouseY, delta);
 
 				graphics.fill(getX() - 5, getY() + 11, getX() + width, getY() + 12, -1);
 			}

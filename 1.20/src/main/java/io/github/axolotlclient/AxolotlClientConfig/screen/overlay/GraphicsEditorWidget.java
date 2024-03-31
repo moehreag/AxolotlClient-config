@@ -207,7 +207,7 @@ public class GraphicsEditorWidget extends Overlay {
 		}
 
 		@Override
-		public void render(GuiGraphics matrices, int i, int j, float f) {
+		public void drawWidget(GuiGraphics matrices, int i, int j, float f) {
 			if (isHoveredOrFocused()) {
 				DrawUtil.outlineRect(matrices, gridX - 1, gridY - 1, maxGridWidth + 2, maxGridHeight + 2, Color.SELECTOR_RED.getAsInt());
 			}

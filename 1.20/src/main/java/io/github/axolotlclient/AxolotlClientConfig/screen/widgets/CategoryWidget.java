@@ -43,8 +43,8 @@ public class CategoryWidget extends ButtonWidget implements OptionWidget {
 	}
 
 	@Override
-	public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-		super.render(graphics, mouseX, mouseY, delta);
+	public void drawWidget(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+		super.drawWidget(graphics, mouseX, mouseY, delta);
 
 		if (enabledButton != null) {
 			enabledButton.setY(getY() + 2);

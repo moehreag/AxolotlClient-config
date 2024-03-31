@@ -33,7 +33,7 @@ public class ButtonWidgetList extends ElementListWidget<ButtonWidgetList.Pair> {
 	private final OptionCategory category;
 
 	public ButtonWidgetList(MinecraftClient minecraftClient, int width, int height, int top, int bottom, int entryHeight, OptionCategory category) {
-		super(minecraftClient, width, height, top, bottom, entryHeight);
+		super(minecraftClient, width, bottom-top, top, entryHeight);
 
 		this.setRenderBackground(false);
 		this.setRenderHeader(false, 0);
@@ -71,14 +71,14 @@ public class ButtonWidgetList extends ElementListWidget<ButtonWidgetList.Pair> {
 	}
 
 	public void renderTooltips(GuiGraphics graphics, int mouseX, int mouseY) {
-		graphics.enableScissor(0, top, this.width, this.bottom);
+		graphics.enableScissor(0, getY(), this.width, this.getYEnd());
 		entries.forEach(pair -> pair.renderTooltips(graphics, mouseX, mouseY));
 		graphics.disableScissor();
 	}
 
 	@Override
 	protected void renderList(GuiGraphics graphics, int x, int y, float delta) {
-		graphics.enableScissor(0, top, this.width, this.bottom);
+		graphics.enableScissor(0, getY(), this.width, this.getYEnd());
 		super.renderList(graphics, x, y, delta);
 		graphics.disableScissor();
 	}
@@ -142,8 +142,8 @@ public class ButtonWidgetList extends ElementListWidget<ButtonWidgetList.Pair> {
 			addEntry(p);
 		}
 
-		if (getScrollAmount() > Math.max(0, this.getMaxPosition() - (bottom - this.top - 4))) {
-			setScrollAmount(Math.max(0, this.getMaxPosition() - (this.bottom - this.top - 4)));
+		if (getScrollAmount() > Math.max(0, this.getMaxPosition() - (getHeight() - 4))) {
+			setScrollAmount(Math.max(0, this.getMaxPosition() - (getHeight() - 4)));
 		}
 	}
 
@@ -241,10 +241,10 @@ public class ButtonWidgetList extends ElementListWidget<ButtonWidgetList.Pair> {
 
 		protected void renderTooltip(GuiGraphics graphics, Tooltippable option, int x, int y) {
 			if (MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder &&
-				option.getTooltip() != null && y < bottom && y > top) {
+				option.getTooltip() != null && y < getYEnd() && y > getY()) {
 				graphics.disableScissor();
 				((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).renderTooltip(graphics, option, x, y);
-				graphics.enableScissor(0, top, width, bottom);
+				graphics.enableScissor(0, getY(), width, getYEnd());
 			}
 		}
 

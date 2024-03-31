@@ -52,6 +52,12 @@ public class Overlay extends Screen {
 		super.render(graphics, mouseX, mouseY, delta);
 	}
 
+
+	@Override
+	public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+
+	}
+
 	protected void postRender(GuiGraphics graphics) {
 		graphics.getMatrices().pop();
 	}

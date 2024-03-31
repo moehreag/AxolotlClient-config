@@ -32,7 +32,7 @@ public class BooleanWidget extends ButtonWidget implements OptionWidget {
 	}
 
 	@Override
-	public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+	public void drawWidget(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
 
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		this.hovered = isMouseOver(mouseX, mouseY) || isFocused();

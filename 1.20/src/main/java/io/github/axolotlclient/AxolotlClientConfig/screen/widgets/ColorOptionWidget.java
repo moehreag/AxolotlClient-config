@@ -63,7 +63,7 @@ public class ColorOptionWidget extends ButtonWidget implements OptionWidget, Par
 			}
 		}, DEFAULT_NARRATION) {
 			@Override
-			public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+			public void drawWidget(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
 				graphics.fill(getX(), getY(), getX() + getWidth(), getY() + getHeight(), option.get().getAsInt());
 				DrawUtil.outlineRect(graphics, getX(), getY(), getWidth(), getHeight(), isFocused() ? -1 : -6250336);
 
@@ -75,7 +75,7 @@ public class ColorOptionWidget extends ButtonWidget implements OptionWidget, Par
 	}
 
 	@Override
-	public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+	public void drawWidget(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
 
 		textField.setY(getY());
 		textField.setX(getX());

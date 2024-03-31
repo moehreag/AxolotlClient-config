@@ -298,10 +298,10 @@ public class ColorSelectionWidget extends Overlay {
 		}
 
 		@Override
-		public void render(GuiGraphics graphics, int i, int j, float f) {
+		public void drawWidget(GuiGraphics graphics, int i, int j, float f) {
 			graphics.getMatrices().push();
 			graphics.getMatrices().translate(0, 0, 5);
-			super.render(graphics, i, j, f);
+			super.drawWidget(graphics, i, j, f);
 			graphics.getMatrices().pop();
 		}
 	}
