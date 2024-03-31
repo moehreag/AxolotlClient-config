@@ -136,7 +136,7 @@ public class KeyBindWidget extends ButtonWidget implements OptionWidget, ParentE
 	}
 
 	@Override
-	public void render(GuiGraphics graphics, int mouseX, int mouseY, float tickDelta) {
+	public void drawWidget(GuiGraphics graphics, int mouseX, int mouseY, float tickDelta) {
 		if (resetButton.isHoveredOrFocused() && bindButton.isHoveredOrFocused()) {
 			resetButton.setFocused(false);
 		}

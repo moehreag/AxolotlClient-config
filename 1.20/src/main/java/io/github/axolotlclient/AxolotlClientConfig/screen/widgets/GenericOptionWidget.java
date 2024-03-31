@@ -19,10 +19,10 @@ public class GenericOptionWidget extends ButtonWidget implements OptionWidget {
 
 
 	@Override
-	public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+	public void drawWidget(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
 		hovered = isMouseOver(mouseX, mouseY) || isFocused();
 		if (visible) {
-			drawWidget(graphics, mouseX, mouseY, delta);
+			super.drawWidget(graphics, mouseX, mouseY, delta);
 		}
 	}
 
