@@ -94,6 +94,7 @@ public class Example implements ClientModInitializer {
 		example.add(new BooleanOption("option", false));
 		example.add(new BooleanOption("other option", true));
 		example.add(new GraphicsOption("graphics", 40, 40));
+		example.add(new EnumOption<>("enum", ExampleEnum.class));
 
 		AxolotlClientConfig.getInstance().register(new JsonConfigManager(QuiltLoader.getConfigDir().resolve(modid + ".json"), example));
 
@@ -116,6 +117,12 @@ public class Example implements ClientModInitializer {
 			AxolotlClientConfig.getInstance().getConfigManager(modid).load();
 			ConfigUI.getInstance().setStyle(option.get());
 		});
+	}
+
+	private enum ExampleEnum {
+		EXAMPLE1,
+		EXAMPLE2,
+		EXAMPLE3
 	}
 
 	public Function<Screen, ? extends Screen> getConfigScreenFactory(String name) {
