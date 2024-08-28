@@ -30,7 +30,7 @@ import io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets.Vanil
 import lombok.Getter;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.button.ButtonWidget;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.CommonTexts;
 import net.minecraft.text.Text;
 
@@ -49,9 +49,9 @@ public class VanillaConfigScreen extends Screen implements ConfigScreen {
 
 	@Override
 	protected void init() {
-		addDrawableSelectableElement(ButtonWidget.builder(CommonTexts.BACK, w -> closeScreen())
+		addDrawableChild(ButtonWidget.builder(CommonTexts.BACK, w -> closeScreen())
 			.position(width / 2 - 75, height - 45).build());
-		addDrawableSelectableElement(new VanillaEntryListWidget(configManager, category, width, height, 45, height - 55, 25));
+		addDrawableChild(new VanillaEntryListWidget(configManager, category, width, height, 45, height - 55, 25));
 	}
 
 	@Override

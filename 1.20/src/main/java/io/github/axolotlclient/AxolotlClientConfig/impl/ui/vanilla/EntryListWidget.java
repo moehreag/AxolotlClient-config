@@ -35,7 +35,7 @@ import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.gui.widget.list.ElementListWidget;
+import net.minecraft.client.gui.widget.ElementListWidget;
 import org.jetbrains.annotations.Nullable;
 
 public class EntryListWidget extends ElementListWidget<EntryListWidget.Entry> {

@@ -25,7 +25,7 @@ package io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets;
 import io.github.axolotlclient.AxolotlClientConfig.impl.options.GraphicsOption;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.screen.GraphicsEditorScreen;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.widget.button.ButtonWidget;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 
 public class GraphicsWidget extends ButtonWidget {

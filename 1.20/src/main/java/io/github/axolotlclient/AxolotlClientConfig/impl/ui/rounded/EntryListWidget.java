@@ -34,11 +34,11 @@ import io.github.axolotlclient.AxolotlClientConfig.api.util.Colors;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.DrawingUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.*;
+import net.minecraft.client.gui.screen.NavigationDirection;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ScreenArea;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.screen.narration.NarrationPart;
-import net.minecraft.client.gui.screen.navigation.NavigationDirection;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -374,8 +374,8 @@ public abstract class EntryListWidget<E extends EntryListWidget.Entry<E>> extend
 	}
 
 	@Override
-	public boolean mouseScrolled(double mouseX, double mouseY, double amount, double d) {
-		this.setScrollAmount(this.getScrollAmount() - d * (double) this.itemHeight / 2.0);
+	public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+		this.setScrollAmount(this.getScrollAmount() - amount * (double) this.itemHeight / 2.0);
 		return true;
 	}
 

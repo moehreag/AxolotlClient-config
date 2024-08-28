@@ -39,7 +39,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.gui.widget.button.ButtonWidget;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.CommonTexts;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -66,7 +66,7 @@ public class ColorSelectionScreen extends Screen {
 	@Override
 	public void init() {
 		super.init();
-		addDrawableSelectableElement(ButtonWidget.builder(CommonTexts.BACK, buttonWidget -> closeScreen())
+		addDrawableChild(ButtonWidget.builder(CommonTexts.BACK, buttonWidget -> closeScreen())
 			.position(width / 2 - 75, height - 40).build());
 
 		chroma = new BooleanOption("option.chroma", option.getOriginal().isChroma(), val -> {
@@ -91,13 +91,13 @@ public class ColorSelectionScreen extends Screen {
 		buttonsX = (int) Math.max(width / 2f + 25, selectorX + selectorRadius * 2 + 10);
 
 		int y = 120;
-		addDrawableSelectableElement(ConfigStyles.createWidget(buttonsX, y, 150, 20, chroma));
+		addDrawableChild(ConfigStyles.createWidget(buttonsX, y, 150, 20, chroma));
 		y += 45;
 		if (height > 300) {
-			addDrawableSelectableElement(ConfigStyles.createWidget(buttonsX, y, 150, 20, speed));
+			addDrawableChild(ConfigStyles.createWidget(buttonsX, y, 150, 20, speed));
 			y += 45;
 		}
-		addDrawableSelectableElement(ConfigStyles.createWidget(buttonsX, y, 150, 20, alpha));
+		addDrawableChild(ConfigStyles.createWidget(buttonsX, y, 150, 20, alpha));
 		y += 45;
 		if (this.height - 250 > 0) {
 			y -= 20;
@@ -117,7 +117,7 @@ public class ColorSelectionScreen extends Screen {
 				}
 			});
 			text.setText(option.get().toString().split(";")[0]);
-			addDrawableSelectableElement(text);
+			addDrawableChild(text);
 		}
 	}
 

@@ -24,7 +24,7 @@ package io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets;
 
 import io.github.axolotlclient.AxolotlClientConfig.impl.options.StringArrayOption;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.widget.button.ButtonWidget;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 
 public class StringArrayWidget extends ButtonWidget {

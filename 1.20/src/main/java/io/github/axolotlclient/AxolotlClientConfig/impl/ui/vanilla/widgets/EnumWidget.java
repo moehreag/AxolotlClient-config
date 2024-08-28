@@ -23,7 +23,7 @@
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets;
 
 import io.github.axolotlclient.AxolotlClientConfig.impl.options.EnumOption;
-import net.minecraft.client.gui.widget.button.ButtonWidget;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 
 public class EnumWidget<T extends Enum<T>> extends ButtonWidget {

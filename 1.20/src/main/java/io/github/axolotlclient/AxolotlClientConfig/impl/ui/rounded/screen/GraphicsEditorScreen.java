@@ -38,7 +38,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.PressableWidget;
-import net.minecraft.client.gui.widget.button.ButtonWidget;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 import org.lwjgl.nanovg.NanoVG;
 
@@ -72,7 +72,7 @@ public class GraphicsEditorScreen extends Screen implements DrawingUtil {
 
 	@Override
 	protected void init() {
-		addDrawableSelectableElement(new RoundedButtonWidget(width / 2 - 75, height - 40, Text.translatable("gui.back"),
+		addDrawableChild(new RoundedButtonWidget(width / 2 - 75, height - 40, Text.translatable("gui.back"),
 			button -> MinecraftClient.getInstance().setScreen(parent)));
 
 
@@ -91,12 +91,12 @@ public class GraphicsEditorScreen extends Screen implements DrawingUtil {
 		maxGridWidth = Math.min(maxGridWidth, gridColumns * pixelSize);
 		maxGridHeight = Math.min(maxGridHeight, gridRows * pixelSize);
 
-		addDrawableSelectableElement(ConfigStyles.createWidget(gridX + maxGridWidth + 10, gridY + 35, 100, 20, colorOption));
+		addDrawableChild(ConfigStyles.createWidget(gridX + maxGridWidth + 10, gridY + 35, 100, 20, colorOption));
 		ButtonWidget clear = new RoundedButtonWidget(gridX + maxGridWidth + 10, gridY + 60,
 			Text.translatable("clear_graphics"), buttonWidget -> clearGraphics());
 		clear.setWidth(100);
-		addDrawableSelectableElement(clear);
-		addDrawableSelectableElement(new ElementSelectable(gridX, gridY, maxGridWidth, maxGridHeight));
+		addDrawableChild(clear);
+		addDrawableChild(new ElementSelectable(gridX, gridY, maxGridWidth, maxGridHeight));
 	}
 
 	@Override
@@ -148,8 +148,8 @@ public class GraphicsEditorScreen extends Screen implements DrawingUtil {
 	}
 
 	@Override
-	public void renderBackground(GuiGraphics graphics, int i, int j, float f) {
-		super.renderBackground(graphics, i, j, f);
+	public void renderBackground(GuiGraphics graphics) {
+		super.renderBackground(graphics);
 		fillRoundedRect(NVGHolder.getContext(), 15, 15, width - 30, height - 30, Colors.background(), 12);
 	}
 

@@ -71,7 +71,7 @@ public class ColorSelectionScreen extends Screen implements DrawingUtil {
 
 	@Override
 	public void init() {
-		addDrawableSelectableElement(new RoundedButtonWidget(width / 2 - 75, height - 40, Text.translatable("gui.back"),
+		addDrawableChild(new RoundedButtonWidget(width / 2 - 75, height - 40, Text.translatable("gui.back"),
 			button -> MinecraftClient.getInstance().setScreen(parent)));
 
 		chroma = new BooleanOption("option.chroma", option.getOriginal().isChroma(), val -> {
@@ -96,13 +96,13 @@ public class ColorSelectionScreen extends Screen implements DrawingUtil {
 		buttonsX = (int) Math.max(width / 2f + 25, selectorX + selectorRadius * 2 + 10);
 
 		int y = 120;
-		addDrawableSelectableElement(ConfigStyles.createWidget(buttonsX, y, 150, 20, chroma));
+		addDrawableChild(ConfigStyles.createWidget(buttonsX, y, 150, 20, chroma));
 		y += 45;
 		if (height > 300) {
-			addDrawableSelectableElement(ConfigStyles.createWidget(buttonsX, y, 150, 20, speed));
+			addDrawableChild(ConfigStyles.createWidget(buttonsX, y, 150, 20, speed));
 			y += 45;
 		}
-		addDrawableSelectableElement(ConfigStyles.createWidget(buttonsX, y, 150, 20, alpha));
+		addDrawableChild(ConfigStyles.createWidget(buttonsX, y, 150, 20, alpha));
 		y += 45;
 		if (this.height - 250 > 0) {
 			y -= 20;
@@ -122,7 +122,7 @@ public class ColorSelectionScreen extends Screen implements DrawingUtil {
 				}
 			});
 			text.setText(option.get().toString().split(";")[0]);
-			addDrawableSelectableElement(text);
+			addDrawableChild(text);
 		}
 	}
 
@@ -167,8 +167,8 @@ public class ColorSelectionScreen extends Screen implements DrawingUtil {
 	}
 
 	@Override
-	public void renderBackground(GuiGraphics graphics, int i, int j, float f) {
-		super.renderBackground(graphics, i, j, f);
+	public void renderBackground(GuiGraphics graphics) {
+		super.renderBackground(graphics);
 		fillRoundedRect(NVGHolder.getContext(), 15, 15, width - 30, height - 30, Colors.background(), 12);
 	}
 

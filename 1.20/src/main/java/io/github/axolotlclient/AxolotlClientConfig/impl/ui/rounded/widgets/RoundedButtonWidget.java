@@ -28,7 +28,7 @@ import io.github.axolotlclient.AxolotlClientConfig.impl.ui.DrawingUtil;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.NVGFont;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.NVGHolder;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.widget.button.ButtonWidget;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;

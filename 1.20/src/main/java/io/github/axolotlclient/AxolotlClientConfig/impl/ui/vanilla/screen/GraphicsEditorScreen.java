@@ -34,7 +34,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.PressableWidget;
-import net.minecraft.client.gui.widget.button.ButtonWidget;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.CommonTexts;
 import net.minecraft.text.Text;
 
@@ -80,15 +80,15 @@ public class GraphicsEditorScreen extends Screen implements DrawingUtil {
 		maxGridWidth = Math.min(maxGridWidth, gridColumns * pixelSize);
 		maxGridHeight = Math.min(maxGridHeight, gridRows * pixelSize);
 
-		addDrawableSelectableElement(new ElementSelectable(gridX, gridY, maxGridWidth, maxGridHeight));
+		addDrawableChild(new ElementSelectable(gridX, gridY, maxGridWidth, maxGridHeight));
 
-		addDrawableSelectableElement(ButtonWidget.builder(Text.translatable("clear_graphics"),
+		addDrawableChild(ButtonWidget.builder(Text.translatable("clear_graphics"),
 				buttonWidget -> clearGraphics())
 			.width(100).position(gridX + maxGridWidth + 10, gridY + 60).build());
 
-		addDrawableSelectableElement(ConfigStyles.createWidget(gridX + maxGridWidth + 10, gridY + 35, 100, 20, colorOption));
+		addDrawableChild(ConfigStyles.createWidget(gridX + maxGridWidth + 10, gridY + 35, 100, 20, colorOption));
 
-		addDrawableSelectableElement(ButtonWidget.builder(CommonTexts.BACK, buttonWidget -> closeScreen())
+		addDrawableChild(ButtonWidget.builder(CommonTexts.BACK, buttonWidget -> closeScreen())
 			.position(width / 2 - 75, height - 30).build());
 	}
 
