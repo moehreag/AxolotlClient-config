@@ -123,6 +123,7 @@ public class ColorSelectionScreen extends Screen {
 
 	@Override
 	public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+		renderBackground(graphics);
 		super.render(graphics, mouseX, mouseY, delta);
 		graphics.drawCenteredShadowedText(client.textRenderer, title, width / 2, 20, Colors.text().toInt());
 

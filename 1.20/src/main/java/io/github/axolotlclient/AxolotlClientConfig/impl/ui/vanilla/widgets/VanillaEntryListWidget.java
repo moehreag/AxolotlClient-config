@@ -40,7 +40,8 @@ public class VanillaEntryListWidget extends EntryListWidget {
 	public VanillaEntryListWidget(ConfigManager manager, OptionCategory category, int screenWidth, int screenHeight, int top, int bottom, int entryHeight) {
 		super(manager, category, screenWidth, screenHeight, top, bottom, entryHeight);
 		setRenderBackground(false);
-		setRenderHeader(false, headerHeight);
+		setRenderHorizontalShadows(false);
+		setRenderHeader(false, 0);
 	}
 
 	protected void addOptions(ConfigManager manager, Collection<Option<?>> options) {

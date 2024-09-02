@@ -50,10 +50,10 @@ dependencies {
 
 	implementation include(project(":common"))
 
-	implementation include("org.lwjgl:lwjgl-nanovg:3.2.2")
-	runtimeOnly include('org.lwjgl:lwjgl-nanovg:3.2.2:natives-linux')
-	runtimeOnly include('org.lwjgl:lwjgl-nanovg:3.2.2:natives-windows')
-	runtimeOnly include('org.lwjgl:lwjgl-nanovg:3.2.2:natives-macos')
+	implementation include("org.lwjgl:lwjgl-nanovg:3.3.2")
+	runtimeOnly include('org.lwjgl:lwjgl-nanovg:3.3.2:natives-linux')
+	runtimeOnly include('org.lwjgl:lwjgl-nanovg:3.3.2:natives-windows')
+	runtimeOnly include('org.lwjgl:lwjgl-nanovg:3.3.2:natives-macos')
 }
 
 processResources {

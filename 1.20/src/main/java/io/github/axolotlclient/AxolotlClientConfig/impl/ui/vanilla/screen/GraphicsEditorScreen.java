@@ -94,6 +94,7 @@ public class GraphicsEditorScreen extends Screen implements DrawingUtil {
 
 	@Override
 	public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+		renderBackground(graphics);
 		super.render(graphics, mouseX, mouseY, delta);
 
 		graphics.drawCenteredShadowedText(client.textRenderer, this.title, width / 2, 20, -1);

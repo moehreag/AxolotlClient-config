@@ -49,13 +49,14 @@ public class VanillaConfigScreen extends Screen implements ConfigScreen {
 
 	@Override
 	protected void init() {
+		addDrawableChild(new VanillaEntryListWidget(configManager, category, width, height, 45, height - 55, 25));
 		addDrawableChild(ButtonWidget.builder(CommonTexts.BACK, w -> closeScreen())
 			.position(width / 2 - 75, height - 45).build());
-		addDrawableChild(new VanillaEntryListWidget(configManager, category, width, height, 45, height - 55, 25));
 	}
 
 	@Override
 	public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+		renderBackground(graphics);
 		super.render(graphics, mouseX, mouseY, delta);
 
 		graphics.drawCenteredShadowedText(client.textRenderer, getTitle(), width / 2, 25, -1);
