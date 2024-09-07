@@ -36,6 +36,7 @@ import io.github.axolotlclient.AxolotlClientConfig.impl.ui.DrawingUtil;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.NVGMC;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.Updatable;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.NVGHolder;
+import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.NVGUtil;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets.RoundedButtonWidget;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets.TextFieldWidget;
 import io.github.axolotlclient.AxolotlClientConfig.impl.util.ConfigStyles;
@@ -128,7 +129,8 @@ public class ColorSelectionScreen extends Screen implements DrawingUtil {
 
 	@Override
 	public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-		NVGMC.wrap(ctx -> {
+		renderBackground(graphics);
+		NVGUtil.wrap(ctx -> {
 			NVGHolder.setContext(ctx);
 			super.render(graphics, mouseX, mouseY, delta);
 

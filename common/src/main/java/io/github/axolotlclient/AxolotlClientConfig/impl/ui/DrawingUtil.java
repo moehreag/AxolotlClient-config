@@ -154,10 +154,10 @@ public interface DrawingUtil {
 		for (String s : tooltipText) {
 			maxWidth = Math.max(font.getWidth(s), maxWidth);
 		}
-		if (maxWidth > screenWidth - x) {
+		if (maxWidth > screenWidth - x-4) {
 			x = (int) (screenWidth - maxWidth-4);
 		}
-		if (height > screenHeight - y) {
+		if (height > screenHeight - y-5) {
 			y = (int) (screenHeight-height-5);
 		}
 
