@@ -99,12 +99,12 @@ public class EntryListWidget extends ElementListWidget<EntryListWidget.Entry> {
 
 	@Override
 	public int getRowWidth() {
-		return 400;
+		return 308;
 	}
 
 	@Override
 	protected int getScrollbarPositionX() {
-		return super.getScrollbarPositionX() + 38;
+		return super.getScrollbarPositionX()-2;
 	}
 
 	protected static class Entry extends ElementListWidget.Entry<Entry> {

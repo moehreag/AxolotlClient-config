@@ -32,7 +32,6 @@ import io.github.axolotlclient.AxolotlClientConfig.api.util.Colors;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.ClickableWidget;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.ButtonListWidget;
 import io.github.axolotlclient.AxolotlClientConfig.impl.util.DrawUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.resource.language.I18n;
 import org.jetbrains.annotations.Nullable;
 
@@ -74,7 +73,7 @@ public class VanillaButtonListWidget extends ButtonListWidget {
 
 		public VanillaOptionEntry(ClickableWidget widget, Option<?> option) {
 			super(ImmutableList.of(widget,
-				new ResetButtonWidget(widget.getX() + widget.getWidth() - 40, 0, 40, widget.getHeight(), option)));
+				new ResetButtonWidget<>(widget.getX() + widget.getWidth() - 40, 0, 40, widget.getHeight(), option)));
 			widget.setWidth(widget.getWidth() - 42);
 			this.option = option;
 		}
