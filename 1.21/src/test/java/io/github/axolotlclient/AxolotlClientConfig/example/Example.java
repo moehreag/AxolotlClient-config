@@ -33,13 +33,12 @@ import io.github.axolotlclient.AxolotlClientConfig.api.util.Colors;
 import io.github.axolotlclient.AxolotlClientConfig.impl.managers.JsonConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.impl.options.*;
 import lombok.Getter;
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.KeyBind;
-import org.quiltmc.loader.api.ModContainer;
-import org.quiltmc.loader.api.QuiltLoader;
-import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
-import org.quiltmc.qsl.lifecycle.api.client.event.ClientTickEvents;
 
 public class Example implements ClientModInitializer {
 
@@ -47,7 +46,7 @@ public class Example implements ClientModInitializer {
 	private static Example Instance;
 
 	@Override
-	public void onInitializeClient(ModContainer mod) {
+	public void onInitializeClient() {
 		Instance = this;
 		final String modid = "axolotlclientconfig-test";
 
@@ -96,11 +95,11 @@ public class Example implements ClientModInitializer {
 		example.add(new GraphicsOption("graphics", 40, 40));
 		example.add(new EnumOption<>("enum", ExampleEnum.class));
 
-		AxolotlClientConfig.getInstance().register(new JsonConfigManager(QuiltLoader.getConfigDir().resolve(modid + ".json"), example));
+		AxolotlClientConfig.getInstance().register(new JsonConfigManager(FabricLoader.getInstance().getConfigDir().resolve(modid + ".json"), example));
 
 		KeyBind bind = new KeyBind(modid, InputUtil.KEY_O_CODE, modid);
 
-		ClientTickEvents.END.register(client -> {
+		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			if (bind.wasPressed()) {
 				client.setScreen(getConfigScreenFactory(modid).apply(client.currentScreen));
 			}

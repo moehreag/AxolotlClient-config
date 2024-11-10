@@ -27,22 +27,21 @@ import java.io.IOException;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.WindowPropertiesProvider;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.ConfigUIImpl;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.NVGMC;
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
-import org.quiltmc.loader.api.ModContainer;
-import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
-import org.quiltmc.qsl.lifecycle.api.client.event.ClientTickEvents;
-import org.quiltmc.qsl.resource.loader.api.ResourceLoader;
-import org.quiltmc.qsl.resource.loader.api.reloader.SimpleSynchronousResourceReloader;
 
 public class AxolotlClientConfigMod implements ClientModInitializer {
 
 	@Override
-	public void onInitializeClient(ModContainer mod) {
-		ClientTickEvents.END.register(client -> AxolotlClientConfigImpl.getInstance().runTick());
+	public void onInitializeClient() {
+		ClientTickEvents.END_CLIENT_TICK.register(client -> AxolotlClientConfigImpl.getInstance().runTick());
 
 		NVGMC.setWindowPropertiesProvider(new WindowPropertiesProvider() {
 			@Override
@@ -61,9 +60,9 @@ public class AxolotlClientConfigMod implements ClientModInitializer {
 			}
 		});
 
-		ResourceLoader.get(ResourceType.CLIENT_RESOURCES).registerReloader(new SimpleSynchronousResourceReloader() {
+		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
 			@Override
-			public @NotNull Identifier getQuiltId() {
+			public @NotNull Identifier getFabricId() {
 				return new Identifier("axolotlclientconfig", "resource_listener");
 			}
 

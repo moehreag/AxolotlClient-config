@@ -5,8 +5,8 @@ plugins {
 group 'io.github.axolotlclient.AxolotlClient-config'
 archivesBaseName = "AxolotlClientConfig-common"
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 repositories {
 	mavenCentral()

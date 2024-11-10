@@ -1,14 +1,14 @@
 plugins {
 	id 'java'
-	id "org.quiltmc.loom"
+	id "fabric-loom"
 }
 
 group = maven_group
 version = "${project.version}+1.16"
 archivesBaseName = "AxolotlClient-config"
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 repositories {
 	maven {
@@ -40,7 +40,7 @@ dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_cts8}"
 	mappings "net.fabricmc:yarn:${project.mappings_cts8}:v2"
 
-	modImplementation "org.quiltmc:quilt-loader:${project.quilt_loader}"
+	modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader}"
 
 	modApi(fabricApi.module("fabric-resource-loader-v0", project.fabric_cts8))
 	modApi(fabricApi.module("fabric-key-binding-api-v1", project.fabric_cts8))
