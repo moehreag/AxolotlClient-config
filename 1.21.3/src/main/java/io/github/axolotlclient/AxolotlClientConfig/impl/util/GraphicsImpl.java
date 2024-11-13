@@ -22,9 +22,6 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.util;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -92,27 +89,11 @@ public class GraphicsImpl implements Graphics {
 
 	@Override
 	public byte[] getPixelData() {
-		BufferedImage image = writeAwt(data);
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try {
-			ImageIO.write(image, "png", baos);
-			return baos.toByteArray();
+			return DrawUtil.writeToByteArray(write(data));
 		} catch (IOException ignored) {
 		}
 		return new byte[0];
-	}
-
-	protected BufferedImage writeAwt(int[][] data) {
-		AtomicInteger width = new AtomicInteger();
-		Arrays.stream(data).forEach(arr -> width.set(Math.max(width.get(), arr.length)));
-		int height = data.length;
-		BufferedImage image = new BufferedImage(width.get(), height, BufferedImage.TYPE_INT_ARGB);
-		for (int x = 0; x < width.get(); x++) {
-			for (int y = 0; y < height; y++) {
-				image.setRGB(x, y, data[y][x]);
-			}
-		}
-		return image;
 	}
 
 	@Override

@@ -22,6 +22,7 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.util;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -29,9 +30,11 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.Arrays;
 
+import com.mojang.blaze3d.texture.NativeImage;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.Option;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Color;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Rectangle;
+import io.github.axolotlclient.AxolotlClientConfig.impl.mixin.NativeImageInvoker;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.DrawingUtil;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.NVGFont;
 import net.minecraft.client.MinecraftClient;
@@ -154,7 +157,7 @@ public class DrawUtil implements DrawingUtil {
 		if (!text[0].isEmpty() || text.length > 1) {
 			TextRenderer renderer = MinecraftClient.getInstance().textRenderer;
 			graphics.method_51434(renderer,
-				Arrays.stream(text).map(Text::of).toList(), x-2, y+12+3+10);
+				Arrays.stream(text).map(Text::of).toList(), x - 2, y + 12 + 3 + 10);
 		}
 	}
 
@@ -167,6 +170,15 @@ public class DrawUtil implements DrawingUtil {
 		if (!text[0].isEmpty() || text.length > 1) {
 			Screen screen = MinecraftClient.getInstance().currentScreen;
 			INSTANCE.drawTooltip(ctx, font, text, x, y, screen.width, screen.height);
+		}
+	}
+
+	public static byte[] writeToByteArray(NativeImage image) throws IOException {
+		try (var out = new ByteArrayOutputStream(); var channel = Channels.newChannel(out)) {
+			// javac is drunk
+			@SuppressWarnings("DataFlowIssue") NativeImageInvoker writer = (NativeImageInvoker)(Object) image;
+			writer.invokeWrite(channel);
+			return out.toByteArray();
 		}
 	}
 }
