@@ -22,12 +22,6 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded;
 
-import java.util.AbstractList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.function.Predicate;
-
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Colors;
@@ -45,6 +39,12 @@ import net.minecraft.util.ArgbHelper;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.AbstractList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
 
 @SuppressWarnings({"deprecated", "unchecked", "rawtypes"})
 public abstract class EntryListWidget<E extends EntryListWidget.Entry<E>> extends AbstractParentElement implements Drawable, Selectable, DrawingUtil {
@@ -302,41 +302,36 @@ public abstract class EntryListWidget<E extends EntryListWidget.Entry<E>> extend
 		return this.width / 2 + 124;
 	}
 
-	protected boolean method_53812(int i) {
-		return i == 0;
-	}
 
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
-		if (!this.method_53812(button)) {
+
+		this.updateScrollingState(mouseX, mouseY, button);
+		if (!this.isMouseOver(mouseX, mouseY)) {
 			return false;
 		} else {
-			this.updateScrollingState(mouseX, mouseY, button);
-			if (!this.isMouseOver(mouseX, mouseY)) {
-				return false;
-			} else {
-				E entry = this.getEntryAtPosition(mouseX, mouseY);
-				if (entry != null) {
-					if (entry.mouseClicked(mouseX, mouseY, button)) {
-						E entry2 = this.getFocused();
-						if (entry2 != entry && entry2 instanceof ParentElement parentElement) {
-							parentElement.setFocusedChild(null);
-						}
-
-						this.setFocusedChild(entry);
-						this.setDragging(true);
-						return true;
-					} else {
-						return this.scrolling;
+			E entry = this.getEntryAtPosition(mouseX, mouseY);
+			if (entry != null) {
+				if (entry.mouseClicked(mouseX, mouseY, button)) {
+					E entry2 = this.getFocused();
+					if (entry2 != entry && entry2 instanceof ParentElement parentElement) {
+						parentElement.setFocusedChild(null);
 					}
-				} else {
-					this.clickedHeader(
-						(int) (mouseX - (double) (this.left + this.width / 2 - this.getRowWidth() / 2)), (int) (mouseY - (double) this.top) + (int) this.getScrollAmount() - 4
-					);
+
+					this.setFocusedChild(entry);
+					this.setDragging(true);
 					return true;
+				} else {
+					return this.scrolling;
 				}
+			} else {
+				this.clickedHeader(
+					(int) (mouseX - (double) (this.left + this.width / 2 - this.getRowWidth() / 2)), (int) (mouseY - (double) this.top) + (int) this.getScrollAmount() - 4
+				);
+				return true;
 			}
 		}
+
 	}
 
 	@Override

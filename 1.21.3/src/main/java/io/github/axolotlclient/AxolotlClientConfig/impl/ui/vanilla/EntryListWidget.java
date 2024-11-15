@@ -89,6 +89,11 @@ public class EntryListWidget extends ElementListWidget<EntryListWidget.Entry> {
 		return ConfigStyles.createWidget(x, 0, WIDGET_WIDTH, itemHeight - 5, id);
 	}
 
+	@Override
+	protected boolean isZero(int index) {
+		return true;
+	}
+
 	protected Entry createOptionEntry(ClickableWidget widget, Option<?> option, @Nullable ClickableWidget other, @Nullable Option<?> otherOption) {
 		return Entry.create(widget, other);
 	}

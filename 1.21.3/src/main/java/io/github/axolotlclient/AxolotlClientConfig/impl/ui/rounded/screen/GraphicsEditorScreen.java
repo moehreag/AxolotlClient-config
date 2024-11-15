@@ -176,7 +176,6 @@ public class GraphicsEditorScreen extends Screen implements DrawingUtil {
 	public boolean mouseReleased(double mouseX, double mouseY, int button) {
 		if (mouseDown) {
 			mouseDown = false;
-			//option.set(pixels);
 			return true;
 		}
 		return false;
