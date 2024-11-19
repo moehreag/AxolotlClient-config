@@ -27,7 +27,6 @@ import io.github.axolotlclient.AxolotlClientConfig.api.manager.ConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.OptionCategory;
 import io.github.axolotlclient.AxolotlClientConfig.api.ui.screen.ConfigScreen;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets.VanillaEntryListWidget;
-import lombok.Getter;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.ButtonWidget;
@@ -36,7 +35,6 @@ import net.minecraft.text.Text;
 
 public class VanillaConfigScreen extends Screen implements ConfigScreen {
 	private final Screen parent;
-	@Getter
 	private final ConfigManager configManager;
 	private final OptionCategory category;
 
@@ -68,6 +66,8 @@ public class VanillaConfigScreen extends Screen implements ConfigScreen {
 
 	@Override
 	public void removed() {
-		configManager.save();
+		if (configManager != null) {
+			configManager.save();
+		}
 	}
 }

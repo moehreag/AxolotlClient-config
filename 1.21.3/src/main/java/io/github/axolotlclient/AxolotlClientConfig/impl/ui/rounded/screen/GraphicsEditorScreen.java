@@ -29,8 +29,8 @@ import io.github.axolotlclient.AxolotlClientConfig.api.util.Graphics;
 import io.github.axolotlclient.AxolotlClientConfig.impl.options.ColorOption;
 import io.github.axolotlclient.AxolotlClientConfig.impl.options.GraphicsOption;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.DrawingUtil;
-import io.github.axolotlclient.AxolotlClientConfig.impl.ui.NVGMC;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.NVGHolder;
+import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.NVGUtil;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets.RoundedButtonWidget;
 import io.github.axolotlclient.AxolotlClientConfig.impl.util.ConfigStyles;
 import net.minecraft.client.MinecraftClient;
@@ -79,8 +79,8 @@ public class GraphicsEditorScreen extends Screen implements DrawingUtil {
 		gridX = 110;
 		gridY = 40;
 
-		maxGridWidth = width - 120;
-		maxGridHeight = height - gridY - 42;
+		maxGridWidth = width - 100;
+		maxGridHeight = height - gridY - 45;
 
 		gridColumns = graphics.getWidth();
 		gridRows = graphics.getHeight();
@@ -101,7 +101,7 @@ public class GraphicsEditorScreen extends Screen implements DrawingUtil {
 
 	@Override
 	public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-		NVGMC.wrap(ctx -> {
+		NVGUtil.wrap(ctx -> {
 			NVGHolder.setContext(ctx);
 			super.render(graphics, mouseX, mouseY, delta);
 
@@ -150,6 +150,7 @@ public class GraphicsEditorScreen extends Screen implements DrawingUtil {
 	@Override
 	public void renderBackground(GuiGraphics graphics, int i, int j, float f) {
 		super.renderBackground(graphics, i, j, f);
+		graphics.fill(0, 0, 1, 1, 0); // Don't ask, it seems to work
 		fillRoundedRect(NVGHolder.getContext(), 15, 15, width - 30, height - 30, Colors.background(), 12);
 	}
 

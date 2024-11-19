@@ -28,11 +28,10 @@ import io.github.axolotlclient.AxolotlClientConfig.api.options.OptionCategory;
 import io.github.axolotlclient.AxolotlClientConfig.api.ui.screen.ConfigScreen;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Colors;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.DrawingUtil;
-import io.github.axolotlclient.AxolotlClientConfig.impl.ui.NVGMC;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.NVGHolder;
+import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.NVGUtil;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets.RoundedButtonListWidget;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets.RoundedButtonWidget;
-import lombok.Getter;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.CommonTexts;
@@ -41,7 +40,6 @@ import net.minecraft.text.Text;
 public class RoundedConfigScreen extends Screen implements ConfigScreen, DrawingUtil {
 
 	private final Screen parent;
-	@Getter
 	private final ConfigManager configManager;
 	private final OptionCategory category;
 
@@ -54,12 +52,17 @@ public class RoundedConfigScreen extends Screen implements ConfigScreen, Drawing
 
 	@Override
 	public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-		NVGMC.wrap(ctx -> {
-			fillRoundedRect(ctx, 15, 15, width - 30, height - 30, Colors.background(), 12);
-			drawCenteredString(ctx, NVGHolder.getFont(), getTitle().getString(), width / 2f, 25, Colors.text());
+		NVGUtil.wrap(ctx -> {
 			NVGHolder.setContext(ctx);
 			super.render(graphics, mouseX, mouseY, delta);
 		});
+	}
+
+	@Override
+	public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+		super.renderBackground(graphics, mouseX, mouseY, delta);
+		fillRoundedRect(NVGHolder.getContext(), 15, 15, width - 30, height - 30, Colors.background(), 12);
+		drawCenteredString(NVGHolder.getContext(), NVGHolder.getFont(), getTitle().getString(), width / 2f, 25, Colors.text());
 	}
 
 	@Override
@@ -76,6 +79,8 @@ public class RoundedConfigScreen extends Screen implements ConfigScreen, Drawing
 
 	@Override
 	public void removed() {
-		configManager.save();
+		if (configManager != null) {
+			configManager.save();
+		}
 	}
 }

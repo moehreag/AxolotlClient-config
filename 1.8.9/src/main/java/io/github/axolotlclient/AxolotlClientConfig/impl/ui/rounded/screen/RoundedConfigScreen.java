@@ -32,7 +32,6 @@ import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.NVGHolder;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.NVGUtil;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets.RoundedButtonListWidget;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets.RoundedButtonWidget;
-import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resource.language.I18n;
@@ -40,7 +39,6 @@ import net.minecraft.client.resource.language.I18n;
 public class RoundedConfigScreen extends io.github.axolotlclient.AxolotlClientConfig.impl.ui.Screen implements ConfigScreen, DrawingUtil {
 
 	private final Screen parent;
-	@Getter
 	private final ConfigManager configManager;
 	private final OptionCategory category;
 
@@ -70,6 +68,8 @@ public class RoundedConfigScreen extends io.github.axolotlclient.AxolotlClientCo
 
 	@Override
 	public void removed() {
-		configManager.save();
+		if (configManager != null) {
+			configManager.save();
+		}
 	}
 }

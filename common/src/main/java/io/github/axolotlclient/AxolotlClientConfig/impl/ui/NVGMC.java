@@ -45,7 +45,7 @@ public class NVGMC {
 			throw new IllegalStateException("WindowPropertiesProvider == null");
 		}
 
-		nvgContext = NanoVGGL3.nvgCreate(NanoVGGL3.NVG_ANTIALIAS);
+		nvgContext = NanoVGGL3.nvgCreate(NanoVGGL3.NVG_ANTIALIAS | NanoVGGL3.NVG_STENCIL_STROKES);
 		initialized = true;
 	}
 

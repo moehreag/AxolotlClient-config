@@ -22,12 +22,14 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl;
 
-import java.util.*;
-
 import io.github.axolotlclient.AxolotlClientConfig.api.AxolotlClientConfig;
 import io.github.axolotlclient.AxolotlClientConfig.api.manager.ConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.OptionCategory;
 import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 
 public class AxolotlClientConfigImpl implements AxolotlClientConfig {
 
@@ -53,12 +55,12 @@ public class AxolotlClientConfigImpl implements AxolotlClientConfig {
 
 	@Override
 	public ConfigManager getConfigManager(OptionCategory category) {
-		for (ConfigManager manager : registeredManagers.values()){
-			if (findCategory(manager.getRoot(), category)){
+		for (ConfigManager manager : registeredManagers.values()) {
+			if (findCategory(manager.getRoot(), category)) {
 				return manager;
 			}
 		}
-		throw new IllegalStateException("Category "+category.getName()+" is not in any registered ConfigManager!");
+		return null;
 	}
 
 	@Override
@@ -73,15 +75,16 @@ public class AxolotlClientConfigImpl implements AxolotlClientConfig {
 
 	@Override
 	public void save(OptionCategory category) {
-		getConfigManager(category).save();
+		ConfigManager c = getConfigManager(category);
+		if (c != null) c.save();
 	}
 
-	private boolean findCategory(OptionCategory root, OptionCategory category){
-		if (root.equals(category)){
+	private boolean findCategory(OptionCategory root, OptionCategory category) {
+		if (root.equals(category)) {
 			return true;
 		}
 		boolean found = false;
-		for (OptionCategory sub : root.getSubCategories()){
+		for (OptionCategory sub : root.getSubCategories()) {
 			found = sub.includeInParentTree() && findCategory(sub, category);
 			if (found) {
 				break;

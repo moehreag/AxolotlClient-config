@@ -60,16 +60,16 @@ public class ButtonListWidget extends ElementListWidget<ButtonListWidget.Entry> 
 	}
 
 	protected void addCategories(ConfigManager manager, Collection<OptionCategory> categories) {
-		List<OptionCategory> list = categories.stream()
-			.filter(c -> !manager.getSuppressedNames().contains(c.getName())).collect(Collectors.toList());
+		List<OptionCategory> list = manager == null ? new ArrayList<>(categories) : categories.stream()
+			.filter(c -> !manager.getSuppressedNames().contains(c.getName())).toList();
 		for (int i = 0; i < list.size(); i += 2) {
 			addEntry(list.get(i), i < list.size() - 1 ? list.get(i + 1) : null);
 		}
 	}
 
 	protected void addOptions(ConfigManager manager, Collection<Option<?>> options) {
-		List<Option<?>> list = options.stream()
-			.filter(o -> !manager.getSuppressedNames().contains(o.getName())).collect(Collectors.toList());
+		List<Option<?>> list = manager == null ? new ArrayList<>(options) : options.stream()
+			.filter(o -> !manager.getSuppressedNames().contains(o.getName())).toList();
 		for (int i = 0; i < list.size(); i += 2) {
 			addEntry(list.get(i), i < list.size() - 1 ? list.get(i + 1) : null);
 		}

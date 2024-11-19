@@ -28,7 +28,7 @@ import lombok.Setter;
 import org.lwjgl.nanovg.NVGColor;
 import org.lwjgl.nanovg.NanoVG;
 
-public class Color implements Runnable, Cloneable {
+public class Color implements Runnable {
 
 	@Getter
 	@Setter
@@ -43,7 +43,6 @@ public class Color implements Runnable, Cloneable {
 	private float chromaSpeed;
 
 	private NVGColor nvgColor;
-	private final Object o = new Object();
 
 	public Color(int color) {
 		this(color >> 16 & 0xFF, color >> 8 & 0xFF, color & 0xFF, color >> 24 & 0xFF);
@@ -408,11 +407,6 @@ public class Color implements Runnable, Cloneable {
 
 		@Override
 		public Color immutable() {
-			return this;
-		}
-
-		@Override
-		public Color clone() {
 			return this;
 		}
 
