@@ -105,8 +105,8 @@ public class ButtonListWidget extends ElementListWidget<ButtonListWidget.Entry> 
 		List<OptionCategory> flattenedCategories = new ArrayList<>();
 		List<Option<?>> flattenedOptions = new ArrayList<>();
 		collectEntries(category, flattenedCategories, flattenedOptions);
-		flattenedCategories.removeIf(c -> !I18n.translate(c.getName()).contains(searchFilter));
-		flattenedOptions.removeIf(c -> !I18n.translate(c.getName()).contains(searchFilter));
+		flattenedCategories.removeIf(c -> !I18n.translate(c.getName()).toLowerCase(Locale.ROOT).contains(searchFilter.toLowerCase(Locale.ROOT)));
+		flattenedOptions.removeIf(c -> !I18n.translate(c.getName()).toLowerCase(Locale.ROOT).contains(searchFilter.toLowerCase(Locale.ROOT)));
 		flattenedCategories.sort((o1, o2) -> AlphabeticalComparator.cmp(I18n.translate(o1.getName()), I18n.translate(o2.getName())));
 		flattenedOptions.sort((o1, o2) -> AlphabeticalComparator.cmp(I18n.translate(o1.getName()), I18n.translate(o2.getName())));
 		addCategories(manager, flattenedCategories);
