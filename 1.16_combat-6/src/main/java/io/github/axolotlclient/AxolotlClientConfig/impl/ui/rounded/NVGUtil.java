@@ -22,10 +22,10 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded;
 
-import java.util.function.Consumer;
-
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.NVGMC;
 import org.lwjgl.opengl.GL11;
+
+import java.util.function.Consumer;
 
 public class NVGUtil {
 

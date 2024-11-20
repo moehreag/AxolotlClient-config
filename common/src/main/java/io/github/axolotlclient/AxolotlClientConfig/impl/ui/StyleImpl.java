@@ -22,13 +22,13 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui;
 
-import java.util.Map;
-import java.util.Optional;
-
 import io.github.axolotlclient.AxolotlClientConfig.api.ui.Style;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+
+import java.util.Map;
+import java.util.Optional;
 
 @EqualsAndHashCode @ToString
 @AllArgsConstructor

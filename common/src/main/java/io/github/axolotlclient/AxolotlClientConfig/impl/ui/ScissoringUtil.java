@@ -22,11 +22,11 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui;
 
-import java.util.Stack;
-
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Rectangle;
 import lombok.AccessLevel;
 import lombok.Getter;
+
+import java.util.Stack;
 
 import static org.lwjgl.nanovg.NanoVG.*;
 

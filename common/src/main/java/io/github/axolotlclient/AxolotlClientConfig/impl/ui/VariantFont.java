@@ -22,11 +22,11 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-
 import org.lwjgl.nanovg.NanoVG;
 import org.lwjgl.system.MemoryUtil;
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
 
 public class VariantFont extends NVGFont {
 	private final int italicVariant, boldVariant, boldItalicVariant;

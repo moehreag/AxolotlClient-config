@@ -56,6 +56,15 @@ dependencies {
 	runtimeOnly include('org.lwjgl:lwjgl-nanovg:3.3.2:natives-macos')
 }
 
+configurations.configureEach {
+	resolutionStrategy {
+		dependencySubstitution {
+			substitute(module("net.fabricmc:fabric-loader:0.10.5")) using module("net.fabricmc:fabric-loader:${fabric_loader}")
+		}
+		force "net.fabricmc:fabric-loader:${fabric_loader}"
+	}
+}
+
 processResources {
 	inputs.property 'version', version
 

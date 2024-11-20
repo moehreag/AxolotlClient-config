@@ -24,7 +24,6 @@ package io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets;
 
 import io.github.axolotlclient.AxolotlClientConfig.impl.options.StringOption;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.DrawingUtil;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.text.Text;
 
@@ -32,7 +31,7 @@ public class StringWidget extends TextFieldWidget implements DrawingUtil {
 	private final StringOption option;
 
 	public StringWidget(int x, int y, int width, int height, StringOption option) {
-		super(MinecraftClient.getInstance().textRenderer, x, y, width, height, Text.translatable(option.getName()));
+		super(x, y, width, height, Text.translatable(option.getName()));
 
 		setMaxLength(option.getMaxLength());
 		write(option.get());

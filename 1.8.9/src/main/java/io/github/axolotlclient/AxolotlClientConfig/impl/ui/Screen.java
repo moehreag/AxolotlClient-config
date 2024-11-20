@@ -22,13 +22,13 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui;
 
-import java.util.List;
-
 import com.google.common.collect.Lists;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.input.Mouse;
+
+import java.util.List;
 
 public abstract class Screen extends net.minecraft.client.gui.screen.Screen implements ParentElement {
 
@@ -55,7 +55,6 @@ public abstract class Screen extends net.minecraft.client.gui.screen.Screen impl
 	@Override
 	public void render(int mouseX, int mouseY, float delta) {
 		renderBackground();
-
 
 		drawables.forEach(drawable -> drawable.render(mouseX, mouseY, delta));
 	}
@@ -168,7 +167,8 @@ public abstract class Screen extends net.minecraft.client.gui.screen.Screen impl
 		charTyped(c, 0);
 	}
 
-	@Override
-	public void tick() {
+	public void clearAndInit() {
+		clearChildren();
+		init(minecraft, width, height);
 	}
 }

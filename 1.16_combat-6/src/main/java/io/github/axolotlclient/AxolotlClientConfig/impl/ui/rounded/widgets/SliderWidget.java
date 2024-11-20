@@ -22,8 +22,6 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets;
 
-import java.text.DecimalFormat;
-
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Colors;
 import io.github.axolotlclient.AxolotlClientConfig.impl.options.NumberOption;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.DrawingUtil;
@@ -33,6 +31,8 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
 import org.lwjgl.nanovg.NanoVG;
+
+import java.text.DecimalFormat;
 
 public class SliderWidget<O extends NumberOption<N>, N extends Number> extends net.minecraft.client.gui.widget.SliderWidget implements DrawingUtil, Updatable {
 	private final O option;

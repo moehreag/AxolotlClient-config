@@ -45,6 +45,8 @@ public abstract class Screen extends net.minecraft.client.gui.screen.Screen {
 	@Override
 	public void init() {
 		client = MinecraftClient.getInstance();
+		children.clear();
+		buttons.clear();
 		drawables.clear();
 	}
 

@@ -22,6 +22,14 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.managers;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import io.github.axolotlclient.AxolotlClientConfig.api.manager.ConfigManager;
+import io.github.axolotlclient.AxolotlClientConfig.api.options.Option;
+import io.github.axolotlclient.AxolotlClientConfig.api.options.OptionCategory;
+import lombok.RequiredArgsConstructor;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -30,14 +38,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import io.github.axolotlclient.AxolotlClientConfig.api.manager.ConfigManager;
-import io.github.axolotlclient.AxolotlClientConfig.api.options.Option;
-import io.github.axolotlclient.AxolotlClientConfig.api.options.OptionCategory;
-import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class JsonConfigManager implements ConfigManager {

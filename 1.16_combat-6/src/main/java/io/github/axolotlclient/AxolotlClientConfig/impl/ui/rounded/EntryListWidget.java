@@ -22,12 +22,6 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded;
 
-import java.util.AbstractList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.function.Predicate;
-
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -45,6 +39,12 @@ import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.AbstractList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
 
 @SuppressWarnings({"deprecated", "unchecked"})
 public abstract class EntryListWidget<E extends EntryListWidget.Entry<E>> extends AbstractParentElement implements Drawable, Selectable, DrawingUtil {

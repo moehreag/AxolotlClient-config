@@ -46,9 +46,13 @@ public class VanillaButtonListWidget extends ButtonListWidget {
 
 	@Override
 	protected void addOptions(ConfigManager manager, Collection<Option<?>> options) {
-		options.stream()
-			.filter(o -> !manager.getSuppressedNames().contains(o.getName()))
-			.forEach(o -> addEntry(o, null));
+		if (manager != null) {
+			options.stream()
+				.filter(o -> !manager.getSuppressedNames().contains(o.getName()))
+				.forEach(o -> addEntry(o, null));
+		} else {
+			options.forEach(o -> addEntry(o, null));
+		}
 	}
 
 	@Override

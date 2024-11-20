@@ -22,16 +22,6 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.util;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Stack;
-
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.Lighting;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.Option;
@@ -49,6 +39,16 @@ import net.minecraft.resource.Identifier;
 import org.lwjgl.nanovg.NanoVG;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Stack;
 
 public class DrawUtil extends GuiElement implements DrawingUtil {
 

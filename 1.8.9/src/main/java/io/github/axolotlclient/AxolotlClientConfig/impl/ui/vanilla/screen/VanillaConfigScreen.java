@@ -26,6 +26,8 @@ import io.github.axolotlclient.AxolotlClientConfig.api.AxolotlClientConfig;
 import io.github.axolotlclient.AxolotlClientConfig.api.manager.ConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.OptionCategory;
 import io.github.axolotlclient.AxolotlClientConfig.api.ui.screen.ConfigScreen;
+import io.github.axolotlclient.AxolotlClientConfig.impl.ui.TextFieldWidget;
+import io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets.PlainTextButtonWidget;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets.VanillaButtonListWidget;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets.VanillaButtonWidget;
 import net.minecraft.client.Minecraft;
@@ -36,6 +38,7 @@ public class VanillaConfigScreen extends io.github.axolotlclient.AxolotlClientCo
 	private final Screen parent;
 	private final ConfigManager configManager;
 	private final OptionCategory category;
+	private boolean searchVisible;
 
 	public VanillaConfigScreen(Screen parent, OptionCategory category) {
 		super(I18n.translate(category.getName()));
@@ -46,16 +49,27 @@ public class VanillaConfigScreen extends io.github.axolotlclient.AxolotlClientCo
 
 	@Override
 	public void init() {
+		searchVisible = false;
+		TextFieldWidget searchInput = addDrawableChild(new TextFieldWidget(textRenderer, width/2 - 75, 20, 150, 20, ""));
+		searchInput.setVisible(false);
 		addDrawableChild(new VanillaButtonWidget(width / 2 - 75, height - 45, 150, 20,
-			I18n.translate("gui.back"), w -> Minecraft.getInstance().openScreen(parent)));
-		addDrawableChild(new VanillaButtonListWidget(configManager, category, width, height, 45, height - 55, 25));
-	}
-
-	@Override
-	public void render(int mouseX, int mouseY, float delta) {
-		super.render(mouseX, mouseY, delta);
-
-		drawCenteredString(Minecraft.getInstance().textRenderer, getTitle(), width / 2, 25, -1);
+			I18n.translate("gui.back"), w -> {
+			if (searchVisible) {
+				clearAndInit();
+			} else {
+				Minecraft.getInstance().openScreen(parent);
+			}
+		}));
+		var list = addDrawableChild(new VanillaButtonListWidget(configManager, category, width, height, 45, height - 55, 25));
+		searchInput.setChangedListener(list::setSearchFilter);
+		addDrawableChild(new PlainTextButtonWidget(width/2 - textRenderer.getWidth(getTitle())/2, 25,
+			textRenderer.getWidth(getTitle()), textRenderer.fontHeight, getTitle(), w -> {
+			w.visible = false;
+			searchInput.visible = searchVisible = true;
+			setFocusedChild(searchInput);
+			searchInput.setFocused(true);
+			list.setSearchFilter(searchInput.getText());
+		}, textRenderer));
 	}
 
 	@Override

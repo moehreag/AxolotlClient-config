@@ -22,12 +22,11 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.api.ui;
 
-import java.util.Collection;
-
-import io.github.axolotlclient.AxolotlClientConfig.api.manager.ConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.OptionCategory;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.WidgetIdentifieable;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.ConfigUIImpl;
+
+import java.util.Collection;
 
 public interface ConfigUI {
 	static ConfigUI getInstance(){

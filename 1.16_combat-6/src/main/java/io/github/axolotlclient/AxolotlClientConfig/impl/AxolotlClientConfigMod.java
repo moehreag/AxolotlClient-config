@@ -22,12 +22,11 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl;
 
-import java.io.IOException;
-
 import io.github.axolotlclient.AxolotlClientConfig.api.ui.ConfigUI;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.WindowPropertiesProvider;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.ConfigUIImpl;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.NVGMC;
+import io.github.axolotlclient.AxolotlClientConfig.impl.ui.StyleImpl;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
@@ -37,6 +36,10 @@ import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AxolotlClientConfigMod implements ClientModInitializer {
 
@@ -71,8 +74,33 @@ public class AxolotlClientConfigMod implements ClientModInitializer {
 			public void apply(ResourceManager resourceManager) {
 				ConfigUIImpl.getInstance().preReload();
 				try {
-					MinecraftClient.getInstance().getResourceManager()
-						.getAllResources(new Identifier(ConfigUI.getInstance().getUiJsonPath())).forEach(resource -> {
+					Map<String, String> vanillaWidgets = new HashMap<>();
+					vanillaWidgets.put("boolean", "io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets.BooleanWidget");
+					vanillaWidgets.put("string", "io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets.StringWidget");
+					vanillaWidgets.put("enum", "io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets.EnumWidget");
+					vanillaWidgets.put("string[]", "io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets.StringArrayWidget");
+					vanillaWidgets.put("color", "io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets.ColorWidget");
+					vanillaWidgets.put("double", "io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets.DoubleWidget");
+					vanillaWidgets.put("float", "io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets.FloatWidget");
+					vanillaWidgets.put("integer", "io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets.IntegerWidget");
+					vanillaWidgets.put("category", "io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets.CategoryWidget");
+					vanillaWidgets.put("graphics", "io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets.GraphicsWidget");
+					ConfigUI.getInstance().addStyle(new StyleImpl("vanilla", vanillaWidgets, "io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.screen.VanillaConfigScreen", null));
+					Map<String, String> roundedWidgets = new HashMap<>();
+					roundedWidgets.put("boolean", "io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets.PillBooleanWidget");
+					roundedWidgets.put("string[]", "io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets.StringArrayButtonWidget");
+					roundedWidgets.put("category", "io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets.CategoryWidget");
+					roundedWidgets.put("string", "io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets.StringWidget");
+					roundedWidgets.put("enum", "io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets.EnumWidget");
+					roundedWidgets.put("color", "io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets.ColorWidget");
+					roundedWidgets.put("double", "io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets.DoubleWidget");
+					roundedWidgets.put("float", "io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets.FloatWidget");
+					roundedWidgets.put("integer", "io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets.IntegerWidget");
+					roundedWidgets.put("graphics", "io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets.GraphicsWidget");
+					ConfigUI.getInstance().addStyle(new StyleImpl("rounded", roundedWidgets, "io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.screen.RoundedConfigScreen", null));
+					Identifier id = new Identifier(ConfigUI.getInstance().getUiJsonPath());
+					resourceManager
+						.getAllResources(id).forEach(resource -> {
 							ConfigUIImpl.getInstance().read(resource.getInputStream());
 						});
 				} catch (IOException ignored) {

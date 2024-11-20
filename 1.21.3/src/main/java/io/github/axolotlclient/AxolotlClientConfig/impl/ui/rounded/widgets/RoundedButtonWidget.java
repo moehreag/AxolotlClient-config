@@ -36,8 +36,8 @@ import net.minecraft.util.math.MathHelper;
 public class RoundedButtonWidget extends ButtonWidget implements DrawingUtil {
 
 	protected final static Color DEFAULT_BACKGROUND_COLOR = Colors.accent();
-	protected final Color activeColor = new Color(16777215);
-	protected final Color inactiveColor = new Color(10526880);
+	protected final Color activeColor = Colors.text();
+	protected final Color inactiveColor = new Color(0xA0A0A0);
 	protected Color backgroundColor = DEFAULT_BACKGROUND_COLOR;
 
 	public RoundedButtonWidget(int x, int y, Text message, PressAction action) {

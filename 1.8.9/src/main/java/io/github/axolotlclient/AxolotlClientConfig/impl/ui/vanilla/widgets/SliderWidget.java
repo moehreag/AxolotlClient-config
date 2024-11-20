@@ -22,8 +22,6 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets;
 
-import java.text.DecimalFormat;
-
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClientConfig.impl.options.NumberOption;
 import io.github.axolotlclient.AxolotlClientConfig.impl.util.DrawUtil;
@@ -31,6 +29,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.TextRenderer;
 import net.minecraft.client.sound.system.SoundManager;
 import net.minecraft.util.math.MathHelper;
+
+import java.text.DecimalFormat;
 
 public class SliderWidget<O extends NumberOption<N>, N extends Number> extends VanillaButtonWidget {
 

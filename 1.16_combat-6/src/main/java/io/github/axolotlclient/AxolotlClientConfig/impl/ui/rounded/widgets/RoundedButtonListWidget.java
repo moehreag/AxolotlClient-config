@@ -22,8 +22,6 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets;
 
-import java.util.Collection;
-
 import com.google.common.collect.ImmutableList;
 import io.github.axolotlclient.AxolotlClientConfig.api.manager.ConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.Option;
@@ -34,9 +32,11 @@ import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.ButtonListWid
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.NVGHolder;
 import io.github.axolotlclient.AxolotlClientConfig.impl.util.DrawUtil;
 import net.minecraft.client.gui.widget.AbstractButtonWidget;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.TranslatableText;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
 
 public class RoundedButtonListWidget extends ButtonListWidget {
 	public RoundedButtonListWidget(ConfigManager manager, OptionCategory category, int screenWidth, int screenHeight, int top, int bottom, int entryHeight) {
@@ -48,9 +48,13 @@ public class RoundedButtonListWidget extends ButtonListWidget {
 
 	@Override
 	protected void addOptions(ConfigManager manager, Collection<Option<?>> options) {
-		options.stream()
-			.filter(o -> !manager.getSuppressedNames().contains(o.getName()))
-			.forEach(o -> addEntry(o, null));
+		if (manager != null) {
+			options.stream()
+				.filter(o -> !manager.getSuppressedNames().contains(o.getName()))
+				.forEach(o -> addEntry(o, null));
+		} else {
+			options.forEach(o -> addEntry(o, null));
+		}
 	}
 
 	@Override
@@ -86,7 +90,7 @@ public class RoundedButtonListWidget extends ButtonListWidget {
 		public void render(MatrixStack graphics, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
 			super.render(graphics, index, y, x, entryWidth, entryHeight, mouseX, mouseY, hovered, tickDelta);
 
-			drawScrollingText(NVGHolder.getContext(), NVGHolder.getFont(), new TranslatableText(option.getName()).getString(),
+			drawScrollingText(NVGHolder.getContext(), NVGHolder.getFont(), I18n.translate(option.getName()),
 				width / 2 + WIDGET_ROW_LEFT, y, WIDGET_WIDTH, entryHeight, Colors.accent());
 		}
 	}

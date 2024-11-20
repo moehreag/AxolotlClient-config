@@ -22,18 +22,12 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets;
 
-import java.util.Objects;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Color;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Colors;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.DrawingUtil;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.NVGFont;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.NVGHolder;
-import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
@@ -44,6 +38,10 @@ import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.nanovg.NanoVG;
+
+import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public class TextFieldWidget extends ClickableWidget implements DrawingUtil {
 	public static final int BACKWARDS = -1;
@@ -76,11 +74,11 @@ public class TextFieldWidget extends ClickableWidget implements DrawingUtil {
 	private Consumer<String> changedListener;
 	private Predicate<String> textPredicate = Objects::nonNull;
 
-	public TextFieldWidget(TextRenderer textRenderer, int x, int y, int width, int height, Text text) {
-		this(textRenderer, x, y, width, height, null, text);
+	public TextFieldWidget(int x, int y, int width, int height, Text text) {
+		this(x, y, width, height, null, text);
 	}
 
-	public TextFieldWidget(TextRenderer textRenderer, int x, int y, int width, int height, @Nullable net.minecraft.client.gui.widget.TextFieldWidget copyFrom, Text text) {
+	public TextFieldWidget(int x, int y, int width, int height, @Nullable net.minecraft.client.gui.widget.TextFieldWidget copyFrom, Text text) {
 		super(x, y, width, height, text);
 		if (copyFrom != null) {
 			this.setText(copyFrom.getText());

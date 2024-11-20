@@ -22,9 +22,6 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.screen;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-
 import com.mojang.blaze3d.glfw.Window;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Color;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Colors;
@@ -45,6 +42,9 @@ import net.minecraft.text.CommonTexts;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.lwjgl.opengl.GL11;
+
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 public class ColorSelectionScreen extends Screen {
 	private final ColorOption option;

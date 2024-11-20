@@ -22,30 +22,38 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded;
 
-import java.util.*;
-import java.util.stream.Stream;
-
 import io.github.axolotlclient.AxolotlClientConfig.api.manager.ConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.Option;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.OptionCategory;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.WidgetIdentifieable;
+import io.github.axolotlclient.AxolotlClientConfig.api.util.AlphabeticalComparator;
 import io.github.axolotlclient.AxolotlClientConfig.impl.util.ConfigStyles;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.widget.ClickableWidget;
+import net.minecraft.client.resource.language.I18n;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.*;
+import java.util.stream.Stream;
 
 public class ButtonListWidget extends ElementListWidget<ButtonListWidget.Entry> {
 
 	protected static int WIDGET_WIDTH = 150;
 	protected static int WIDGET_ROW_LEFT = -155;
 	protected static int WIDGET_ROW_RIGHT = WIDGET_ROW_LEFT + WIDGET_WIDTH + 10;
+	protected String searchFilter = null;
+	@Nullable
+	private final ConfigManager manager;
+	private final OptionCategory category;
 
 	public ButtonListWidget(ConfigManager manager, OptionCategory category, int screenWidth, int screenHeight, int top, int bottom, int entryHeight) {
 		super(MinecraftClient.getInstance(), screenWidth, screenHeight, top, bottom, entryHeight);
 		centerListVertically = false;
+		this.manager = manager;
+		this.category = category;
 
 		addEntries(manager, category);
 	}
@@ -61,16 +69,20 @@ public class ButtonListWidget extends ElementListWidget<ButtonListWidget.Entry> 
 	}
 
 	protected void addCategories(ConfigManager manager, Collection<OptionCategory> categories) {
-		List<OptionCategory> list = manager == null ? new ArrayList<>(categories) : categories.stream()
-			.filter(c -> !manager.getSuppressedNames().contains(c.getName())).toList();
+		List<OptionCategory> list = new ArrayList<>(categories);
+		if (manager != null) {
+			list.removeIf(c -> manager.getSuppressedNames().contains(c.getName()));
+		}
 		for (int i = 0; i < list.size(); i += 2) {
 			addEntry(list.get(i), i < list.size() - 1 ? list.get(i + 1) : null);
 		}
 	}
 
 	protected void addOptions(ConfigManager manager, Collection<Option<?>> options) {
-		List<Option<?>> list = manager == null ? new ArrayList<>(options) : options.stream()
-			.filter(o -> !manager.getSuppressedNames().contains(o.getName())).toList();
+		List<Option<?>> list = new ArrayList<>(options);
+		if (manager != null) {
+			list.removeIf(o -> manager.getSuppressedNames().contains(o.getName()));
+		}
 		for (int i = 0; i < list.size(); i += 2) {
 			addEntry(list.get(i), i < list.size() - 1 ? list.get(i + 1) : null);
 		}
@@ -82,6 +94,30 @@ public class ButtonListWidget extends ElementListWidget<ButtonListWidget.Entry> 
 			addEntry(new Entry(Collections.emptyList()));
 		}
 		addOptions(manager, category.getOptions());
+	}
+
+	public void setSearchFilter(String filter) {
+		this.searchFilter = filter;
+		clearEntries();
+		if (searchFilter == null) {
+			addEntries(manager, category);
+			return;
+		}
+		List<OptionCategory> flattenedCategories = new ArrayList<>();
+		List<Option<?>> flattenedOptions = new ArrayList<>();
+		collectEntries(category, flattenedCategories, flattenedOptions);
+		flattenedCategories.removeIf(c -> !I18n.translate(c.getName()).contains(searchFilter));
+		flattenedOptions.removeIf(c -> !I18n.translate(c.getName()).contains(searchFilter));
+		flattenedCategories.sort((o1, o2) -> AlphabeticalComparator.cmp(I18n.translate(o1.getName()), I18n.translate(o2.getName())));
+		flattenedOptions.sort((o1, o2) -> AlphabeticalComparator.cmp(I18n.translate(o1.getName()), I18n.translate(o2.getName())));
+		addCategories(manager, flattenedCategories);
+		addOptions(manager, flattenedOptions);
+	}
+
+	protected void collectEntries(OptionCategory current, List<OptionCategory> categoryCollector, List<Option<?>> optionCollector) {
+		categoryCollector.add(current);
+		optionCollector.addAll(current.getOptions());
+		current.getSubCategories().forEach(c -> collectEntries(c, categoryCollector, optionCollector));
 	}
 
 	protected ClickableWidget createWidget(int x, WidgetIdentifieable id) {

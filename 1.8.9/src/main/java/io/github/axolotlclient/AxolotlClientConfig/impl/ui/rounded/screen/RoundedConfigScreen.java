@@ -32,6 +32,8 @@ import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.NVGHolder;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.NVGUtil;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets.RoundedButtonListWidget;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets.RoundedButtonWidget;
+import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets.TextFieldWidget;
+import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets.TextOnlyButtonWidget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resource.language.I18n;
@@ -41,6 +43,7 @@ public class RoundedConfigScreen extends io.github.axolotlclient.AxolotlClientCo
 	private final Screen parent;
 	private final ConfigManager configManager;
 	private final OptionCategory category;
+	private boolean searchVisible;
 
 	public RoundedConfigScreen(Screen parent, OptionCategory category) {
 		super(I18n.translate(category.getName()));
@@ -53,7 +56,6 @@ public class RoundedConfigScreen extends io.github.axolotlclient.AxolotlClientCo
 	public void render(int mouseX, int mouseY, float delta) {
 		NVGUtil.wrap(ctx -> {
 			fillRoundedRect(ctx, 15, 15, width - 30, height - 30, Colors.background(), 12);
-			drawCenteredString(ctx, NVGHolder.getFont(), getTitle(), width / 2f, 25, Colors.highlight());
 			NVGHolder.setContext(ctx);
 			super.render(mouseX, mouseY, delta);
 		});
@@ -61,9 +63,26 @@ public class RoundedConfigScreen extends io.github.axolotlclient.AxolotlClientCo
 
 	@Override
 	public void init() {
+		searchVisible = false;
+		TextFieldWidget searchInput = addDrawableChild(new TextFieldWidget(textRenderer, width/2 - 75, 20, 150, 20, ""));
+		searchInput.visible = false;
 		addDrawableChild(new RoundedButtonWidget(width / 2 - 75, height - 40,
-			I18n.translate("gui.back"), w -> Minecraft.getInstance().openScreen(parent)));
-		addDrawableChild(new RoundedButtonListWidget(configManager, category, width, height, 45, height - 55, 25));
+			I18n.translate("gui.back"), w -> {
+			if (searchVisible) {
+				clearAndInit();
+			} else {
+				Minecraft.getInstance().openScreen(parent);
+			}
+		}));
+		var list = addDrawableChild(new RoundedButtonListWidget(configManager, category, width, height, 45, height - 55, 25));
+		searchInput.setChangedListener(list::setSearchFilter);
+		addDrawableChild(TextOnlyButtonWidget.centeredWidget(width/2, 25, getTitle(), w -> {
+			w.visible = false;
+			searchInput.visible = searchVisible = true;
+			setFocusedChild(searchInput);
+			searchInput.setFocused(true);
+			list.setSearchFilter(searchInput.getText());
+		}));
 	}
 
 	@Override

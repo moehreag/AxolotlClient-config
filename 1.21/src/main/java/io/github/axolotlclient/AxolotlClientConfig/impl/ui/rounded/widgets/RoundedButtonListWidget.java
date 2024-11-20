@@ -22,8 +22,6 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets;
 
-import java.util.Collection;
-
 import com.google.common.collect.ImmutableList;
 import io.github.axolotlclient.AxolotlClientConfig.api.manager.ConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.Option;
@@ -38,6 +36,8 @@ import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 public class RoundedButtonListWidget extends ButtonListWidget {
 	public RoundedButtonListWidget(ConfigManager manager, OptionCategory category, int screenWidth, int screenHeight, int top, int bottom, int entryHeight) {
 		super(manager, category, screenWidth, screenHeight, top, bottom, entryHeight);
@@ -46,9 +46,13 @@ public class RoundedButtonListWidget extends ButtonListWidget {
 
 	@Override
 	protected void addOptions(ConfigManager manager, Collection<Option<?>> options) {
-		options.stream()
-			.filter(o -> !manager.getSuppressedNames().contains(o.getName()))
-			.forEach(o -> addEntry(o, null));
+		if (manager != null) {
+			options.stream()
+				.filter(o -> !manager.getSuppressedNames().contains(o.getName()))
+				.forEach(o -> addEntry(o, null));
+		} else {
+			options.forEach(o -> addEntry(o, null));
+		}
 	}
 
 	@Override

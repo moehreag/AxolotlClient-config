@@ -22,11 +22,11 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets;
 
-import java.text.DecimalFormat;
-
 import io.github.axolotlclient.AxolotlClientConfig.impl.options.NumberOption;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.Updatable;
 import net.minecraft.text.Text;
+
+import java.text.DecimalFormat;
 
 public class SliderWidget<O extends NumberOption<N>, N extends Number> extends net.minecraft.client.gui.widget.SliderWidget implements Updatable {
 	private final O option;

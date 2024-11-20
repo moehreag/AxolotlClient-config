@@ -32,6 +32,8 @@ import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.NVGHolder;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.NVGUtil;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets.RoundedButtonListWidget;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets.RoundedButtonWidget;
+import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets.TextFieldWidget;
+import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets.TextOnlyButtonWidget;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.CommonTexts;
@@ -42,6 +44,7 @@ public class RoundedConfigScreen extends Screen implements ConfigScreen, Drawing
 	private final Screen parent;
 	private final ConfigManager configManager;
 	private final OptionCategory category;
+	private boolean searchVisible;
 
 	public RoundedConfigScreen(Screen parent, OptionCategory category) {
 		super(Text.translatable(category.getName()));
@@ -62,19 +65,32 @@ public class RoundedConfigScreen extends Screen implements ConfigScreen, Drawing
 	public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
 		super.renderBackground(graphics, mouseX, mouseY, delta);
 		fillRoundedRect(NVGHolder.getContext(), 15, 15, width - 30, height - 30, Colors.background(), 12);
-		drawCenteredString(NVGHolder.getContext(), NVGHolder.getFont(), getTitle().getString(), width / 2f, 25, Colors.text());
 	}
 
 	@Override
 	public void init() {
+		searchVisible = false;
+		TextFieldWidget searchInput = addDrawableSelectableElement(new TextFieldWidget(textRenderer, width/2 - 75, 20, 150, 20, Text.empty()));
+		searchInput.visible = false;
 		addDrawableSelectableElement(new RoundedButtonWidget(width / 2 - 75, height - 40,
 			CommonTexts.BACK, w -> closeScreen()));
-		addDrawableSelectableElement(new RoundedButtonListWidget(configManager, category, width, height, 45, height - 55, 25));
+		var list = addDrawableSelectableElement(new RoundedButtonListWidget(configManager, category, width, height, 45, height - 55, 25));
+		searchInput.setChangedListener(list::setSearchFilter);
+		addDrawableSelectableElement(TextOnlyButtonWidget.centeredWidget(width/2, 25, getTitle(), w -> {
+			w.visible = false;
+			searchInput.visible = searchVisible = true;
+			setFocusedChild(searchInput);
+			list.setSearchFilter(searchInput.getText());
+		}));
 	}
 
 	@Override
 	public void closeScreen() {
-		client.setScreen(parent);
+		if (searchVisible) {
+			clearAndInit();
+		} else {
+			client.setScreen(parent);
+		}
 	}
 
 	@Override

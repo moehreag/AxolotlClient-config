@@ -22,8 +22,6 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets;
 
-import java.util.Collection;
-
 import com.google.common.collect.ImmutableList;
 import io.github.axolotlclient.AxolotlClientConfig.api.manager.ConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.Option;
@@ -35,6 +33,8 @@ import io.github.axolotlclient.AxolotlClientConfig.impl.util.DrawUtil;
 import net.minecraft.client.resource.language.I18n;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 public class VanillaButtonListWidget extends ButtonListWidget {
 	public VanillaButtonListWidget(ConfigManager manager, OptionCategory category, int screenWidth, int screenHeight, int top, int bottom, int entryHeight) {
 		super(manager, category, screenWidth, screenHeight, top, bottom, entryHeight);
@@ -45,9 +45,13 @@ public class VanillaButtonListWidget extends ButtonListWidget {
 
 	@Override
 	protected void addOptions(ConfigManager manager, Collection<Option<?>> options) {
-		options.stream()
-			.filter(o -> !manager.getSuppressedNames().contains(o.getName()))
-			.forEach(o -> addEntry(o, null));
+		if (manager != null) {
+			options.stream()
+				.filter(o -> !manager.getSuppressedNames().contains(o.getName()))
+				.forEach(o -> addEntry(o, null));
+		} else {
+			options.forEach(o -> addEntry(o, null));
+		}
 	}
 
 	@Override

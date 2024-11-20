@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.util;
 
+import io.github.axolotlclient.AxolotlClientConfig.api.util.Color;
+import io.github.axolotlclient.AxolotlClientConfig.api.util.Graphics;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -29,9 +32,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import io.github.axolotlclient.AxolotlClientConfig.api.util.Color;
-import io.github.axolotlclient.AxolotlClientConfig.api.util.Graphics;
 
 public class GraphicsImpl implements Graphics {
 

@@ -22,9 +22,6 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.screen;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-
 import com.mojang.blaze3d.glfw.Window;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Color;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Colors;
@@ -33,7 +30,6 @@ import io.github.axolotlclient.AxolotlClientConfig.impl.options.ColorOption;
 import io.github.axolotlclient.AxolotlClientConfig.impl.options.FloatOption;
 import io.github.axolotlclient.AxolotlClientConfig.impl.options.IntegerOption;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.DrawingUtil;
-import io.github.axolotlclient.AxolotlClientConfig.impl.ui.NVGMC;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.Updatable;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.NVGHolder;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.NVGUtil;
@@ -49,6 +45,9 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.lwjgl.nanovg.NVGPaint;
 import org.lwjgl.opengl.GL11;
+
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 import static org.lwjgl.nanovg.NanoVG.*;
 

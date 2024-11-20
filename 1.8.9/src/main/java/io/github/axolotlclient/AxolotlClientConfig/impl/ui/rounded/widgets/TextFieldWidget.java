@@ -22,10 +22,6 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets;
 
-import java.util.Objects;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Color;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Colors;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.ClickableWidget;
@@ -40,6 +36,10 @@ import net.minecraft.client.render.TextRenderer;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.nanovg.NanoVG;
+
+import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public class TextFieldWidget extends ClickableWidget implements DrawingUtil, Selectable {
 	public static final int BACKWARDS = -1;

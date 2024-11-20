@@ -27,9 +27,10 @@ import io.github.axolotlclient.AxolotlClientConfig.api.manager.ConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.OptionCategory;
 import io.github.axolotlclient.AxolotlClientConfig.api.ui.screen.ConfigScreen;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets.VanillaEntryListWidget;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.ButtonWidget;
+import net.minecraft.client.gui.widget.button.PlainTextButtonWidget;
 import net.minecraft.text.CommonTexts;
 import net.minecraft.text.Text;
 
@@ -37,6 +38,7 @@ public class VanillaConfigScreen extends Screen implements ConfigScreen {
 	private final Screen parent;
 	private final ConfigManager configManager;
 	private final OptionCategory category;
+	private boolean searchVisible;
 
 	public VanillaConfigScreen(Screen parent, OptionCategory category) {
 		super(Text.translatable(category.getName()));
@@ -47,21 +49,29 @@ public class VanillaConfigScreen extends Screen implements ConfigScreen {
 
 	@Override
 	protected void init() {
+		searchVisible = false;
+		TextFieldWidget searchInput = addDrawableSelectableElement(new TextFieldWidget(textRenderer, width/2 - 75, 20, 150, 20, Text.empty()));
+		searchInput.visible = false;
 		addDrawableSelectableElement(ButtonWidget.builder(CommonTexts.BACK, w -> closeScreen())
 			.position(width / 2 - 75, height - 45).build());
-		addDrawableSelectableElement(new VanillaEntryListWidget(configManager, category, width, height, 45, height - 55, 25));
-	}
-
-	@Override
-	public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-		super.render(graphics, mouseX, mouseY, delta);
-
-		graphics.drawCenteredShadowedText(client.textRenderer, getTitle(), width / 2, 25, -1);
+		var list = addDrawableSelectableElement(new VanillaEntryListWidget(configManager, category, width, height, 45, height - 55, 25));
+		searchInput.setChangedListener(list::setSearchFilter);
+		addDrawableSelectableElement(new PlainTextButtonWidget(width/2 - textRenderer.getWidth(getTitle())/2, 25,
+			textRenderer.getWidth(getTitle()), textRenderer.fontHeight, getTitle(), w -> {
+			w.visible = false;
+			searchInput.visible = searchVisible = true;
+			setFocusedChild(searchInput);
+			list.setSearchFilter(searchInput.getText());
+		}, textRenderer));
 	}
 
 	@Override
 	public void closeScreen() {
-		client.setScreen(parent);
+		if (searchVisible) {
+			clearAndInit();
+		} else {
+			client.setScreen(parent);
+		}
 	}
 
 	@Override

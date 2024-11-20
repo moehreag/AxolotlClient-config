@@ -22,8 +22,6 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl;
 
-import java.io.IOException;
-
 import io.github.axolotlclient.AxolotlClientConfig.api.util.WindowPropertiesProvider;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.ConfigUIImpl;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.NVGMC;
@@ -33,6 +31,8 @@ import net.minecraft.resource.Identifier;
 import net.ornithemc.osl.entrypoints.api.client.ClientModInitializer;
 import net.ornithemc.osl.lifecycle.api.client.MinecraftClientEvents;
 import net.ornithemc.osl.resource.loader.api.ResourceLoaderEvents;
+
+import java.io.IOException;
 
 public class AxolotlClientConfigMod implements ClientModInitializer {
 

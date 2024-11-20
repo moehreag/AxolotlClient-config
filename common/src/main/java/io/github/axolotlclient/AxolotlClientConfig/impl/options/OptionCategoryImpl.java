@@ -22,16 +22,16 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.options;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-
 import io.github.axolotlclient.AxolotlClientConfig.api.options.Option;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.OptionCategory;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 @Getter
 @RequiredArgsConstructor

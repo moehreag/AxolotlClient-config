@@ -22,8 +22,6 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded;
 
-import java.util.List;
-
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.ElementPath;
@@ -38,6 +36,8 @@ import net.minecraft.client.gui.screen.navigation.NavigationDirection;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public abstract class ElementListWidget<E extends ElementListWidget.Entry<E>> extends EntryListWidget<E> {
 	public ElementListWidget(MinecraftClient minecraftClient, int i, int j, int k, int l, int m) {

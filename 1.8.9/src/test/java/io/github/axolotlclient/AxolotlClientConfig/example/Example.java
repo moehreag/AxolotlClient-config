@@ -22,8 +22,6 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.example;
 
-import java.util.function.Function;
-
 import io.github.axolotlclient.AxolotlClientConfig.api.AxolotlClientConfig;
 import io.github.axolotlclient.AxolotlClientConfig.api.manager.ConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.OptionCategory;
@@ -38,6 +36,8 @@ import net.minecraft.client.options.KeyBinding;
 import net.ornithemc.osl.entrypoints.api.client.ClientModInitializer;
 import net.ornithemc.osl.keybinds.api.KeyBindingEvents;
 import net.ornithemc.osl.lifecycle.api.client.MinecraftClientEvents;
+
+import java.util.function.Function;
 
 public class Example implements ClientModInitializer {
 

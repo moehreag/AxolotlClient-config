@@ -106,7 +106,7 @@ public class ColorSelectionScreen extends Screen implements DrawingUtil {
 		y += 45;
 		if (this.height - 250 > 0) {
 			y -= 20;
-			TextFieldWidget text = new TextFieldWidget(client.textRenderer, buttonsX, y, 150, 20, Text.empty());
+			TextFieldWidget text = new TextFieldWidget(buttonsX, y, 150, 20, Text.empty());
 			text.setChangedListener(s -> {
 				try {
 					option.set(Color.parse(s));
