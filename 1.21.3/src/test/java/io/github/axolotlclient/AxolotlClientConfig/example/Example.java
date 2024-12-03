@@ -22,7 +22,7 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.example;
 
-import com.mojang.blaze3d.platform.InputUtil;
+import com.mojang.blaze3d.platform.InputConstants;
 import io.github.axolotlclient.AxolotlClientConfig.api.AxolotlClientConfig;
 import io.github.axolotlclient.AxolotlClientConfig.api.manager.ConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.OptionCategory;
@@ -34,9 +34,9 @@ import lombok.Getter;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.option.KeyBind;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 
 import java.util.function.Function;
 
@@ -97,11 +97,11 @@ public class Example implements ClientModInitializer {
 
 		AxolotlClientConfig.getInstance().register(new JsonConfigManager(FabricLoader.getInstance().getConfigDir().resolve(modid + ".json"), example));
 
-		KeyBind bind = new KeyBind(modid, InputUtil.KEY_O_CODE, modid);
+		KeyMapping bind = new KeyMapping(modid, InputConstants.KEY_O, modid);
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
-			if (bind.wasPressed()) {
-				client.setScreen(getConfigScreenFactory(modid).apply(client.currentScreen));
+			if (bind.consumeClick()) {
+				client.setScreen(getConfigScreenFactory(modid).apply(client.screen));
 			}
 		});
 
@@ -111,7 +111,7 @@ public class Example implements ClientModInitializer {
 				ConfigUI.getInstance().getStyleNames().toArray(new String[0]),
 				ConfigUI.getInstance().getCurrentStyle().getName(), s -> {
 				ConfigUI.getInstance().setStyle(s);
-				MinecraftClient.getInstance().currentScreen.closeScreen();
+				Minecraft.getInstance().screen.onClose();
 			}));
 			AxolotlClientConfig.getInstance().getConfigManager(modid).load();
 			ConfigUI.getInstance().setStyle(option.get());

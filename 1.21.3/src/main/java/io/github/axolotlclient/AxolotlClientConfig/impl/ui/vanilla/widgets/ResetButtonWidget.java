@@ -23,25 +23,25 @@
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets;
 
 import com.google.common.util.concurrent.AtomicDouble;
-import com.mojang.blaze3d.glfw.Window;
+import com.mojang.blaze3d.platform.Window;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.Option;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.button.ButtonWidget;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 
-public class ResetButtonWidget<T> extends ButtonWidget {
+public class ResetButtonWidget<T> extends Button {
 
 	private final Option<T> option;
 
 	public ResetButtonWidget(int x, int y, int width, int height, Option<T> option) {
-		super(x, y, width, height, Text.translatable("action.reset"), widget -> {
+		super(x, y, width, height, Component.translatable("action.reset"), widget -> {
 			option.set(option.getDefault());
-			Window window = MinecraftClient.getInstance().getWindow();
-			int i = window.getScaledWidth();
-			int j = window.getScaledHeight();
-			Screen current = MinecraftClient.getInstance().currentScreen;
+			Window window = Minecraft.getInstance().getWindow();
+			int i = window.getGuiScaledWidth();
+			int j = window.getGuiScaledHeight();
+			Screen current = Minecraft.getInstance().screen;
 			if (current != null) {
 				AtomicDouble scroll = new AtomicDouble();
 				current.children().stream()
@@ -49,7 +49,7 @@ public class ResetButtonWidget<T> extends ButtonWidget {
 					.map(e -> (VanillaEntryListWidget) e).findFirst().ifPresent(list -> {
 						scroll.set(list.getScrollAmount());
 					});
-				current.init(MinecraftClient.getInstance(), i, j);
+				current.init(Minecraft.getInstance(), i, j);
 				current.children().stream()
 					.filter(e -> e instanceof VanillaEntryListWidget)
 					.map(e -> (VanillaEntryListWidget) e).findFirst().ifPresent(list -> {
@@ -61,8 +61,8 @@ public class ResetButtonWidget<T> extends ButtonWidget {
 	}
 
 	@Override
-	public void drawWidget(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+	public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
 		this.active = !option.getDefault().equals(option.get());
-		super.drawWidget(graphics, mouseX, mouseY, delta);
+		super.renderWidget(graphics, mouseX, mouseY, delta);
 	}
 }

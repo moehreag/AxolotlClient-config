@@ -24,20 +24,20 @@ package io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets;
 
 import io.github.axolotlclient.AxolotlClientConfig.impl.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.Updatable;
-import net.minecraft.text.CommonTexts;
+import net.minecraft.network.chat.CommonComponents;
 
 public class BooleanWidget extends RoundedButtonWidget implements Updatable {
 	private final BooleanOption option;
 
 	public BooleanWidget(int x, int y, int width, int height, BooleanOption option) {
-		super(x, y, width, height, option.get() ? CommonTexts.ON : CommonTexts.OFF, widget -> {
+		super(x, y, width, height, option.get() ? CommonComponents.OPTION_ON : CommonComponents.OPTION_OFF, widget -> {
 			option.set(!option.get());
-			widget.setMessage(option.get() ? CommonTexts.ON : CommonTexts.OFF);
+			widget.setMessage(option.get() ? CommonComponents.OPTION_ON : CommonComponents.OPTION_OFF);
 		});
 		this.option = option;
 	}
 
 	public void update() {
-		setMessage(option.get() ? CommonTexts.ON : CommonTexts.OFF);
+		setMessage(option.get() ? CommonComponents.OPTION_ON : CommonComponents.OPTION_OFF);
 	}
 }

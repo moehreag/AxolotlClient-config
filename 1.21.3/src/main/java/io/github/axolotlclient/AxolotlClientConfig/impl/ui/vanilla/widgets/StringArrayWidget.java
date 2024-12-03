@@ -24,39 +24,51 @@ package io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets;
 
 import io.github.axolotlclient.AxolotlClientConfig.impl.options.StringArrayOption;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.widget.button.ButtonWidget;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
+import org.apache.commons.lang3.ArrayUtils;
 
-public class StringArrayWidget extends ButtonWidget {
+public class StringArrayWidget extends Button {
 
 	private final StringArrayOption option;
 
 	public StringArrayWidget(int x, int y, int width, int height, StringArrayOption option) {
-		super(x, y, width, height, Text.translatable(option.get()), widget -> {
+		super(x, y, width, height, Component.translatable(option.get()), widget -> {
 		}, DEFAULT_NARRATION);
 		this.option = option;
 	}
 
 	@Override
-	protected void drawWidget(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-		if (!getMessage().getString().equals(Text.translatable(option.get()).getString())) {
-			setMessage(Text.translatable(option.get()));
+	protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+		if (!getMessage().getString().equals(Component.translatable(option.get()).getString())) {
+			setMessage(Component.translatable(option.get()));
 		}
-		super.drawWidget(graphics, mouseX, mouseY, delta);
+		super.renderWidget(graphics, mouseX, mouseY, delta);
 	}
 
 	@Override
-	public void onClick(double mouseX, double mouseY) {
+	public void onPress() {
+		cycle(Screen.hasShiftDown() ? -1 : 1);
+	}
+
+	private void cycle(int delta) {
 		String[] values = option.getValues();
-		int i = 0;
-		while (!values[i].equals(option.get())) {
-			i += 1;
-		}
-		i += 1;
-		if (i >= values.length) {
-			i = 0;
-		}
+		int i = ArrayUtils.indexOf(values, option.get());
+		i = Mth.positiveModulo(i + delta, values.length);
 		option.set(values[i]);
-		setMessage(Text.translatable(option.get()));
+		setMessage(Component.translatable(option.get()));
+	}
+
+	@Override
+	public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+		if (scrollY > 0.0) {
+			this.cycle(-1);
+		} else if (scrollY < 0.0) {
+			this.cycle(1);
+		}
+
+		return true;
 	}
 }

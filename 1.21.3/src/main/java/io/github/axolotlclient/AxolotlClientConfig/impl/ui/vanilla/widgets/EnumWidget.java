@@ -23,30 +23,42 @@
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets;
 
 import io.github.axolotlclient.AxolotlClientConfig.impl.options.EnumOption;
-import net.minecraft.client.gui.widget.button.ButtonWidget;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
+import org.apache.commons.lang3.ArrayUtils;
 
-public class EnumWidget<T extends Enum<T>> extends ButtonWidget {
+public class EnumWidget<T extends Enum<T>> extends Button {
 	private final EnumOption<T> option;
 
 	public EnumWidget(int x, int y, int width, int height, EnumOption<T> option) {
-		super(x, y, width, height, Text.translatable(String.valueOf(option.get())), widget -> {
+		super(x, y, width, height, Component.translatable(String.valueOf(option.get())), widget -> {
 		}, DEFAULT_NARRATION);
 		this.option = option;
 	}
 
 	@Override
-	public void onClick(double mouseX, double mouseY) {
+	public void onPress() {
+		cycle(Screen.hasShiftDown() ? -1 : 1);
+	}
+
+	private void cycle(int delta) {
 		T[] values = option.getClazz().getEnumConstants();
-		int i = 0;
-		while (!values[i].equals(option.get())) {
-			i += 1;
-		}
-		i += 1;
-		if (i >= values.length) {
-			i = 0;
-		}
+		int i = ArrayUtils.indexOf(values, option.get());
+		i = Mth.positiveModulo(i + delta, values.length);
 		option.set(values[i]);
-		setMessage(Text.translatable(String.valueOf(option.get())));
+		setMessage(Component.translatable(String.valueOf(option.get())));
+	}
+
+	@Override
+	public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+		if (scrollY > 0.0) {
+			this.cycle(-1);
+		} else if (scrollY < 0.0) {
+			this.cycle(1);
+		}
+
+		return true;
 	}
 }

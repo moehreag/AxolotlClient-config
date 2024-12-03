@@ -114,9 +114,11 @@ public class ButtonListWidget extends ElementListWidget<ButtonListWidget.Entry> 
 	}
 
 	protected void collectEntries(OptionCategory current, List<OptionCategory> categoryCollector, List<Option<?>> optionCollector) {
-		categoryCollector.add(current);
 		optionCollector.addAll(current.getOptions());
-		current.getSubCategories().forEach(c -> collectEntries(c, categoryCollector, optionCollector));
+		current.getSubCategories().forEach(c -> {
+			categoryCollector.add(c);
+			collectEntries(c, categoryCollector, optionCollector);
+		});
 	}
 
 	protected ClickableWidget createWidget(int x, WidgetIdentifieable id) {

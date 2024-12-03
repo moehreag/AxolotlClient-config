@@ -29,10 +29,10 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.resource.ResourceType;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.resources.ResourceManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -46,31 +46,31 @@ public class AxolotlClientConfigMod implements ClientModInitializer {
 		NVGMC.setWindowPropertiesProvider(new WindowPropertiesProvider() {
 			@Override
 			public int getHeight() {
-				return MinecraftClient.getInstance().getFramebuffer().textureHeight;
+				return Minecraft.getInstance().getMainRenderTarget().height;
 			}
 
 			@Override
 			public int getWidth() {
-				return MinecraftClient.getInstance().getFramebuffer().textureWidth;
+				return Minecraft.getInstance().getMainRenderTarget().width;
 			}
 
 			@Override
 			public float getScaleFactor() {
-				return (float) MinecraftClient.getInstance().getWindow().getScaleFactor();
+				return (float) Minecraft.getInstance().getWindow().getGuiScale();
 			}
 		});
 
-		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
+		ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
 			@Override
-			public @NotNull Identifier getFabricId() {
-				return Identifier.of("axolotlclientconfig", "resource_listener");
+			public @NotNull ResourceLocation getFabricId() {
+				return ResourceLocation.fromNamespaceAndPath("axolotlclientconfig", "resource_listener");
 			}
 
 			@Override
-			public void reload(ResourceManager resourceManager) {
+			public void onResourceManagerReload(ResourceManager resourceManager) {
 				ConfigUIImpl.getInstance().preReload();
-				MinecraftClient.getInstance().getResourceManager()
-					.getAllResources(Identifier.parse(ConfigUIImpl.getInstance().getUiJsonPath())).forEach(resource -> {
+				Minecraft.getInstance().getResourceManager()
+					.getResourceStack(ResourceLocation.parse(ConfigUIImpl.getInstance().getUiJsonPath())).forEach(resource -> {
 						try {
 							ConfigUIImpl.getInstance().read(resource.open());
 						} catch (IOException ignored) {

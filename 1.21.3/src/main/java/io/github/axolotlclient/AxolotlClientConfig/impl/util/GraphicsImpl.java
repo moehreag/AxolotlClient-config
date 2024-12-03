@@ -22,7 +22,7 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.util;
 
-import com.mojang.blaze3d.texture.NativeImage;
+import com.mojang.blaze3d.platform.NativeImage;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Color;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Graphics;
 
@@ -53,7 +53,7 @@ public class GraphicsImpl implements Graphics {
 
 				for (int y = 0; y < data.length; y++) {
 					for (int x = 0; x < data[y].length; x++) {
-						data[y][x] = image.method_61940(x, y);
+						data[y][x] = image.getPixel(x, y);
 					}
 				}
 				return data;
@@ -71,7 +71,7 @@ public class GraphicsImpl implements Graphics {
 		NativeImage image = new NativeImage(width.get(), height, true);
 		for (int x = 0; x < width.get(); x++) {
 			for (int y = 0; y < height; y++) {
-				image.method_61941(x, y, data[y][x]);
+				image.setPixel(x, y, data[y][x]);
 			}
 		}
 		return image;

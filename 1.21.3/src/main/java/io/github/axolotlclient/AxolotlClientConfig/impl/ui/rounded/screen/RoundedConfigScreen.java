@@ -35,9 +35,9 @@ import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets.Round
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets.TextFieldWidget;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets.TextOnlyButtonWidget;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.text.CommonTexts;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
 
 public class RoundedConfigScreen extends Screen implements ConfigScreen, DrawingUtil {
 
@@ -47,7 +47,7 @@ public class RoundedConfigScreen extends Screen implements ConfigScreen, Drawing
 	private boolean searchVisible;
 
 	public RoundedConfigScreen(Screen parent, OptionCategory category) {
-		super(Text.translatable(category.getName()));
+		super(Component.translatable(category.getName()));
 		this.parent = parent;
 		this.configManager = AxolotlClientConfig.getInstance().getConfigManager(category);
 		this.category = category;
@@ -73,26 +73,26 @@ public class RoundedConfigScreen extends Screen implements ConfigScreen, Drawing
 	@Override
 	protected void init() {
 		searchVisible = false;
-		TextFieldWidget searchInput = addDrawableSelectableElement(new TextFieldWidget(width/2 - 75, 20, 150, 20, Text.empty()));
+		TextFieldWidget searchInput = addRenderableWidget(new TextFieldWidget(width/2 - 75, 20, 150, 20, Component.empty()));
 		searchInput.visible = false;
-		addDrawableSelectableElement(new RoundedButtonWidget(width / 2 - 75, height - 40,
-			CommonTexts.BACK, w -> closeScreen()));
-		RoundedButtonListWidget list = addDrawableSelectableElement(new RoundedButtonListWidget(configManager, category, width, height, 45, height - 55, 25));
+		addRenderableWidget(new RoundedButtonWidget(width / 2 - 75, height - 40,
+			CommonComponents.GUI_BACK, w -> onClose()));
+		RoundedButtonListWidget list = addRenderableWidget(new RoundedButtonListWidget(configManager, category, width, height, 45, height - 55, 25));
 		searchInput.setChangedListener(list::setSearchFilter);
-		addDrawableSelectableElement(TextOnlyButtonWidget.centeredWidget(width/2, 25, getTitle(), w -> {
+		addRenderableWidget(TextOnlyButtonWidget.centeredWidget(width/2, 25, getTitle(), w -> {
 			w.visible = false;
 			searchInput.visible = searchVisible = true;
-			setFocusedChild(searchInput);
+			setFocused(searchInput);
 			list.setSearchFilter(searchInput.getText());
 		}));
 	}
 
 	@Override
-	public void closeScreen() {
+	public void onClose() {
 		if (searchVisible) {
-			clearAndInit();
+			rebuildWidgets();
 		} else {
-			client.setScreen(parent);
+			minecraft.setScreen(parent);
 		}
 	}
 

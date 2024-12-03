@@ -30,8 +30,8 @@ import io.github.axolotlclient.AxolotlClientConfig.api.util.Colors;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.EntryListWidget;
 import io.github.axolotlclient.AxolotlClientConfig.impl.util.DrawUtil;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -58,14 +58,14 @@ public class VanillaEntryListWidget extends EntryListWidget {
 	}
 
 	@Override
-	protected Entry createOptionEntry(ClickableWidget widget, Option<?> option, @Nullable ClickableWidget other, @Nullable Option<?> otherOption) {
+	protected Entry createOptionEntry(AbstractWidget widget, Option<?> option, @Nullable AbstractWidget other, @Nullable Option<?> otherOption) {
 		return new VanillaOptionEntry(widget, option);
 	}
 
 	@Override
 	protected void renderDecorations(GuiGraphics graphics, int mouseX, int mouseY) {
-		if (getHoveredEntry() != null && getHoveredEntry() instanceof VanillaOptionEntry) {
-			DrawUtil.drawTooltip(graphics, ((VanillaOptionEntry) getHoveredEntry()).option,
+		if (getHovered() != null && getHovered() instanceof VanillaOptionEntry) {
+			DrawUtil.drawTooltip(graphics, ((VanillaOptionEntry) getHovered()).option,
 				mouseX, mouseY);
 		}
 	}
@@ -74,7 +74,7 @@ public class VanillaEntryListWidget extends EntryListWidget {
 
 		private final Option<?> option;
 
-		public VanillaOptionEntry(ClickableWidget widget, Option<?> option) {
+		public VanillaOptionEntry(AbstractWidget widget, Option<?> option) {
 			super(ImmutableList.of(widget,
 				new ResetButtonWidget<>(widget.getX() + widget.getWidth() - 40, 0, 40, widget.getHeight(), option)));
 			widget.setWidth(widget.getWidth() - 42);
@@ -85,7 +85,7 @@ public class VanillaEntryListWidget extends EntryListWidget {
 		public void render(GuiGraphics graphics, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
 			super.render(graphics, index, y, x, entryWidth, entryHeight, mouseX, mouseY, hovered, tickDelta);
 
-			DrawUtil.drawScrollingText(graphics, Text.translatable(option.getName()), width / 2 + WIDGET_ROW_LEFT,
+			DrawUtil.drawScrollingText(graphics, Component.translatable(option.getName()), width / 2 + WIDGET_ROW_LEFT,
 				y, WIDGET_WIDTH, entryHeight, Colors.text());
 		}
 	}

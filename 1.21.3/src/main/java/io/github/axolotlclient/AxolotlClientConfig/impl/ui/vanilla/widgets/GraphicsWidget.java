@@ -24,22 +24,22 @@ package io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets;
 
 import io.github.axolotlclient.AxolotlClientConfig.impl.options.GraphicsOption;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.screen.GraphicsEditorScreen;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.widget.button.ButtonWidget;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.Component;
 
-public class GraphicsWidget extends ButtonWidget {
+public class GraphicsWidget extends Button {
 	private final GraphicsOption option;
 
 	public GraphicsWidget(int x, int y, int width, int height, GraphicsOption option) {
-		super(x, y, width, height, Text.translatable("open_editor"), buttonWidget -> {
+		super(x, y, width, height, Component.translatable("open_editor"), buttonWidget -> {
 		}, DEFAULT_NARRATION);
 		this.option = option;
 	}
 
 	@Override
 	public void onPress() {
-		MinecraftClient.getInstance()
-			.setScreen(new GraphicsEditorScreen(MinecraftClient.getInstance().currentScreen, option));
+		Minecraft.getInstance()
+			.setScreen(new GraphicsEditorScreen(Minecraft.getInstance().screen, option));
 	}
 }

@@ -22,20 +22,20 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.util;
 
-import com.mojang.blaze3d.texture.NativeImage;
+import com.mojang.blaze3d.platform.NativeImage;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.Option;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Color;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Rectangle;
 import io.github.axolotlclient.AxolotlClientConfig.impl.mixin.NativeImageInvoker;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.DrawingUtil;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.NVGFont;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.resource.language.I18n;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import org.lwjgl.nanovg.NanoVG;
 import org.lwjgl.system.MemoryUtil;
 
@@ -72,26 +72,26 @@ public class DrawUtil implements DrawingUtil {
 		fillRect(stack, x, y + height - 1, width - 1, 1, color);
 	}
 
-	public static void drawCenteredString(GuiGraphics stack, TextRenderer renderer,
+	public static void drawCenteredString(GuiGraphics stack, Font renderer,
 										  String text, int centerX, int y,
 										  int color, boolean shadow) {
-		drawString(stack, renderer, text, centerX - renderer.getWidth(text) / 2,
+		drawString(stack, renderer, text, centerX - renderer.width(text) / 2,
 			y,
 			color, shadow);
 	}
 
-	public static void drawString(GuiGraphics stack, TextRenderer renderer, String text, int x, int y,
+	public static void drawString(GuiGraphics stack, Font renderer, String text, int x, int y,
 								  int color, boolean shadow) {
-		stack.drawText(renderer, text, x, y, color, shadow);
+		stack.drawString(renderer, text, x, y, color, shadow);
 	}
 
-	public static int nvgCreateImage(long ctx, Identifier texture) {
+	public static int nvgCreateImage(long ctx, ResourceLocation texture) {
 		return nvgCreateImage(ctx, texture, 0);
 	}
 
-	public static int nvgCreateImage(long ctx, Identifier texture, int imageFlags) {
+	public static int nvgCreateImage(long ctx, ResourceLocation texture, int imageFlags) {
 		try {
-			ByteBuffer buffer = mallocAndRead(MinecraftClient.getInstance().getResourceManager().getResource(texture)
+			ByteBuffer buffer = mallocAndRead(Minecraft.getInstance().getResourceManager().getResource(texture)
 				.orElseThrow().open());
 			int handle = NanoVG.nvgCreateImageMem(ctx, imageFlags, buffer);
 			MemoryUtil.memFree(buffer);
@@ -115,7 +115,7 @@ public class DrawUtil implements DrawingUtil {
 		}
 	}
 
-	public static void drawScrollingText(GuiGraphics stack, Text text, int x, int y, int width, int height, Color color) {
+	public static void drawScrollingText(GuiGraphics stack, Component text, int x, int y, int width, int height, Color color) {
 		drawScrollingText(stack, text.getString(), x, y, width, height, color);
 	}
 
@@ -124,11 +124,11 @@ public class DrawUtil implements DrawingUtil {
 	}
 
 	public static void drawScrollingText(GuiGraphics stack, int left, int top, int right, int bottom, String text, Color color) {
-		drawScrollingText(stack, MinecraftClient.getInstance().textRenderer, text, (left + right) / 2, left, top, right, bottom, color);
+		drawScrollingText(stack, Minecraft.getInstance().font, text, (left + right) / 2, left, top, right, bottom, color);
 	}
 
-	public static void drawScrollingText(GuiGraphics graphics, TextRenderer renderer, String text, int center, int left, int top, int right, int bottom, Color color) {
-		int textWidth = renderer.getWidth(text);
+	public static void drawScrollingText(GuiGraphics graphics, Font renderer, String text, int center, int left, int top, int right, int bottom, Color color) {
+		int textWidth = renderer.width(text);
 		int y = (top + bottom - 9) / 2 + 1;
 		int width = right - left;
 		if (textWidth > width) {
@@ -149,26 +149,26 @@ public class DrawUtil implements DrawingUtil {
 	}
 
 	public static void drawTooltip(GuiGraphics graphics, Option<?> option, int x, int y) {
-		String tooltip = I18n.translate(option.getTooltip());
+		String tooltip = I18n.get(option.getTooltip());
 		if (tooltip.equals(option.getTooltip())) {
 			return;
 		}
 		String[] text = tooltip.split("<br>");
 		if (!text[0].isEmpty() || text.length > 1) {
-			TextRenderer renderer = MinecraftClient.getInstance().textRenderer;
-			graphics.method_51434(renderer,
-				Arrays.stream(text).map(Text::of).toList(), x - 2, y + 12 + 3 + 10);
+			Font renderer = Minecraft.getInstance().font;
+			graphics.renderComponentTooltip(renderer,
+				Arrays.stream(text).map(Component::nullToEmpty).toList(), x - 2, y + 12 + 3 + 10);
 		}
 	}
 
 	public static void drawTooltip(long ctx, NVGFont font, Option<?> option, int x, int y) {
-		String tooltip = I18n.translate(option.getTooltip());
+		String tooltip = I18n.get(option.getTooltip());
 		if (tooltip.equals(option.getTooltip())) {
 			return;
 		}
 		String[] text = tooltip.split("<br>");
 		if (!text[0].isEmpty() || text.length > 1) {
-			Screen screen = MinecraftClient.getInstance().currentScreen;
+			Screen screen = Minecraft.getInstance().screen;
 			INSTANCE.drawTooltip(ctx, font, text, x, y, screen.width, screen.height);
 		}
 	}

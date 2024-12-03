@@ -22,18 +22,18 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.example.mixin;
 
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.hud.in_game.InGameHud;
-import net.minecraft.client.render.DeltaTracker;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(InGameHud.class)
+@Mixin(Gui.class)
 public class InGameHudMixin {
 
-	@Inject(method = "renderStatusEffectOverlay", at = @At(value = "HEAD"))
+	@Inject(method = "renderEffects", at = @At(value = "HEAD"))
 	private void onHudRender(GuiGraphics graphics, DeltaTracker tracker, CallbackInfo ci) {
 		graphics.fill(50, 50, 100, 100, -162555);
 		//graphics.drawTexture(Example.getInstance().graphicsOption.getTexture(), 50, 50, 0, 0, 50, 50, 50, 50);

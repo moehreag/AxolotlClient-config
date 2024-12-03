@@ -27,19 +27,24 @@ import io.github.axolotlclient.AxolotlClientConfig.api.options.Option;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.OptionCategory;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.WidgetIdentifieable;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.AlphabeticalComparator;
+import io.github.axolotlclient.AxolotlClientConfig.api.util.Colors;
+import io.github.axolotlclient.AxolotlClientConfig.impl.ui.DrawingUtil;
 import io.github.axolotlclient.AxolotlClientConfig.impl.util.ConfigStyles;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.Element;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.Selectable;
-import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.resource.language.I18n;
+import net.minecraft.client.gui.components.AbstractButton;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.ContainerObjectSelectionList;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarratableEntry;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Stream;
 
-public class ButtonListWidget extends ElementListWidget<ButtonListWidget.Entry> {
+public class ButtonListWidget extends ContainerObjectSelectionList<ButtonListWidget.Entry> implements DrawingUtil {
 
 	protected static int WIDGET_WIDTH = 150;
 	protected static int WIDGET_ROW_LEFT = -155;
@@ -50,7 +55,7 @@ public class ButtonListWidget extends ElementListWidget<ButtonListWidget.Entry> 
 	private final OptionCategory category;
 
 	public ButtonListWidget(ConfigManager manager, OptionCategory category, int screenWidth, int screenHeight, int top, int bottom, int entryHeight) {
-		super(MinecraftClient.getInstance(), screenWidth, screenHeight, top, bottom, entryHeight);
+		super(Minecraft.getInstance(), screenWidth, bottom-top, top, entryHeight);
 		centerListVertically = false;
 		this.manager = manager;
 		this.category = category;
@@ -106,52 +111,88 @@ public class ButtonListWidget extends ElementListWidget<ButtonListWidget.Entry> 
 		List<OptionCategory> flattenedCategories = new ArrayList<>();
 		List<Option<?>> flattenedOptions = new ArrayList<>();
 		collectEntries(category, flattenedCategories, flattenedOptions);
-		flattenedCategories.removeIf(c -> !I18n.translate(c.getName()).toLowerCase(Locale.ROOT).contains(searchFilter.toLowerCase(Locale.ROOT)));
-		flattenedOptions.removeIf(c -> !I18n.translate(c.getName()).toLowerCase(Locale.ROOT).contains(searchFilter.toLowerCase(Locale.ROOT)));
-		flattenedCategories.sort((o1, o2) -> AlphabeticalComparator.cmp(I18n.translate(o1.getName()), I18n.translate(o2.getName())));
-		flattenedOptions.sort((o1, o2) -> AlphabeticalComparator.cmp(I18n.translate(o1.getName()), I18n.translate(o2.getName())));
+		flattenedCategories.removeIf(c -> !I18n.get(c.getName()).toLowerCase(Locale.ROOT).contains(searchFilter.toLowerCase(Locale.ROOT)));
+		flattenedOptions.removeIf(c -> !I18n.get(c.getName()).toLowerCase(Locale.ROOT).contains(searchFilter.toLowerCase(Locale.ROOT)));
+		flattenedCategories.sort((o1, o2) -> AlphabeticalComparator.cmp(I18n.get(o1.getName()), I18n.get(o2.getName())));
+		flattenedOptions.sort((o1, o2) -> AlphabeticalComparator.cmp(I18n.get(o1.getName()), I18n.get(o2.getName())));
 		addCategories(manager, flattenedCategories);
 		addOptions(manager, flattenedOptions);
 	}
 
 	protected void collectEntries(OptionCategory current, List<OptionCategory> categoryCollector, List<Option<?>> optionCollector) {
-		categoryCollector.add(current);
 		optionCollector.addAll(current.getOptions());
-		current.getSubCategories().forEach(c -> collectEntries(c, categoryCollector, optionCollector));
+		current.getSubCategories().forEach(c -> {
+			categoryCollector.add(c);
+			collectEntries(c, categoryCollector, optionCollector);
+		});
 	}
 
-	protected ClickableWidget createWidget(int x, WidgetIdentifieable id) {
+	protected AbstractWidget createWidget(int x, WidgetIdentifieable id) {
 		return ConfigStyles.createWidget(x, 0, WIDGET_WIDTH, itemHeight - 5, id);
 	}
 
-	protected Entry createOptionEntry(ClickableWidget widget, Option<?> option, @Nullable ClickableWidget other, @Nullable Option<?> otherOption) {
+	protected Entry createOptionEntry(AbstractWidget widget, Option<?> option, @Nullable AbstractWidget other, @Nullable Option<?> otherOption) {
 		return Entry.create(widget, other);
 	}
 
-	protected Entry createCategoryEntry(ClickableWidget widget, OptionCategory optionCategory, @Nullable ClickableWidget other, @Nullable OptionCategory otherOptionCategory) {
+	protected Entry createCategoryEntry(AbstractWidget widget, OptionCategory optionCategory, @Nullable AbstractWidget other, @Nullable OptionCategory otherOptionCategory) {
 		return Entry.create(widget, other);
 	}
 
 	@Override
 	public int getRowWidth() {
-		return 400;
+		return 308;
 	}
 
 	@Override
-	protected int getScrollbarPositionX() {
-		return super.getScrollbarPositionX() + 38;
+	protected boolean scrollbarVisible() {
+		return false;
+	}
+	protected void renderListBackground(GuiGraphics guiGraphics) {
 	}
 
-	protected static class Entry extends ElementListWidget.Entry<Entry> {
+	protected void renderListSeparators(GuiGraphics guiGraphics) {
+	}
+
+	@Override
+	public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+		return getHovered() != null && getHovered().mouseScrolled(mouseX, mouseY, scrollX, scrollY) || super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+	}
+
+	@Override
+	protected void renderDecorations(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+		int i = this.getMaxScroll();
+		if (i > 0) {
+			int j = this.getScrollbarPosition();
+			int k = (int) ((float) ((this.height) * (this.height)) / (float) this.getMaxPosition());
+			k = Mth.clamp(k, 32, this.height - 8);
+			int l = (int) this.getScrollAmount() * (this.height - k) / i + this.getY();
+			if (l < this.getY()) {
+				l = this.getY();
+			}
+
+			fillRoundedRect(NVGHolder.getContext(), j, getY(), 6, getHeight(), Colors.foreground(), 6 / 2);
+			fillRoundedRect(NVGHolder.getContext(), j, l, 6, k, Colors.accent(), 6 / 2);
+		}
+	}
+
+	@Override
+	protected void renderListItems(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+		pushScissor(NVGHolder.getContext(), getX(), getY(), getWidth(), getHeight());
+		super.renderListItems(guiGraphics, mouseX, mouseY, partialTick);
+		popScissor(NVGHolder.getContext());
+	}
+
+	protected static class Entry extends ContainerObjectSelectionList.Entry<Entry> {
 
 
-		protected final List<ClickableWidget> children = new ArrayList<>();
+		protected final List<AbstractWidget> children = new ArrayList<>();
 
-		public Entry(Collection<ClickableWidget> widgets) {
+		public Entry(Collection<AbstractWidget> widgets) {
 			children.addAll(widgets);
 		}
 
-		public static Entry create(ClickableWidget first, ClickableWidget other) {
+		public static Entry create(AbstractWidget first, AbstractWidget other) {
 			return new Entry(Stream.of(first, other).filter(Objects::nonNull).toList());
 		}
 
@@ -164,12 +205,12 @@ public class ButtonListWidget extends ElementListWidget<ButtonListWidget.Entry> 
 		}
 
 		@Override
-		public List<? extends Selectable> selectableChildren() {
+		public List<? extends NarratableEntry> narratables() {
 			return children;
 		}
 
 		@Override
-		public List<? extends Element> children() {
+		public List<? extends GuiEventListener> children() {
 			return children;
 		}
 	}

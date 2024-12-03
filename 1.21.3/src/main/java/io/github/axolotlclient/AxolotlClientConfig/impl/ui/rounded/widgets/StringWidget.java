@@ -25,13 +25,13 @@ package io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets;
 import io.github.axolotlclient.AxolotlClientConfig.impl.options.StringOption;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.DrawingUtil;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 
 public class StringWidget extends TextFieldWidget implements DrawingUtil {
 	private final StringOption option;
 
 	public StringWidget(int x, int y, int width, int height, StringOption option) {
-		super(x, y, width, height, Text.translatable(option.getName()));
+		super(x, y, width, height, Component.translatable(option.getName()));
 
 		setMaxLength(option.getMaxLength());
 		write(option.get());
@@ -40,10 +40,10 @@ public class StringWidget extends TextFieldWidget implements DrawingUtil {
 	}
 
 	@Override
-	public void drawWidget(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+	public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
 		if (!option.get().equals(getText())) {
 			setText(option.get());
 		}
-		super.drawWidget(graphics, mouseX, mouseY, delta);
+		super.renderWidget(graphics, mouseX, mouseY, delta);
 	}
 }

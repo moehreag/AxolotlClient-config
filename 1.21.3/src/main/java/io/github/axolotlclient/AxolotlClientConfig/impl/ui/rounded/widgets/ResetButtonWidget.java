@@ -23,16 +23,16 @@
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets;
 
 import com.google.common.util.concurrent.AtomicDouble;
-import com.mojang.blaze3d.glfw.Window;
+import com.mojang.blaze3d.platform.Window;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.Option;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Color;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Colors;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.NVGHolder;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import org.lwjgl.nanovg.NanoVG;
 
 public class ResetButtonWidget<T> extends RoundedButtonWidget {
@@ -40,12 +40,12 @@ public class ResetButtonWidget<T> extends RoundedButtonWidget {
 	private final Option<T> option;
 
 	public ResetButtonWidget(int x, int y, int width, int height, Option<T> option) {
-		super(x, y, width, height, Text.empty(), widget -> {
+		super(x, y, width, height, Component.empty(), widget -> {
 			option.set(option.getDefault());
-			Window window = MinecraftClient.getInstance().getWindow();
-			int i = window.getScaledWidth();
-			int j = window.getScaledHeight();
-			Screen current = MinecraftClient.getInstance().currentScreen;
+			Window window = Minecraft.getInstance().getWindow();
+			int i = window.getGuiScaledWidth();
+			int j = window.getGuiScaledHeight();
+			Screen current = Minecraft.getInstance().screen;
 			if (current != null) {
 				AtomicDouble scroll = new AtomicDouble();
 				current.children().stream()
@@ -53,7 +53,7 @@ public class ResetButtonWidget<T> extends RoundedButtonWidget {
 					.map(e -> (RoundedButtonListWidget) e).findFirst().ifPresent(list -> {
 						scroll.set(list.getScrollAmount());
 					});
-				current.init(MinecraftClient.getInstance(), i, j);
+				current.init(Minecraft.getInstance(), i, j);
 				current.children().stream()
 					.filter(e -> e instanceof RoundedButtonListWidget)
 					.map(e -> (RoundedButtonListWidget) e).findFirst().ifPresent(list -> {
@@ -65,10 +65,10 @@ public class ResetButtonWidget<T> extends RoundedButtonWidget {
 	}
 
 	@Override
-	protected void drawWidget(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+	protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
 		long ctx = NVGHolder.getContext();
 		this.active = !option.getDefault().equals(option.get());
-		super.drawWidget(graphics, mouseX, mouseY, delta);
+		super.renderWidget(graphics, mouseX, mouseY, delta);
 
 		Color color = !active ? Colors.foreground() : Colors.highlight();
 		if (active && isHovered()) {
@@ -89,8 +89,8 @@ public class ResetButtonWidget<T> extends RoundedButtonWidget {
 
 	}
 
-	protected MutableText getNarrationMessage() {
-		return getNarrationMessage(Text.translatable("action.reset"));
+	protected MutableComponent createNarrationMessage() {
+		return wrapDefaultNarrationMessage(Component.translatable("action.reset"));
 	}
 
 	@Override

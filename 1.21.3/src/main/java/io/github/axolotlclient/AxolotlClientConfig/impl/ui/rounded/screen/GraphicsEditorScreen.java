@@ -22,7 +22,7 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.screen;
 
-import com.mojang.blaze3d.platform.InputUtil;
+import com.mojang.blaze3d.platform.InputConstants;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Color;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Colors;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Graphics;
@@ -33,13 +33,12 @@ import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.NVGHolder;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.NVGUtil;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets.RoundedButtonWidget;
 import io.github.axolotlclient.AxolotlClientConfig.impl.util.ConfigStyles;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
-import net.minecraft.client.gui.widget.PressableWidget;
-import net.minecraft.client.gui.widget.button.ButtonWidget;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.components.AbstractButton;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import org.lwjgl.nanovg.NanoVG;
 
 public class GraphicsEditorScreen extends Screen implements DrawingUtil {
@@ -63,7 +62,7 @@ public class GraphicsEditorScreen extends Screen implements DrawingUtil {
 	private int mouseButton;
 
 	public GraphicsEditorScreen(Screen parent, GraphicsOption option) {
-		super(Text.translatable("draw_graphics"));
+		super(Component.translatable("draw_graphics"));
 
 		this.parent = parent;
 		this.option = option;
@@ -72,8 +71,8 @@ public class GraphicsEditorScreen extends Screen implements DrawingUtil {
 
 	@Override
 	protected void init() {
-		addDrawableSelectableElement(new RoundedButtonWidget(width / 2 - 75, height - 40, Text.translatable("gui.back"),
-			button -> MinecraftClient.getInstance().setScreen(parent)));
+		addRenderableWidget(new RoundedButtonWidget(width / 2 - 75, height - 40, Component.translatable("gui.back"),
+			button -> minecraft.getInstance().setScreen(parent)));
 
 
 		gridX = 110;
@@ -87,16 +86,16 @@ public class GraphicsEditorScreen extends Screen implements DrawingUtil {
 
 		pixelSize = Math.min(maxGridHeight / gridRows, maxGridWidth / gridColumns);
 
-		gridX = MinecraftClient.getInstance().getWindow().getScaledWidth() / 2 - (gridColumns * pixelSize) / 2;
+		gridX = minecraft.getWindow().getGuiScaledWidth() / 2 - (gridColumns * pixelSize) / 2;
 		maxGridWidth = Math.min(maxGridWidth, gridColumns * pixelSize);
 		maxGridHeight = Math.min(maxGridHeight, gridRows * pixelSize);
 
-		addDrawableSelectableElement(ConfigStyles.createWidget(gridX + maxGridWidth + 10, gridY + 35, 100, 20, colorOption));
-		ButtonWidget clear = new RoundedButtonWidget(gridX + maxGridWidth + 10, gridY + 60,
-			Text.translatable("clear_graphics"), buttonWidget -> clearGraphics());
+		addRenderableWidget(ConfigStyles.createWidget(gridX + maxGridWidth + 10, gridY + 35, 100, 20, colorOption));
+		Button clear = new RoundedButtonWidget(gridX + maxGridWidth + 10, gridY + 60,
+			Component.translatable("clear_graphics"), buttonWidget -> clearGraphics());
 		clear.setWidth(100);
-		addDrawableSelectableElement(clear);
-		addDrawableSelectableElement(new ElementSelectable(gridX, gridY, maxGridWidth, maxGridHeight));
+		addRenderableWidget(clear);
+		addRenderableWidget(new ElementSelectable(gridX, gridY, maxGridWidth, maxGridHeight));
 	}
 
 	@Override
@@ -140,7 +139,7 @@ public class GraphicsEditorScreen extends Screen implements DrawingUtil {
 			}
 			outline(NVGHolder.getContext(), gridX + (pixelSize * focusedPixel[0]), gridY + (pixelSize * focusedPixel[1]), pixelSize, pixelSize, Colors.GREEN, 1);
 
-			drawString(NVGHolder.getContext(), NVGHolder.getFont(), Text.translatable("option.current").getString(),
+			drawString(NVGHolder.getContext(), NVGHolder.getFont(), Component.translatable("option.current").getString(),
 				gridX + maxGridWidth + 10, gridY, Colors.text());
 			fillRoundedRect(NVGHolder.getContext(), gridX + maxGridWidth + 10, gridY + 12, 100, 20, colorOption.get().get(), 5);
 			outlineRoundedRect(NVGHolder.getContext(), gridX + maxGridWidth + 10, gridY + 12, 100, 20, Colors.BLACK, 5, 1);
@@ -198,37 +197,37 @@ public class GraphicsEditorScreen extends Screen implements DrawingUtil {
 		}
 	}
 
-	private class ElementSelectable extends PressableWidget {
+	private class ElementSelectable extends AbstractButton {
 
 		public ElementSelectable(int x, int y, int width, int height) {
-			super(x, y, width, height, Text.empty());
+			super(x, y, width, height, Component.empty());
 		}
 
 		@Override
 		public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 			keyboardInput = true;
-			if (keyCode == InputUtil.KEY_UP_CODE) {
+			if (keyCode == InputConstants.KEY_UP) {
 				if (focusedPixel[1] > 0) {
 					focusedPixel[1] -= 1;
 					return true;
 				}
-			} else if (keyCode == InputUtil.KEY_DOWN_CODE) {
+			} else if (keyCode == InputConstants.KEY_DOWN) {
 				if ((focusedPixel[1] + 1) * pixelSize < height) {
 					focusedPixel[1] += 1;
 					return true;
 				}
-			} else if (keyCode == InputUtil.KEY_LEFT_CODE) {
+			} else if (keyCode == InputConstants.KEY_LEFT) {
 				if (focusedPixel[0] > 0) {
 					focusedPixel[0] -= 1;
 					return true;
 				}
-			} else if (keyCode == InputUtil.KEY_RIGHT_CODE) {
+			} else if (keyCode == InputConstants.KEY_RIGHT) {
 				if ((focusedPixel[0] + 1) * pixelSize < width) {
 					focusedPixel[0] += 1;
 					return true;
 				}
 			}
-			if (keyCode == InputUtil.KEY_DELETE_CODE) {
+			if (keyCode == InputConstants.KEY_DELETE) {
 				graphics.setPixelColor(focusedPixel[0], focusedPixel[1], Colors.TRANSPARENT);
 			}
 			return super.keyPressed(keyCode, scanCode, modifiers);
@@ -240,7 +239,7 @@ public class GraphicsEditorScreen extends Screen implements DrawingUtil {
 		}
 
 		@Override
-		public void drawWidget(GuiGraphics matrices, int i, int j, float f) {
+		public void renderWidget(GuiGraphics matrices, int i, int j, float f) {
 			if (isHoveredOrFocused()) {
 				outline(NVGHolder.getContext(), gridX - 1, gridY - 1, maxGridWidth + 2, maxGridHeight + 2, Colors.RED, 1);
 			} else {
@@ -249,7 +248,7 @@ public class GraphicsEditorScreen extends Screen implements DrawingUtil {
 		}
 
 		@Override
-		protected void updateNarration(NarrationMessageBuilder builder) {
+		protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
 
 		}
 	}

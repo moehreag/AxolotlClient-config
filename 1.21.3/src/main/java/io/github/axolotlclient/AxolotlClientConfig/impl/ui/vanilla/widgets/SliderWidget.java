@@ -22,24 +22,24 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets;
 
-import io.github.axolotlclient.AxolotlClientConfig.impl.options.NumberOption;
-import io.github.axolotlclient.AxolotlClientConfig.impl.ui.Updatable;
-import net.minecraft.text.Text;
-
 import java.text.DecimalFormat;
 
-public class SliderWidget<O extends NumberOption<N>, N extends Number> extends net.minecraft.client.gui.widget.SliderWidget implements Updatable {
+import io.github.axolotlclient.AxolotlClientConfig.impl.options.NumberOption;
+import io.github.axolotlclient.AxolotlClientConfig.impl.ui.Updatable;
+import net.minecraft.network.chat.Component;
+
+public class SliderWidget<O extends NumberOption<N>, N extends Number> extends net.minecraft.client.gui.components.AbstractSliderButton implements Updatable {
 	private final O option;
 
 	public SliderWidget(int x, int y, int width, int height, O option) {
-		super(x, y, width, height, Text.literal(String.valueOf(option.get())), 0);
+		super(x, y, width, height, Component.literal(String.valueOf(option.get())), 0);
 		this.value = ((option.get().doubleValue() - option.getMin().doubleValue()) / (option.getMax().doubleValue() - option.getMin().doubleValue()));
 		this.option = option;
 	}
 
 	public void updateMessage() {
 		DecimalFormat format = new DecimalFormat("0.##");
-		setMessage(Text.literal(format.format(option.get().doubleValue())));
+		setMessage(Component.literal(format.format(option.get().doubleValue())));
 	}
 
 	@SuppressWarnings("unchecked")

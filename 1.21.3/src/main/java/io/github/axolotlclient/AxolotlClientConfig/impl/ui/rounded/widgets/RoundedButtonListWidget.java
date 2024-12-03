@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets;
 
+import java.util.Collection;
+
 import com.google.common.collect.ImmutableList;
 import io.github.axolotlclient.AxolotlClientConfig.api.manager.ConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.Option;
@@ -32,16 +34,13 @@ import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.ButtonListWid
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.NVGHolder;
 import io.github.axolotlclient.AxolotlClientConfig.impl.util.DrawUtil;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Collection;
 
 public class RoundedButtonListWidget extends ButtonListWidget {
 	public RoundedButtonListWidget(ConfigManager manager, OptionCategory category, int screenWidth, int screenHeight, int top, int bottom, int entryHeight) {
 		super(manager, category, screenWidth, screenHeight, top, bottom, entryHeight);
-		setRenderBackground(false);
 	}
 
 	@Override
@@ -61,14 +60,15 @@ public class RoundedButtonListWidget extends ButtonListWidget {
 	}
 
 	@Override
-	protected Entry createOptionEntry(ClickableWidget widget, Option<?> option, @Nullable ClickableWidget other, @Nullable Option<?> otherOption) {
+	protected Entry createOptionEntry(AbstractWidget widget, Option<?> option, @Nullable AbstractWidget other, @Nullable Option<?> otherOption) {
 		return new RoundedOptionEntry(widget, option);
 	}
 
 	@Override
 	protected void renderDecorations(GuiGraphics graphics, int mouseX, int mouseY) {
-		if (getHoveredEntry() != null && getHoveredEntry() instanceof RoundedOptionEntry) {
-			DrawUtil.drawTooltip(NVGHolder.getContext(), NVGHolder.getFont(), ((RoundedOptionEntry) getHoveredEntry()).option,
+		super.renderDecorations(graphics, mouseX, mouseY);
+		if (getHovered() != null && getHovered() instanceof RoundedOptionEntry) {
+			DrawUtil.drawTooltip(NVGHolder.getContext(), NVGHolder.getFont(), ((RoundedOptionEntry) getHovered()).option,
 				mouseX, mouseY);
 		}
 	}
@@ -77,7 +77,7 @@ public class RoundedButtonListWidget extends ButtonListWidget {
 
 		private final Option<?> option;
 
-		public RoundedOptionEntry(ClickableWidget widget, Option<?> option) {
+		public RoundedOptionEntry(AbstractWidget widget, Option<?> option) {
 			super(ImmutableList.of(widget,
 				new ResetButtonWidget<>(widget.getX() + widget.getWidth() - 20, 0, 20, widget.getHeight(), option)));
 			widget.setWidth(widget.getWidth() - 22);
@@ -88,7 +88,7 @@ public class RoundedButtonListWidget extends ButtonListWidget {
 		public void render(GuiGraphics graphics, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
 			super.render(graphics, index, y, x, entryWidth, entryHeight, mouseX, mouseY, hovered, tickDelta);
 
-			drawScrollingText(NVGHolder.getContext(), NVGHolder.getFont(), Text.translatable(option.getName()).getString(),
+			drawScrollingText(NVGHolder.getContext(), NVGHolder.getFont(), Component.translatable(option.getName()).getString(),
 				width / 2 + WIDGET_ROW_LEFT, y, WIDGET_WIDTH, entryHeight, Colors.accent());
 		}
 	}

@@ -4,8 +4,7 @@ plugins {
 }
 
 def minecraft_version = "1.21.3"
-def mappings_version = "1.21.3+build.6"
-def fapi_version = "0.107.3"
+def fapi_version = "0.110.0"
 group = maven_group
 version = "${project.version}+${minecraft_version}"
 archivesBaseName = "AxolotlClient-config"
@@ -21,8 +20,8 @@ repositories {
 		url = "https://maven.terraformersmc.com/releases"
 	}
 	maven {
-		name = 'Quilt'
-		url = 'https://maven.quiltmc.org/repository/release'
+		name = 'ParchmentMC'
+		url = 'https://maven.parchmentmc.org'
 	}
 	mavenLocal()
 }
@@ -40,7 +39,10 @@ loom {
 
 dependencies {
 	minecraft "com.mojang:minecraft:${minecraft_version}"
-	mappings "org.quiltmc:quilt-mappings:${mappings_version}:intermediary-v2"
+	mappings loom.layered {
+		officialMojangMappings()
+		parchment("org.parchmentmc.data:parchment-1.21.1:2024.11.17@zip")
+	}
 
 	modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader}"
 

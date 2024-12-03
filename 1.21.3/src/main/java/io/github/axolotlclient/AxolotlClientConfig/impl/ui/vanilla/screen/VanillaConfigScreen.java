@@ -27,12 +27,12 @@ import io.github.axolotlclient.AxolotlClientConfig.api.manager.ConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.OptionCategory;
 import io.github.axolotlclient.AxolotlClientConfig.api.ui.screen.ConfigScreen;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets.VanillaEntryListWidget;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.gui.widget.button.ButtonWidget;
-import net.minecraft.client.gui.widget.button.PlainTextButtonWidget;
-import net.minecraft.text.CommonTexts;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.PlainTextButton;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
 
 public class VanillaConfigScreen extends Screen implements ConfigScreen {
 	private final Screen parent;
@@ -41,7 +41,7 @@ public class VanillaConfigScreen extends Screen implements ConfigScreen {
 	private boolean searchVisible;
 
 	public VanillaConfigScreen(Screen parent, OptionCategory category) {
-		super(Text.translatable(category.getName()));
+		super(Component.translatable(category.getName()));
 		this.parent = parent;
 		this.configManager = AxolotlClientConfig.getInstance().getConfigManager(category);
 		this.category = category;
@@ -50,27 +50,27 @@ public class VanillaConfigScreen extends Screen implements ConfigScreen {
 	@Override
 	protected void init() {
 		searchVisible = false;
-		TextFieldWidget searchInput = addDrawableSelectableElement(new TextFieldWidget(textRenderer, width/2 - 75, 20, 150, 20, Text.empty()));
+		EditBox searchInput = addRenderableWidget(new EditBox(font, width/2 - 75, 20, 150, 20, Component.empty()));
 		searchInput.visible = false;
-		addDrawableSelectableElement(ButtonWidget.builder(CommonTexts.BACK, w -> closeScreen())
-			.position(width / 2 - 75, height - 45).build());
-		var list = addDrawableSelectableElement(new VanillaEntryListWidget(configManager, category, width, height, 45, height - 55, 25));
-		searchInput.setChangedListener(list::setSearchFilter);
-		addDrawableSelectableElement(new PlainTextButtonWidget(width/2 - textRenderer.getWidth(getTitle())/2, 25,
-			textRenderer.getWidth(getTitle()), textRenderer.fontHeight, getTitle(), w -> {
+		addRenderableWidget(Button.builder(CommonComponents.GUI_BACK, w -> onClose())
+			.pos(width / 2 - 75, height - 45).build());
+		var list = addRenderableWidget(new VanillaEntryListWidget(configManager, category, width, height, 45, height - 55, 25));
+		searchInput.setResponder(list::setSearchFilter);
+		addRenderableWidget(new PlainTextButton(width/2 - font.width(getTitle())/2, 25,
+			font.width(getTitle()), font.lineHeight, getTitle(), w -> {
 			w.visible = false;
 			searchInput.visible = searchVisible = true;
-			setFocusedChild(searchInput);
-			list.setSearchFilter(searchInput.getText());
-		}, textRenderer));
+			setFocused(searchInput);
+			list.setSearchFilter(searchInput.getValue());
+		}, font));
 	}
 
 	@Override
-	public void closeScreen() {
+	public void onClose() {
 		if (searchVisible) {
-			clearAndInit();
+			rebuildWidgets();
 		} else {
-			client.setScreen(parent);
+			minecraft.setScreen(parent);
 		}
 	}
 

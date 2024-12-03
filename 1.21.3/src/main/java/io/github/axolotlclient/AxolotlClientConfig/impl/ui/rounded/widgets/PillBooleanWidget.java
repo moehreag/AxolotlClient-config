@@ -26,9 +26,9 @@ import io.github.axolotlclient.AxolotlClientConfig.api.util.Colors;
 import io.github.axolotlclient.AxolotlClientConfig.impl.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.Updatable;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.NVGHolder;
+import net.minecraft.Util;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.text.CommonTexts;
-import net.minecraft.util.Util;
+import net.minecraft.network.chat.CommonComponents;
 
 public class PillBooleanWidget extends RoundedButtonWidget implements Updatable {
 
@@ -40,13 +40,13 @@ public class PillBooleanWidget extends RoundedButtonWidget implements Updatable 
 	private boolean state;
 	private boolean targetState;
 	private double progress;
-	private long tickTime = Util.getEpochTimeMs();
+	private long tickTime = Util.getMillis();
 	private int notWidth;
 
 	public PillBooleanWidget(int x, int y, int width, int height, BooleanOption option) {
-		super(x, y, 40, height, option.get() ? CommonTexts.ON : CommonTexts.OFF, widget -> {
+		super(x, y, 40, height, option.get() ? CommonComponents.OPTION_ON : CommonComponents.OPTION_OFF, widget -> {
 			option.set(!option.get());
-			widget.setMessage(option.get() ? CommonTexts.ON : CommonTexts.OFF);
+			widget.setMessage(option.get() ? CommonComponents.OPTION_ON : CommonComponents.OPTION_OFF);
 		});
 
 		this.option = option;
@@ -75,11 +75,11 @@ public class PillBooleanWidget extends RoundedButtonWidget implements Updatable 
 	}
 
 	@Override
-	protected void drawWidget(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+	protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
 		fillRoundedRect(NVGHolder.getContext(), getX(), getY(), super.getWidth(), getHeight(), Colors.foreground(), Math.min(getHeight(), super.getWidth()) / 2f);
 
-		if (((Util.getEpochTimeMs() - tickTime) / 300L) % 2L == 0L) {
-			tickTime = Util.getEpochTimeMs();
+		if (((Util.getMillis() - tickTime) / 300L) % 2L == 0L) {
+			tickTime = Util.getMillis();
 			if (state != targetState) {
 				if (targetState) {
 					progress = Math.min(1, progress + 0.05f);
@@ -112,11 +112,11 @@ public class PillBooleanWidget extends RoundedButtonWidget implements Updatable 
 		super.onPress();
 		state = targetState;
 		targetState = !targetState;
-		tickTime = Util.getEpochTimeMs();
+		tickTime = Util.getMillis();
 	}
 
 	public void update() {
 		targetState = option.get();
-		setMessage(option.get() ? CommonTexts.ON : CommonTexts.OFF);
+		setMessage(option.get() ? CommonComponents.OPTION_ON : CommonComponents.OPTION_OFF);
 	}
 }

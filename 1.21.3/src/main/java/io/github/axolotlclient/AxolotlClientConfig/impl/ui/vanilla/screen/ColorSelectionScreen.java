@@ -22,7 +22,7 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.screen;
 
-import com.mojang.blaze3d.glfw.Window;
+import com.mojang.blaze3d.platform.Window;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Color;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Colors;
 import io.github.axolotlclient.AxolotlClientConfig.impl.options.BooleanOption;
@@ -32,15 +32,14 @@ import io.github.axolotlclient.AxolotlClientConfig.impl.options.IntegerOption;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.Updatable;
 import io.github.axolotlclient.AxolotlClientConfig.impl.util.ConfigStyles;
 import io.github.axolotlclient.AxolotlClientConfig.impl.util.DrawUtil;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.gui.widget.button.ButtonWidget;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.text.CommonTexts;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import java.nio.ByteBuffer;
@@ -48,7 +47,7 @@ import java.nio.ByteOrder;
 
 public class ColorSelectionScreen extends Screen {
 	private final ColorOption option;
-	private final Identifier texture = Identifier.of("axolotlclientconfig", "textures/gui/colorwheel.png");
+	private final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath("axolotlclientconfig", "textures/gui/colorwheel.png");
 	private final Screen parent;
 	private BooleanOption chroma;
 	private FloatOption speed;
@@ -59,7 +58,7 @@ public class ColorSelectionScreen extends Screen {
 	private int buttonsX;
 
 	public ColorSelectionScreen(Screen parent, ColorOption option) {
-		super(Text.translatable("select_color"));
+		super(Component.translatable("select_color"));
 		this.option = option;
 		this.parent = parent;
 	}
@@ -67,8 +66,8 @@ public class ColorSelectionScreen extends Screen {
 	@Override
 	public void init() {
 		super.init();
-		addDrawableSelectableElement(ButtonWidget.builder(CommonTexts.BACK, buttonWidget -> closeScreen())
-			.position(width / 2 - 75, height - 40).build());
+		addRenderableWidget(Button.builder(CommonComponents.GUI_BACK, buttonWidget -> onClose())
+			.pos(width / 2 - 75, height - 40).build());
 
 		chroma = new BooleanOption("option.chroma", option.getOriginal().isChroma(), val -> {
 			option.getOriginal().setChroma(val);
@@ -79,8 +78,8 @@ public class ColorSelectionScreen extends Screen {
 		alpha = new IntegerOption("option.alpha", option.get().getAlpha(), val -> {
 			option.getOriginal().setAlpha(val);
 			children().forEach(e -> {
-				if (e instanceof TextFieldWidget) {
-					((TextFieldWidget) e).setText(option.get().toString().split(";")[0]);
+				if (e instanceof EditBox) {
+					((EditBox) e).setValue(option.get().toString().split(";")[0]);
 				}
 			});
 		}, 0, 255);
@@ -92,18 +91,18 @@ public class ColorSelectionScreen extends Screen {
 		buttonsX = (int) Math.max(width / 2f + 25, selectorX + selectorRadius * 2 + 10);
 
 		int y = 120;
-		addDrawableSelectableElement(ConfigStyles.createWidget(buttonsX, y, 150, 20, chroma));
+		addRenderableWidget(ConfigStyles.createWidget(buttonsX, y, 150, 20, chroma));
 		y += 45;
 		if (height > 300) {
-			addDrawableSelectableElement(ConfigStyles.createWidget(buttonsX, y, 150, 20, speed));
+			addRenderableWidget(ConfigStyles.createWidget(buttonsX, y, 150, 20, speed));
 			y += 45;
 		}
-		addDrawableSelectableElement(ConfigStyles.createWidget(buttonsX, y, 150, 20, alpha));
+		addRenderableWidget(ConfigStyles.createWidget(buttonsX, y, 150, 20, alpha));
 		y += 45;
 		if (this.height - 250 > 0) {
 			y -= 20;
-			TextFieldWidget text = new TextFieldWidget(client.textRenderer, buttonsX, y, 150, 20, Text.empty());
-			text.setChangedListener(s -> {
+			EditBox text = new EditBox(minecraft.font, buttonsX, y, 150, 20, Component.empty());
+			text.setResponder(s -> {
 				try {
 					option.set(Color.parse(s));
 					option.getOriginal().setChroma(chroma.get());
@@ -117,33 +116,33 @@ public class ColorSelectionScreen extends Screen {
 				} catch (Throwable ignored) {
 				}
 			});
-			text.setText(option.get().toString().split(";")[0]);
-			addDrawableSelectableElement(text);
+			text.setValue(option.get().toString().split(";")[0]);
+			addRenderableWidget(text);
 		}
 	}
 
 	@Override
 	public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
 		super.render(graphics, mouseX, mouseY, delta);
-		graphics.drawCenteredShadowedText(client.textRenderer, title, width / 2, 20, Colors.text().toInt());
+		graphics.drawCenteredString(minecraft.font, title, width / 2, 20, Colors.text().toInt());
 
-		graphics.method_25290(RenderLayer::getGuiTextured, texture, (int) selectorX, (int) selectorY, 0, 0, selectorRadius * 2, selectorRadius * 2, selectorRadius * 2, selectorRadius * 2);
+		graphics.blit(RenderType::guiTextured, texture, (int) selectorX, (int) selectorY, 0, 0, selectorRadius * 2, selectorRadius * 2, selectorRadius * 2, selectorRadius * 2);
 
 		DrawUtil.outlineRect(graphics, (int) selectorX, (int) selectorY, selectorRadius * 2, selectorRadius * 2, Colors.BLACK.toInt());
 
-		graphics.drawShadowedText(client.textRenderer, Text.translatable("option.current"), buttonsX, 40, Colors.text().toInt());
+		graphics.drawString(minecraft.font, Component.translatable("option.current"), buttonsX, 40, Colors.text().toInt());
 
 		DrawUtil.fillRect(graphics, buttonsX, 55, 150, 40, option.get().toInt());
 		DrawUtil.outlineRect(graphics, buttonsX, 55, 150, 40, Colors.BLACK.toInt());
 
 		int y = 105;
-		graphics.drawShadowedText(client.textRenderer, Text.translatable("option.chroma"), buttonsX, y, Colors.text().toInt());
+		graphics.drawString(minecraft.font, Component.translatable("option.chroma"), buttonsX, y, Colors.text().toInt());
 		y += 45;
 		if (height > 300) {
-			graphics.drawShadowedText(client.textRenderer, Text.translatable("option.speed"), buttonsX, y, Colors.text().toInt());
+			graphics.drawString(minecraft.font, Component.translatable("option.speed"), buttonsX, y, Colors.text().toInt());
 			y += 45;
 		}
-		graphics.drawShadowedText(client.textRenderer, Text.translatable("option.alpha"), buttonsX, y, Colors.text().toInt());
+		graphics.drawString(minecraft.font, Component.translatable("option.alpha"), buttonsX, y, Colors.text().toInt());
 	}
 
 	@Override
@@ -172,8 +171,8 @@ public class ColorSelectionScreen extends Screen {
 					}
 				});
 				children().forEach(e -> {
-					if (e instanceof TextFieldWidget) {
-						((TextFieldWidget) e).setText(option.get().toString().split(";")[0]);
+					if (e instanceof EditBox) {
+						((EditBox) e).setValue(option.get().toString().split(";")[0]);
 					}
 				});
 				return true;
@@ -184,18 +183,18 @@ public class ColorSelectionScreen extends Screen {
 	}
 
 	private int toGlCoordsX(double x) {
-		Window window = MinecraftClient.getInstance().getWindow();
-		return (int) (x * window.getScaleFactor());
+		Window window = minecraft.getWindow();
+		return (int) (x * window.getGuiScale());
 	}
 
 	private int toGlCoordsY(double y) {
-		Window window = MinecraftClient.getInstance().getWindow();
-		double scale = window.getScaleFactor();
-		return Math.round((float) (MinecraftClient.getInstance().getFramebuffer().textureHeight - y * scale - scale));
+		Window window = minecraft.getWindow();
+		double scale = window.getGuiScale();
+		return Math.round((float) (minecraft.getMainRenderTarget().height - y * scale - scale));
 	}
 
 	@Override
-	public void closeScreen() {
-		client.setScreen(parent);
+	public void onClose() {
+		minecraft.setScreen(parent);
 	}
 }

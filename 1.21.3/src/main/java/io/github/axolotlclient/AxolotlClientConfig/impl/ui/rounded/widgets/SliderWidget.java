@@ -28,22 +28,22 @@ import io.github.axolotlclient.AxolotlClientConfig.impl.ui.DrawingUtil;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.Updatable;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.NVGHolder;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 import org.lwjgl.nanovg.NanoVG;
 
 import java.text.DecimalFormat;
 
-public class SliderWidget<O extends NumberOption<N>, N extends Number> extends net.minecraft.client.gui.widget.SliderWidget implements DrawingUtil, Updatable {
+public class SliderWidget<O extends NumberOption<N>, N extends Number> extends net.minecraft.client.gui.components.AbstractSliderButton implements DrawingUtil, Updatable {
 	private final O option;
 
 	public SliderWidget(int x, int y, int width, int height, O option) {
-		super(x, y, width, height, Text.translatable(String.valueOf(option.get())), 0);
+		super(x, y, width, height, Component.translatable(String.valueOf(option.get())), 0);
 		this.value = ((option.get().doubleValue() - option.getMin().doubleValue()) / (option.getMax().doubleValue() - option.getMin().doubleValue()));
 		this.option = option;
 	}
 
 	@Override
-	public void drawWidget(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+	public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
 		long ctx = NVGHolder.getContext();
 		double val = ((option.get().doubleValue() - option.getMin().doubleValue()) / (option.getMax().doubleValue() - option.getMin().doubleValue()));
 		if (!isHoveredOrFocused() &&
@@ -72,7 +72,7 @@ public class SliderWidget<O extends NumberOption<N>, N extends Number> extends n
 
 	public void updateMessage() {
 		DecimalFormat format = new DecimalFormat("0.##");
-		setMessage(Text.literal(format.format(option.get().doubleValue())));
+		setMessage(Component.literal(format.format(option.get().doubleValue())));
 	}
 
 	@SuppressWarnings("unchecked")

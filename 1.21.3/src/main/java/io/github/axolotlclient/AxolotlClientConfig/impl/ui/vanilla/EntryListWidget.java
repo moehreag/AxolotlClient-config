@@ -28,19 +28,21 @@ import io.github.axolotlclient.AxolotlClientConfig.api.options.OptionCategory;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.WidgetIdentifieable;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.AlphabeticalComparator;
 import io.github.axolotlclient.AxolotlClientConfig.impl.util.ConfigStyles;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.Element;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.Selectable;
-import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.gui.widget.list.ElementListWidget;
-import net.minecraft.client.resource.language.I18n;
+import net.minecraft.client.gui.components.AbstractButton;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.ContainerObjectSelectionList;
+import net.minecraft.client.gui.components.events.ContainerEventHandler;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarratableEntry;
+import net.minecraft.client.resources.language.I18n;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Stream;
 
-public class EntryListWidget extends ElementListWidget<EntryListWidget.Entry> {
+public class EntryListWidget extends ContainerObjectSelectionList<EntryListWidget.Entry> {
 
 	protected static int WIDGET_WIDTH = 150;
 	protected static int WIDGET_ROW_LEFT = -155;
@@ -51,7 +53,7 @@ public class EntryListWidget extends ElementListWidget<EntryListWidget.Entry> {
 	private final OptionCategory category;
 
 	public EntryListWidget(ConfigManager manager, OptionCategory category, int screenWidth, int screenHeight, int top, int bottom, int entryHeight) {
-		super(MinecraftClient.getInstance(), screenWidth, bottom - top, top, entryHeight);
+		super(Minecraft.getInstance(), screenWidth, bottom - top, top, entryHeight);
 		centerListVertically = false;
 		this.manager = manager;
 		this.category = category;
@@ -97,7 +99,7 @@ public class EntryListWidget extends ElementListWidget<EntryListWidget.Entry> {
 		addOptions(manager, category.getOptions());
 	}
 
-	protected ClickableWidget createWidget(int x, WidgetIdentifieable id) {
+	protected AbstractWidget createWidget(int x, WidgetIdentifieable id) {
 		return ConfigStyles.createWidget(x, 0, WIDGET_WIDTH, itemHeight - 5, id);
 	}
 
@@ -111,30 +113,32 @@ public class EntryListWidget extends ElementListWidget<EntryListWidget.Entry> {
 		List<OptionCategory> flattenedCategories = new ArrayList<>();
 		List<Option<?>> flattenedOptions = new ArrayList<>();
 		collectEntries(category, flattenedCategories, flattenedOptions);
-		flattenedCategories.removeIf(c -> !I18n.translate(c.getName()).toLowerCase(Locale.ROOT).contains(searchFilter.toLowerCase(Locale.ROOT)));
-		flattenedOptions.removeIf(c -> !I18n.translate(c.getName()).toLowerCase(Locale.ROOT).contains(searchFilter.toLowerCase(Locale.ROOT)));
-		flattenedCategories.sort((o1, o2) -> AlphabeticalComparator.cmp(I18n.translate(o1.getName()), I18n.translate(o2.getName())));
-		flattenedOptions.sort((o1, o2) -> AlphabeticalComparator.cmp(I18n.translate(o1.getName()), I18n.translate(o2.getName())));
+		flattenedCategories.removeIf(c -> !I18n.get(c.getName()).toLowerCase(Locale.ROOT).contains(searchFilter.toLowerCase(Locale.ROOT)));
+		flattenedOptions.removeIf(c -> !I18n.get(c.getName()).toLowerCase(Locale.ROOT).contains(searchFilter.toLowerCase(Locale.ROOT)));
+		flattenedCategories.sort((o1, o2) -> AlphabeticalComparator.cmp(I18n.get(o1.getName()), I18n.get(o2.getName())));
+		flattenedOptions.sort((o1, o2) -> AlphabeticalComparator.cmp(I18n.get(o1.getName()), I18n.get(o2.getName())));
 		addCategories(manager, flattenedCategories);
 		addOptions(manager, flattenedOptions);
 	}
 
 	protected void collectEntries(OptionCategory current, List<OptionCategory> categoryCollector, List<Option<?>> optionCollector) {
-		categoryCollector.add(current);
 		optionCollector.addAll(current.getOptions());
-		current.getSubCategories().forEach(c -> collectEntries(c, categoryCollector, optionCollector));
+		current.getSubCategories().forEach(c -> {
+			categoryCollector.add(c);
+			collectEntries(c, categoryCollector, optionCollector);
+		});
 	}
 
 	@Override
-	protected boolean isZero(int index) {
+	protected boolean isValidMouseClick(int index) {
 		return true;
 	}
 
-	protected Entry createOptionEntry(ClickableWidget widget, Option<?> option, @Nullable ClickableWidget other, @Nullable Option<?> otherOption) {
+	protected Entry createOptionEntry(AbstractWidget widget, Option<?> option, @Nullable AbstractWidget other, @Nullable Option<?> otherOption) {
 		return Entry.create(widget, other);
 	}
 
-	protected Entry createCategoryEntry(ClickableWidget widget, OptionCategory optionCategory, @Nullable ClickableWidget other, @Nullable OptionCategory otherOptionCategory) {
+	protected Entry createCategoryEntry(AbstractWidget widget, OptionCategory optionCategory, @Nullable AbstractWidget other, @Nullable OptionCategory otherOptionCategory) {
 		return Entry.create(widget, other);
 	}
 
@@ -144,20 +148,25 @@ public class EntryListWidget extends ElementListWidget<EntryListWidget.Entry> {
 	}
 
 	@Override
-	protected int getScrollbarPositionX() {
-		return super.getScrollbarPositionX() - 2;
+	protected int getScrollbarPosition() {
+		return super.getScrollbarPosition() - 2;
 	}
 
-	protected static class Entry extends ElementListWidget.Entry<Entry> {
+	@Override
+	public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+		return getHovered() != null && getHovered().mouseScrolled(mouseX, mouseY, scrollX, scrollY) || super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+	}
+
+	protected static class Entry extends ContainerObjectSelectionList.Entry<Entry> {
 
 
-		private final List<ClickableWidget> children = new ArrayList<>();
+		private final List<AbstractWidget> children = new ArrayList<>();
 
-		public Entry(Collection<ClickableWidget> widgets) {
+		public Entry(Collection<AbstractWidget> widgets) {
 			children.addAll(widgets);
 		}
 
-		public static Entry create(ClickableWidget first, ClickableWidget other) {
+		public static Entry create(AbstractWidget first, AbstractWidget other) {
 			return new Entry(Stream.of(first, other).filter(Objects::nonNull).toList());
 		}
 
@@ -170,12 +179,12 @@ public class EntryListWidget extends ElementListWidget<EntryListWidget.Entry> {
 		}
 
 		@Override
-		public List<? extends Selectable> selectableChildren() {
+		public List<? extends NarratableEntry> narratables() {
 			return children;
 		}
 
 		@Override
-		public List<? extends Element> children() {
+		public List<? extends GuiEventListener> children() {
 			return children;
 		}
 	}
