@@ -39,7 +39,6 @@ import java.util.Collection;
 public class VanillaEntryListWidget extends EntryListWidget {
 	public VanillaEntryListWidget(ConfigManager manager, OptionCategory category, int screenWidth, int screenHeight, int top, int bottom, int entryHeight) {
 		super(manager, category, screenWidth, screenHeight, top, bottom, entryHeight);
-		setRenderHeader(false, headerHeight);
 	}
 
 	protected void addOptions(ConfigManager manager, Collection<Option<?>> options) {

@@ -20,27 +20,23 @@
  * For more information, see the LICENSE file.
  */
 
-package io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets;
+package io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets;
 
 import com.google.common.util.concurrent.AtomicDouble;
 import com.mojang.blaze3d.platform.Window;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.Option;
-import io.github.axolotlclient.AxolotlClientConfig.api.util.Color;
-import io.github.axolotlclient.AxolotlClientConfig.api.util.Colors;
-import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.NVGHolder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import org.lwjgl.nanovg.NanoVG;
 
-public class ResetButtonWidget<T> extends RoundedButtonWidget {
+public class ResetButtonWidget<T> extends Button {
 
 	private final Option<T> option;
 
 	public ResetButtonWidget(int x, int y, int width, int height, Option<T> option) {
-		super(x, y, width, height, Component.empty(), widget -> {
+		super(x, y, width, height, Component.translatable("action.reset"), widget -> {
 			option.set(option.getDefault());
 			Window window = Minecraft.getInstance().getWindow();
 			int i = window.getGuiScaledWidth();
@@ -49,52 +45,24 @@ public class ResetButtonWidget<T> extends RoundedButtonWidget {
 			if (current != null) {
 				AtomicDouble scroll = new AtomicDouble();
 				current.children().stream()
-					.filter(e -> e instanceof RoundedButtonListWidget)
-					.map(e -> (RoundedButtonListWidget) e).findFirst().ifPresent(list -> {
-						scroll.set(list.getScrollAmount());
+					.filter(e -> e instanceof VanillaEntryListWidget)
+					.map(e -> (VanillaEntryListWidget) e).findFirst().ifPresent(list -> {
+						scroll.set(list.scrollAmount());
 					});
 				current.init(Minecraft.getInstance(), i, j);
 				current.children().stream()
-					.filter(e -> e instanceof RoundedButtonListWidget)
-					.map(e -> (RoundedButtonListWidget) e).findFirst().ifPresent(list -> {
+					.filter(e -> e instanceof VanillaEntryListWidget)
+					.map(e -> (VanillaEntryListWidget) e).findFirst().ifPresent(list -> {
 						list.setScrollAmount(scroll.get());
 					});
 			}
-		});
+		}, DEFAULT_NARRATION);
 		this.option = option;
 	}
 
 	@Override
-	protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-		long ctx = NVGHolder.getContext();
+	public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
 		this.active = !option.getDefault().equals(option.get());
 		super.renderWidget(graphics, mouseX, mouseY, delta);
-
-		Color color = !active ? Colors.foreground() : Colors.highlight();
-		if (active && isHovered()) {
-			color = Colors.accent2();
-		}
-
-		NanoVG.nvgLineCap(ctx, NanoVG.NVG_ROUND);
-		NanoVG.nvgLineJoin(ctx, NanoVG.NVG_ROUND);
-		outlineCircle(ctx, getX() + getWidth() / 2, getY() + getHeight() / 2, color, getWidth() / 4, 2, 0, 270);
-		NanoVG.nvgBeginPath(ctx);
-		NanoVG.nvgMoveTo(ctx, getX() + getWidth() / 2f, getY() + getHeight() / 4f);
-		NanoVG.nvgLineTo(ctx, getX() + getWidth() / 2f - 3, getY() + getHeight() / 4f);
-		NanoVG.nvgMoveTo(ctx, getX() + getWidth() / 2f, getY() + getHeight() / 2f - 2);
-		NanoVG.nvgLineTo(ctx, getX() + getWidth() / 2f - 3, getY() + getHeight() / 4f);
-		NanoVG.nvgLineTo(ctx, getX() + getWidth() / 2f, getY() + 2);
-		NanoVG.nvgStrokeColor(ctx, color.toNVG());
-		NanoVG.nvgStroke(ctx);
-
-	}
-
-	protected MutableComponent createNarrationMessage() {
-		return wrapDefaultNarrationMessage(Component.translatable("action.reset"));
-	}
-
-	@Override
-	protected Color getWidgetColor() {
-		return Colors.accent();
 	}
 }

@@ -20,31 +20,27 @@
  * For more information, see the LICENSE file.
  */
 
-package io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded;
+package io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla;
+
+import java.util.*;
+import java.util.stream.Stream;
 
 import io.github.axolotlclient.AxolotlClientConfig.api.manager.ConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.Option;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.OptionCategory;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.WidgetIdentifieable;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.AlphabeticalComparator;
-import io.github.axolotlclient.AxolotlClientConfig.api.util.Colors;
-import io.github.axolotlclient.AxolotlClientConfig.impl.ui.DrawingUtil;
 import io.github.axolotlclient.AxolotlClientConfig.impl.util.ConfigStyles;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.ContainerObjectSelectionList;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
-import java.util.stream.Stream;
-
-public class ButtonListWidget extends ContainerObjectSelectionList<ButtonListWidget.Entry> implements DrawingUtil {
+public class EntryListWidget extends ContainerObjectSelectionList<EntryListWidget.Entry> {
 
 	protected static int WIDGET_WIDTH = 150;
 	protected static int WIDGET_ROW_LEFT = -155;
@@ -54,8 +50,8 @@ public class ButtonListWidget extends ContainerObjectSelectionList<ButtonListWid
 	private final ConfigManager manager;
 	private final OptionCategory category;
 
-	public ButtonListWidget(ConfigManager manager, OptionCategory category, int screenWidth, int screenHeight, int top, int bottom, int entryHeight) {
-		super(Minecraft.getInstance(), screenWidth, bottom-top, top, entryHeight);
+	public EntryListWidget(ConfigManager manager, OptionCategory category, int screenWidth, int screenHeight, int top, int bottom, int entryHeight) {
+		super(Minecraft.getInstance(), screenWidth, bottom - top, top, entryHeight);
 		centerListVertically = false;
 		this.manager = manager;
 		this.category = category;
@@ -101,6 +97,10 @@ public class ButtonListWidget extends ContainerObjectSelectionList<ButtonListWid
 		addOptions(manager, category.getOptions());
 	}
 
+	protected AbstractWidget createWidget(int x, WidgetIdentifieable id) {
+		return ConfigStyles.createWidget(x, 0, WIDGET_WIDTH, itemHeight - 5, id);
+	}
+
 	public void setSearchFilter(String filter) {
 		this.searchFilter = filter;
 		clearEntries();
@@ -127,8 +127,9 @@ public class ButtonListWidget extends ContainerObjectSelectionList<ButtonListWid
 		});
 	}
 
-	protected AbstractWidget createWidget(int x, WidgetIdentifieable id) {
-		return ConfigStyles.createWidget(x, 0, WIDGET_WIDTH, itemHeight - 5, id);
+	@Override
+	protected boolean isValidClickButton(int index) {
+		return true;
 	}
 
 	protected Entry createOptionEntry(AbstractWidget widget, Option<?> option, @Nullable AbstractWidget other, @Nullable Option<?> otherOption) {
@@ -145,13 +146,8 @@ public class ButtonListWidget extends ContainerObjectSelectionList<ButtonListWid
 	}
 
 	@Override
-	protected boolean scrollbarVisible() {
-		return false;
-	}
-	protected void renderListBackground(GuiGraphics guiGraphics) {
-	}
-
-	protected void renderListSeparators(GuiGraphics guiGraphics) {
+	protected int scrollBarX() {
+		return super.scrollBarX() - 2;
 	}
 
 	@Override
@@ -159,34 +155,10 @@ public class ButtonListWidget extends ContainerObjectSelectionList<ButtonListWid
 		return getHovered() != null && getHovered().mouseScrolled(mouseX, mouseY, scrollX, scrollY) || super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
 	}
 
-	@Override
-	protected void renderDecorations(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-		int i = this.getMaxScroll();
-		if (i > 0) {
-			int j = this.getScrollbarPosition();
-			int k = (int) ((float) ((this.height) * (this.height)) / (float) this.getMaxPosition());
-			k = Mth.clamp(k, 32, this.height - 8);
-			int l = (int) this.getScrollAmount() * (this.height - k) / i + this.getY();
-			if (l < this.getY()) {
-				l = this.getY();
-			}
-
-			fillRoundedRect(NVGHolder.getContext(), j, getY(), 6, getHeight(), Colors.foreground(), 6 / 2);
-			fillRoundedRect(NVGHolder.getContext(), j, l, 6, k, Colors.accent(), 6 / 2);
-		}
-	}
-
-	@Override
-	protected void renderListItems(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-		pushScissor(NVGHolder.getContext(), getX(), getY(), getWidth(), getHeight());
-		super.renderListItems(guiGraphics, mouseX, mouseY, partialTick);
-		popScissor(NVGHolder.getContext());
-	}
-
 	protected static class Entry extends ContainerObjectSelectionList.Entry<Entry> {
 
 
-		protected final List<AbstractWidget> children = new ArrayList<>();
+		private final List<AbstractWidget> children = new ArrayList<>();
 
 		public Entry(Collection<AbstractWidget> widgets) {
 			children.addAll(widgets);
