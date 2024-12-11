@@ -22,24 +22,6 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.util;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.platform.Lighting;
-import io.github.axolotlclient.AxolotlClientConfig.api.options.Option;
-import io.github.axolotlclient.AxolotlClientConfig.api.util.Color;
-import io.github.axolotlclient.AxolotlClientConfig.api.util.Rectangle;
-import io.github.axolotlclient.AxolotlClientConfig.impl.ui.DrawingUtil;
-import io.github.axolotlclient.AxolotlClientConfig.impl.ui.NVGFont;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiElement;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.render.TextRenderer;
-import net.minecraft.client.render.Window;
-import net.minecraft.client.resource.language.I18n;
-import net.minecraft.resource.Identifier;
-import org.lwjgl.nanovg.NanoVG;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.system.MemoryUtil;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.Buffer;
@@ -49,6 +31,26 @@ import java.nio.channels.ReadableByteChannel;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
+
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.platform.Lighting;
+import io.github.axolotlclient.AxolotlClientConfig.api.options.Option;
+import io.github.axolotlclient.AxolotlClientConfig.api.util.Color;
+import io.github.axolotlclient.AxolotlClientConfig.api.util.Rectangle;
+import io.github.axolotlclient.AxolotlClientConfig.impl.ui.DrawingUtil;
+import io.github.axolotlclient.AxolotlClientConfig.impl.ui.NVGFont;
+import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.NVGHolder;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiElement;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.render.TextRenderer;
+import net.minecraft.client.render.Window;
+import net.minecraft.client.resource.language.I18n;
+import net.minecraft.resource.Identifier;
+import net.minecraft.util.math.MathHelper;
+import org.lwjgl.nanovg.NanoVG;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.system.MemoryUtil;
 
 public class DrawUtil extends GuiElement implements DrawingUtil {
 
@@ -182,6 +184,25 @@ public class DrawUtil extends GuiElement implements DrawingUtil {
 		}
 	}
 
+	public static void drawScrollingText(DrawingUtil drawingUtil, NVGFont font, String text, int i, int j, int k, int l, int m, Color color) {
+		float textWidth = font.getWidth(text);
+		int y = (k + m - 9) / 2 + 1;
+		int width = l - j;
+		if (textWidth > width) {
+			float r = textWidth - width;
+			double d = (double) Minecraft.getTime() / 1000.0;
+			double e = Math.max((double) r * 0.5, 3.0);
+			double f = Math.sin((Math.PI / 2) * Math.cos((Math.PI * 2) * d / e)) / 2.0 + 0.5;
+			double g = MathHelper.clampedLerp(f, 0.0, r);
+			drawingUtil.pushScissor(NVGHolder.getContext(), j, k, l, m);
+			drawingUtil.drawString(NVGHolder.getContext(), font, text, j - (int) g, y, color);
+			drawingUtil.popScissor(NVGHolder.getContext());
+		} else {
+			float centerX = MathHelper.clamp(i, j + textWidth / 2, l - textWidth / 2);
+			drawingUtil.drawCenteredString(NVGHolder.getContext(), font, text, centerX, y, color);
+		}
+	}
+
 	public static void drawTooltip(Option<?> option, int x, int y) {
 		String tooltip = I18n.translate(option.getTooltip());
 		if (tooltip.equals(option.getTooltip())) {
@@ -189,7 +210,7 @@ public class DrawUtil extends GuiElement implements DrawingUtil {
 		}
 		String[] text = tooltip.split("<br>");
 		if (!text[0].isEmpty() || text.length > 1) {
-			INSTANCE.renderTooltip(Arrays.asList(text), x-2, y+12+3+10);
+			INSTANCE.renderTooltip(Arrays.asList(text), x - 2, y + 12 + 3 + 10);
 		}
 
 	}

@@ -23,11 +23,14 @@
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.axolotlclient.AxolotlClientConfig.api.util.Color;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.ButtonWidget;
-import io.github.axolotlclient.AxolotlClientConfig.impl.util.DrawUtil;
 import net.minecraft.client.render.TextRenderer;
 
 public class VanillaButtonWidget extends ButtonWidget {
+	private static final Color DEFAULT = new Color(14737632);
+	private static final Color DISABLED = new Color(10526880);
+	private static final Color HOVERED = new Color(16777120);
 
 	public VanillaButtonWidget(int x, int y, int width, int height, String message, PressAction action) {
 		super(x, y, width, height, message, action);
@@ -46,13 +49,13 @@ public class VanillaButtonWidget extends ButtonWidget {
 
 		drawTexture(this.getX(), this.getY(), 0, 46 + k * 20, this.getWidth() / 2, this.getHeight());
 		drawTexture(this.getX() + this.getWidth() / 2, this.getY(), 200 - this.getWidth() / 2, 46 + k * 20, this.getWidth() / 2, this.getHeight());
-		int l = 14737632;
+		Color l = DEFAULT;
 		if (!this.active) {
-			l = 10526880;
+			l = DISABLED;
 		} else if (this.hovered) {
-			l = 16777120;
+			l = HOVERED;
 		}
 
-		DrawUtil.drawCenteredString(textRenderer, this.getMessage(), this.getX() + this.getWidth() / 2, this.getY() + (this.getHeight() - 8) / 2, l, true);
+		drawScrollingText(textRenderer, getMessage(), getX()+getWidth()/2, getX(), getY(), getX()+getWidth(), getY()+getHeight(), l);
 	}
 }

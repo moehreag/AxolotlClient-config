@@ -30,30 +30,11 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
-import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 
 public class VanillaButtonWidget extends ButtonWidget implements Selectable {
 	public VanillaButtonWidget(int x, int y, int width, int height, Text message, PressAction onPress) {
 		super(x, y, width, height, message, onPress);
-	}
-
-	protected static void drawScrollableText(MatrixStack matrices, TextRenderer textRenderer, Text text, int left, int top, int right, int bottom, int color) {
-		int i = textRenderer.getWidth(text);
-		int j = (top + bottom - 9) / 2 + 1;
-		int k = right - left;
-		if (i > k) {
-			int l = i - k;
-			double d = (double) Util.getMeasuringTimeMs() / 1000.0;
-			double e = Math.max((double) l * 0.5, 3.0);
-			double f = Math.sin((Math.PI / 2) * Math.cos((Math.PI * 2) * d / e)) / 2.0 + 0.5;
-			double g = MathHelper.lerp(f, 0.0, (double) l);
-			DrawUtil.pushScissor(left, top, right - left, bottom - top);
-			drawTextWithShadow(matrices, textRenderer, text, left - (int) g, j, color);
-			DrawUtil.popScissor();
-		} else {
-			drawCenteredText(matrices, textRenderer, text, (left + right) / 2, j, color);
-		}
 	}
 
 	public boolean isHovered() {
@@ -90,7 +71,7 @@ public class VanillaButtonWidget extends ButtonWidget implements Selectable {
 	protected void drawScrollableText(MatrixStack matrices, TextRenderer textRenderer, int xOffset, int color) {
 		int i = this.getX() + xOffset;
 		int j = this.getX() + this.getWidth() - xOffset;
-		drawScrollableText(matrices, textRenderer, this.getMessage(), i, this.getY(), j, this.getY() + this.getHeight(), color);
+		DrawUtil.drawScrollingText(matrices, textRenderer, this.getMessage(), i + j / 2, i, this.getY(), j, this.getY() + this.getHeight(), color);
 	}
 
 	@Override

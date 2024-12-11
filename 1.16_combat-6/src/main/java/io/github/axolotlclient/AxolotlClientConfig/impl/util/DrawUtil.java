@@ -37,6 +37,7 @@ import io.github.axolotlclient.AxolotlClientConfig.api.util.Color;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Rectangle;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.DrawingUtil;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.NVGFont;
+import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.NVGHolder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
@@ -46,6 +47,8 @@ import net.minecraft.client.util.Window;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Util;
+import net.minecraft.util.math.MathHelper;
 import org.lwjgl.nanovg.NanoVG;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
@@ -162,6 +165,10 @@ public class DrawUtil implements DrawingUtil {
 	}
 
 	public static void drawScrollingText(MatrixStack stack, TextRenderer renderer, String text, int center, int left, int top, int right, int bottom, Color color) {
+		drawScrollingText(stack, renderer, text, center, left, top, right, bottom, color.toInt());
+	}
+
+	public static void drawScrollingText(MatrixStack stack, TextRenderer renderer, Text text, int center, int left, int top, int right, int bottom, int color) {
 		int textWidth = renderer.getWidth(text);
 		int y = (top + bottom - 9) / 2 + 1;
 		int width = right - left;
@@ -172,13 +179,53 @@ public class DrawUtil implements DrawingUtil {
 			double f = Math.sin((Math.PI / 2) * Math.cos((Math.PI * 2) * d / e)) / 2.0 + 0.5;
 			double g = f * r;
 			pushScissor(left, top, right - left, bottom - top);
-			drawString(stack, renderer, text, left - (int) g, y, color.toInt(), true);
+			renderer.drawWithShadow(stack, text, left - (int) g, y, color);
 			popScissor();
 		} else {
 			int min = left + textWidth / 2;
 			int max = right - textWidth / 2;
 			int centerX = center < min ? min : Math.min(center, max);
-			drawCenteredString(stack, renderer, text, centerX, y, color.toInt(), true);
+			DrawableHelper.drawCenteredText(stack, renderer, text, centerX, y, color);
+		}
+	}
+
+	public static void drawScrollingText(MatrixStack stack, TextRenderer renderer, String text, int center, int left, int top, int right, int bottom, int color) {
+		int textWidth = renderer.getWidth(text);
+		int y = (top + bottom - 9) / 2 + 1;
+		int width = right - left;
+		if (textWidth > width) {
+			float r = textWidth - width;
+			double d = (double) (System.nanoTime() / 1000000L) / 1000.0;
+			double e = Math.max((double) r * 0.5, 3.0);
+			double f = Math.sin((Math.PI / 2) * Math.cos((Math.PI * 2) * d / e)) / 2.0 + 0.5;
+			double g = f * r;
+			pushScissor(left, top, right - left, bottom - top);
+			drawString(stack, renderer, text, left - (int) g, y, color, true);
+			popScissor();
+		} else {
+			int min = left + textWidth / 2;
+			int max = right - textWidth / 2;
+			int centerX = center < min ? min : Math.min(center, max);
+			drawCenteredString(stack, renderer, text, centerX, y, color, true);
+		}
+	}
+
+	public static void drawScrollingText(DrawingUtil drawingUtil, NVGFont font, Text text, int center, int left, int top, int right, int bottom, Color color) {
+		float textWidth = font.getWidth(text.getString());
+		int y = (top + bottom - 9) / 2 + 1;
+		int width = right - left;
+		if (textWidth > width) {
+			float r = textWidth - width;
+			double d = (double) Util.getMeasuringTimeMs() / 1000.0;
+			double e = Math.max((double) r * 0.5, 3.0);
+			double f = Math.sin((Math.PI / 2) * Math.cos((Math.PI * 2) * d / e)) / 2.0 + 0.5;
+			double g = MathHelper.lerp(f, 0.0, r);
+			drawingUtil.pushScissor(NVGHolder.getContext(), left, top, right, bottom);
+			drawingUtil.drawString(NVGHolder.getContext(), font, text.getString(), left - (int) g, y, color);
+			drawingUtil.popScissor(NVGHolder.getContext());
+		} else {
+			float centerX = MathHelper.clamp(center, left + textWidth / 2, right - textWidth / 2);
+			drawingUtil.drawCenteredString(NVGHolder.getContext(), font, text.getString(), centerX, y, color);
 		}
 	}
 

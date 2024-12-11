@@ -27,11 +27,10 @@ import io.github.axolotlclient.AxolotlClientConfig.api.util.Colors;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.DrawingUtil;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.NVGFont;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.NVGHolder;
+import io.github.axolotlclient.AxolotlClientConfig.impl.util.DrawUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.widget.button.ButtonWidget;
 import net.minecraft.text.Text;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.MathHelper;
 
 public class RoundedButtonWidget extends ButtonWidget implements DrawingUtil {
 
@@ -49,26 +48,7 @@ public class RoundedButtonWidget extends ButtonWidget implements DrawingUtil {
 	}
 
 	protected static void drawScrollingText(DrawingUtil graphics, NVGFont font, Text text, int left, int top, int right, int bottom, Color color) {
-		drawScrollingText(graphics, font, text, (left + right) / 2, left, top, right, bottom, color);
-	}
-
-	protected static void drawScrollingText(DrawingUtil drawingUtil, NVGFont font, Text text, int center, int left, int top, int right, int bottom, Color color) {
-		float textWidth = font.getWidth(text.getString());
-		int y = (top + bottom - 9) / 2 + 1;
-		int width = right - left;
-		if (textWidth > width) {
-			float r = textWidth - width;
-			double d = (double) Util.getMeasuringTimeMs() / 1000.0;
-			double e = Math.max((double) r * 0.5, 3.0);
-			double f = Math.sin((Math.PI / 2) * Math.cos((Math.PI * 2) * d / e)) / 2.0 + 0.5;
-			double g = MathHelper.lerp(f, 0.0, r);
-			drawingUtil.pushScissor(NVGHolder.getContext(), left, top, right, bottom);
-			drawingUtil.drawString(NVGHolder.getContext(), font, text.getString(), left - (int) g, y, color);
-			drawingUtil.popScissor(NVGHolder.getContext());
-		} else {
-			float centerX = MathHelper.clamp(center, left + textWidth / 2, right - textWidth / 2);
-			drawingUtil.drawCenteredString(NVGHolder.getContext(), font, text.getString(), centerX, y, color);
-		}
+		DrawUtil.drawScrollingText(graphics, font, text, (left + right) / 2, left, top, right, bottom, color);
 	}
 
 	@Override
