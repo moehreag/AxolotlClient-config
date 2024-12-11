@@ -22,14 +22,14 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+
 import io.github.axolotlclient.AxolotlClientConfig.api.AxolotlClientConfig;
 import io.github.axolotlclient.AxolotlClientConfig.api.manager.ConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.OptionCategory;
 import lombok.Getter;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 
 public class AxolotlClientConfigImpl implements AxolotlClientConfig {
 

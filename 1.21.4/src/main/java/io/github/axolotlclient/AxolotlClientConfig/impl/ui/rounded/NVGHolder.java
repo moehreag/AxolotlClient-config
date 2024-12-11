@@ -22,10 +22,10 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded;
 
+import java.io.IOException;
+
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.NVGFont;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.NVGMC;
-
-import java.io.IOException;
 
 public class NVGHolder {
 	private static long ctx;

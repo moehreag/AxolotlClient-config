@@ -22,10 +22,10 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.jetbrains.annotations.Nullable;
 
 public interface ParentElement extends Element {
 	List<? extends Element> children();

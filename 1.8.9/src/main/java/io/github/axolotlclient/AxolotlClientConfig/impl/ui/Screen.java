@@ -22,13 +22,13 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui;
 
+import java.util.List;
+
 import com.google.common.collect.Lists;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.input.Mouse;
-
-import java.util.List;
 
 public abstract class Screen extends net.minecraft.client.gui.screen.Screen implements ParentElement {
 

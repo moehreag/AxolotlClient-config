@@ -26,8 +26,6 @@ import io.github.axolotlclient.AxolotlClientConfig.api.util.Color;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Colors;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.*;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.NVGHolder;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.math.MathHelper;
 
 public class RoundedButtonWidget extends ButtonWidget implements DrawingUtil, Drawable, Selectable {
 

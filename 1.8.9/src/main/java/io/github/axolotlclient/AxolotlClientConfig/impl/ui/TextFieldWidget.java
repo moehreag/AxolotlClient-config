@@ -22,6 +22,10 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui;
 
+import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.Minecraft;
@@ -30,10 +34,6 @@ import net.minecraft.client.render.TextRenderer;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
-
-import java.util.Objects;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 public class TextFieldWidget extends ClickableWidget {
 	public static final int BACKWARDS = -1;

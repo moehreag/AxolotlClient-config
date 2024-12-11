@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla;
 
+import java.util.*;
+import java.util.stream.Stream;
+
 import io.github.axolotlclient.AxolotlClientConfig.api.manager.ConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.Option;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.OptionCategory;
@@ -36,9 +39,6 @@ import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.list.ElementListWidget;
 import net.minecraft.client.resource.language.I18n;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
-import java.util.stream.Stream;
 
 public class EntryListWidget extends ElementListWidget<EntryListWidget.Entry> {
 

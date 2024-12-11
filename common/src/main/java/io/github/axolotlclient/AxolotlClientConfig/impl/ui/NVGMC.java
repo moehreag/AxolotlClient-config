@@ -22,13 +22,13 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui;
 
-import io.github.axolotlclient.AxolotlClientConfig.api.util.WindowPropertiesProvider;
-import org.lwjgl.nanovg.NanoVG;
-import org.lwjgl.nanovg.NanoVGGL3;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.function.Consumer;
+
+import io.github.axolotlclient.AxolotlClientConfig.api.util.WindowPropertiesProvider;
+import org.lwjgl.nanovg.NanoVG;
+import org.lwjgl.nanovg.NanoVGGL3;
 
 public class NVGMC {
 	private static long nvgContext;

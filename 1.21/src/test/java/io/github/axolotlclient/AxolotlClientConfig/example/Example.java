@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.example;
 
+import java.util.function.Function;
+
 import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClientConfig.api.AxolotlClientConfig;
 import io.github.axolotlclient.AxolotlClientConfig.api.manager.ConfigManager;
@@ -37,8 +39,6 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.KeyBind;
-
-import java.util.function.Function;
 
 public class Example implements ClientModInitializer {
 

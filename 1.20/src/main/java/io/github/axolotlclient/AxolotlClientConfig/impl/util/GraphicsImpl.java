@@ -22,13 +22,13 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.util;
 
-import com.mojang.blaze3d.texture.NativeImage;
-import io.github.axolotlclient.AxolotlClientConfig.api.util.Color;
-import io.github.axolotlclient.AxolotlClientConfig.api.util.Graphics;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import com.mojang.blaze3d.texture.NativeImage;
+import io.github.axolotlclient.AxolotlClientConfig.api.util.Color;
+import io.github.axolotlclient.AxolotlClientConfig.api.util.Graphics;
 
 public class GraphicsImpl implements Graphics {
 

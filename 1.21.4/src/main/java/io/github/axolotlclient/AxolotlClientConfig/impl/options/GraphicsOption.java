@@ -22,10 +22,10 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.options;
 
+import java.util.Base64;
+
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Graphics;
 import io.github.axolotlclient.AxolotlClientConfig.impl.util.GraphicsImpl;
-
-import java.util.Base64;
 
 public class GraphicsOption extends OptionBase<Graphics> {
 	public GraphicsOption(String name, int width, int height) {

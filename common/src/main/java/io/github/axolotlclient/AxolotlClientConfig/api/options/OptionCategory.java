@@ -22,9 +22,9 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.api.options;
 
-import io.github.axolotlclient.AxolotlClientConfig.impl.options.OptionCategoryImpl;
-
 import java.util.Collection;
+
+import io.github.axolotlclient.AxolotlClientConfig.impl.options.OptionCategoryImpl;
 
 public interface OptionCategory extends WidgetIdentifieable {
 

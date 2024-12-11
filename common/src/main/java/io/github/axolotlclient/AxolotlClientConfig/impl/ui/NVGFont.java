@@ -22,11 +22,6 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui;
 
-import lombok.Getter;
-import org.lwjgl.Version;
-import org.lwjgl.nanovg.NanoVG;
-import org.lwjgl.system.MemoryUtil;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.invoke.MethodHandles;
@@ -37,6 +32,11 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
+
+import lombok.Getter;
+import org.lwjgl.Version;
+import org.lwjgl.nanovg.NanoVG;
+import org.lwjgl.system.MemoryUtil;
 
 /**
  * @author TheKodeToad

@@ -22,9 +22,9 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.api.manager;
 
-import io.github.axolotlclient.AxolotlClientConfig.api.options.OptionCategory;
-
 import java.util.Collection;
+
+import io.github.axolotlclient.AxolotlClientConfig.api.options.OptionCategory;
 
 public interface ConfigManager {
 

@@ -22,9 +22,9 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.options;
 
-import lombok.Getter;
-
 import java.util.Arrays;
+
+import lombok.Getter;
 
 @Getter
 public class StringArrayOption extends OptionBase<String> {

@@ -1,9 +1,9 @@
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded;
 
+import java.util.function.Consumer;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.NVGMC;
-
-import java.util.function.Consumer;
 
 public class NVGUtil {
 

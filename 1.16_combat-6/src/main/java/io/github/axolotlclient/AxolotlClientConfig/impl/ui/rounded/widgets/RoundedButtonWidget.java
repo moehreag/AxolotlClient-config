@@ -33,8 +33,6 @@ import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.MathHelper;
 
 public class RoundedButtonWidget extends ButtonWidget implements DrawingUtil, Drawable, Selectable {
 

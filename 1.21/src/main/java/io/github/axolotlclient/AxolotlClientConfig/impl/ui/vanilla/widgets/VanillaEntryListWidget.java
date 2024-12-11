@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets;
 
+import java.util.Collection;
+
 import com.google.common.collect.ImmutableList;
 import io.github.axolotlclient.AxolotlClientConfig.api.manager.ConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.Option;
@@ -33,8 +35,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Collection;
 
 public class VanillaEntryListWidget extends EntryListWidget {
 	public VanillaEntryListWidget(ConfigManager manager, OptionCategory category, int screenWidth, int screenHeight, int top, int bottom, int entryHeight) {

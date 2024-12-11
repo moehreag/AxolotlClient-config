@@ -22,6 +22,14 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Constructor;
+import java.net.URL;
+import java.util.*;
+import java.util.stream.Collectors;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -31,14 +39,6 @@ import io.github.axolotlclient.AxolotlClientConfig.api.options.WidgetIdentifieab
 import io.github.axolotlclient.AxolotlClientConfig.api.ui.ConfigUI;
 import io.github.axolotlclient.AxolotlClientConfig.api.ui.Style;
 import lombok.Getter;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Constructor;
-import java.net.URL;
-import java.util.*;
-import java.util.stream.Collectors;
 
 public class ConfigUIImpl implements ConfigUI {
 

@@ -22,14 +22,14 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui;
 
-import io.github.axolotlclient.AxolotlClientConfig.api.util.Color;
-import org.lwjgl.nanovg.NVGColor;
-import org.lwjgl.nanovg.NanoVG;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import io.github.axolotlclient.AxolotlClientConfig.api.util.Color;
+import org.lwjgl.nanovg.NVGColor;
+import org.lwjgl.nanovg.NanoVG;
 
 public class FormattingUtil implements DrawingUtil {
 	private static final FormattingUtil INSTANCE = new FormattingUtil();

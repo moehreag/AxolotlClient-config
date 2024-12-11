@@ -22,16 +22,16 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.managers;
 
-import com.google.gson.JsonObject;
-import io.github.axolotlclient.AxolotlClientConfig.api.options.OptionCategory;
-import lombok.Data;
-import org.jetbrains.annotations.NotNull;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
+import com.google.gson.JsonObject;
+import io.github.axolotlclient.AxolotlClientConfig.api.options.OptionCategory;
+import lombok.Data;
+import org.jetbrains.annotations.NotNull;
 
 public class VersionedJsonConfigManager extends JsonConfigManager {
 

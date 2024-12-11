@@ -22,13 +22,13 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.util;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 import io.github.axolotlclient.AxolotlClientConfig.api.ui.ConfigUI;
 import io.github.axolotlclient.AxolotlClientConfig.impl.AxolotlClientConfigImpl;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class AxolotlClientConfigModMenu implements ModMenuApi {
 

@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.screen;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+
 import com.mojang.blaze3d.platform.Window;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Color;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Colors;
@@ -45,9 +48,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.lwjgl.nanovg.NVGPaint;
 import org.lwjgl.opengl.GL11;
-
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 
 import static org.lwjgl.nanovg.NanoVG.*;
 
