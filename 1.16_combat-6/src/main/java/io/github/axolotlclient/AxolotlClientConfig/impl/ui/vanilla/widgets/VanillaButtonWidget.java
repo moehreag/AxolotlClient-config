@@ -71,7 +71,7 @@ public class VanillaButtonWidget extends ButtonWidget implements Selectable {
 	protected void drawScrollableText(MatrixStack matrices, TextRenderer textRenderer, int xOffset, int color) {
 		int i = this.getX() + xOffset;
 		int j = this.getX() + this.getWidth() - xOffset;
-		DrawUtil.drawScrollingText(matrices, textRenderer, this.getMessage(), i + j / 2, i, this.getY(), j, this.getY() + this.getHeight(), color);
+		DrawUtil.drawScrollingText(matrices, textRenderer, this.getMessage(), getX() + (getWidth() / 2), i, this.getY(), j, this.getY() + this.getHeight(), color);
 	}
 
 	@Override
