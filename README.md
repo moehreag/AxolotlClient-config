@@ -45,7 +45,5 @@ dependencies {
 
 ### Registering a config
 ```java
-
-AxolotlClientConfigManager.registerConfig("yourmodsmodid", YourModsConfigClassInstance);
-
+AxolotlClientConfig.register(ConfigManager manager);
 ```
