@@ -26,6 +26,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 import com.mojang.blaze3d.platform.Window;
+import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Color;
 import io.github.axolotlclient.AxolotlClientConfig.api.util.Colors;
 import io.github.axolotlclient.AxolotlClientConfig.impl.options.BooleanOption;
@@ -74,12 +75,8 @@ public class ColorSelectionScreen extends Screen implements DrawingUtil {
 		addRenderableWidget(new RoundedButtonWidget(width / 2 - 75, height - 40, Component.translatable("gui.back"),
 			button -> minecraft.setScreen(parent)));
 
-		chroma = new BooleanOption("option.chroma", option.getOriginal().isChroma(), val -> {
-			option.getOriginal().setChroma(val);
-		});
-		speed = new FloatOption("option.speed", option.getOriginal().getChromaSpeed(), val -> {
-			option.getOriginal().setChromaSpeed(val);
-		}, 0f, 4f);
+		chroma = new BooleanOption("option.chroma", option.getOriginal().isChroma(), option.getOriginal()::setChroma);
+		speed = new FloatOption("option.speed", option.getOriginal().getChromaSpeed(), option.getOriginal()::setChromaSpeed, 0f, 4f);
 		alpha = new IntegerOption("option.alpha", option.get().getAlpha(), val -> {
 			option.getOriginal().setAlpha(val);
 			children().forEach(e -> {
@@ -184,7 +181,7 @@ public class ColorSelectionScreen extends Screen implements DrawingUtil {
 				final ByteBuffer pixelBuffer = ByteBuffer.allocateDirect(4);
 				pixelBuffer.order(ByteOrder.nativeOrder());
 
-				GL11.glReadPixels(toGlCoordsX(mouseX), toGlCoordsY(mouseY),
+				RenderSystem.readPixels(toGlCoordsX(mouseX), toGlCoordsY(mouseY),
 					1, 1, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, pixelBuffer);
 
 				final int r = pixelBuffer.get(0) & 0xff;

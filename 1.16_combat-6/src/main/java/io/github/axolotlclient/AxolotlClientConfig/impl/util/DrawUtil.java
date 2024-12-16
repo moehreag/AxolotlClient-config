@@ -145,7 +145,7 @@ public class DrawUtil implements DrawingUtil {
 			GL11.glEnable(GL11.GL_SCISSOR_TEST);
 			Window window = MinecraftClient.getInstance().getWindow();
 			int scale = (int) window.getScaleFactor();
-			GL11.glScissor(rect.x() * scale, (int) ((window.getScaledHeight() - rect.height() - rect.y()) * scale),
+			GL11.glScissor(rect.x() * scale, (window.getScaledHeight() - rect.height() - rect.y()) * scale,
 				rect.width() * scale, rect.height() * scale);
 		} else {
 			GL11.glDisable(GL11.GL_SCISSOR_TEST);
