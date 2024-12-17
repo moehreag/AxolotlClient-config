@@ -59,7 +59,7 @@ dependencies {
 		exclude group: 'org.javassist'
 	}
 
-	def lwjglVersion = "3.3.2"
+	def lwjglVersion = "3.3.5"
 	api include("org.lwjgl:lwjgl-nanovg:$lwjglVersion")
 	include runtimeOnly("org.lwjgl:lwjgl-nanovg:$lwjglVersion:natives-linux")
 	include runtimeOnly("org.lwjgl:lwjgl-nanovg:$lwjglVersion:natives-linux-arm64")
