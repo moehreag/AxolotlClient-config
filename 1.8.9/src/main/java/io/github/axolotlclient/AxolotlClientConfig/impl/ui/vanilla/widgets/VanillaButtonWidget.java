@@ -56,6 +56,14 @@ public class VanillaButtonWidget extends ButtonWidget {
 			l = HOVERED;
 		}
 
-		drawScrollingText(textRenderer, getMessage(), getX()+getWidth()/2, getX(), getY(), getX()+getWidth(), getY()+getHeight(), l);
+		drawScrollingText(textRenderer, 2, l);
+	}
+
+	protected void drawScrollingText(TextRenderer renderer, int offset, Color color) {
+		int left = getX() + offset;
+		int right = getX()+getWidth() - offset;
+		int center = getX() + getWidth()/2;
+
+		drawScrollingText(renderer, getMessage(), center, left, getY(), right, getY()+getHeight(), color);
 	}
 }
