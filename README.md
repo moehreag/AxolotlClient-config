@@ -47,3 +47,11 @@ dependencies {
 ```java
 AxolotlClientConfig.register(ConfigManager manager);
 ```
+
+### Creating your own options
+
+You'll need to implement the `Option<T>` interface. The `OptionBase<T>` class may be helpful
+for many cases. Note though that widgets are specific for each Option/Category implementation meaning
+that if you create your own option you will also have to create a widget for it.
+
+If you want an option to not be saved to the config file, return `null` in `toSerializedValue`

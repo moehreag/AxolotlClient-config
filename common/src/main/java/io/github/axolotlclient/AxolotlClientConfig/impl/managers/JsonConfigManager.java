@@ -72,7 +72,10 @@ public class JsonConfigManager implements ConfigManager {
 			}
 		}
 
-		category.getOptions().forEach(o -> object.addProperty(o.getName(), o.toSerializedValue()));
+		category.getOptions().forEach(o -> {
+			String value = o.toSerializedValue();
+			if (value != null) object.addProperty(o.getName(), value);
+		});
 	}
 
 	@Override

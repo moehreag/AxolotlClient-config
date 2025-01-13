@@ -72,11 +72,11 @@ public class ColorSelectionScreen extends Screen {
 
 		chroma = new BooleanOption("option.chroma", option.getOriginal().isChroma(), option.getOriginal()::setChroma);
 		speed = new FloatOption("option.speed", option.getOriginal().getChromaSpeed(), option.getOriginal()::setChromaSpeed, 0f, 4f);
-		alpha = new IntegerOption("option.alpha", option.get().getAlpha(), val -> {
+		alpha = new IntegerOption("option.alpha", option.getOriginal().getAlpha(), val -> {
 			option.getOriginal().setAlpha(val);
 			children().forEach(e -> {
 				if (e instanceof EditBox) {
-					((EditBox) e).setValue(option.get().toString().split(";")[0]);
+					((EditBox) e).setValue(option.getOriginal().toString().split(";")[0]);
 				}
 			});
 		}, 0, 255);

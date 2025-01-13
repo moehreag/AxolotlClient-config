@@ -78,11 +78,11 @@ public class ColorSelectionScreen extends io.github.axolotlclient.AxolotlClientC
 		speed = new FloatOption("option.speed", option.getOriginal().getChromaSpeed(), val -> {
 			option.getOriginal().setChromaSpeed(val);
 		}, 0f, 4f);
-		alpha = new IntegerOption("option.alpha", option.get().getAlpha(), val -> {
+		alpha = new IntegerOption("option.alpha", option.getOriginal().getAlpha(), val -> {
 			option.getOriginal().setAlpha(val);
 			children().forEach(e -> {
 				if (e instanceof TextFieldWidget) {
-					((TextFieldWidget) e).setText(option.get().toString().split(";")[0]);
+					((TextFieldWidget) e).setText(option.getOriginal().toString().split(";")[0]);
 				}
 			});
 		}, 0, 255);

@@ -20,6 +20,7 @@ repositories {
 }
 
 subprojects {
+	apply plugin: "java"
 	apply plugin: "maven-publish"
 	apply plugin: "io.freefair.lombok"
 	apply plugin: "dev.yumi.gradle.licenser"
@@ -30,9 +31,8 @@ subprojects {
 		maven { url 'https://jitpack.io' }
 	}
 
-	java {
-
-		withSourcesJar()
+	project.extensions.configure(JavaPluginExtension.class) {
+		it.withSourcesJar()
 	}
 
 	jar {

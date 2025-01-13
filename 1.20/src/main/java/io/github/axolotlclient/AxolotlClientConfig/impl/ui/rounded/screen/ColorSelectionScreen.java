@@ -77,11 +77,11 @@ public class ColorSelectionScreen extends Screen implements DrawingUtil {
 
 		chroma = new BooleanOption("option.chroma", option.getOriginal().isChroma(), option.getOriginal()::setChroma);
 		speed = new FloatOption("option.speed", option.getOriginal().getChromaSpeed(), option.getOriginal()::setChromaSpeed, 0f, 4f);
-		alpha = new IntegerOption("option.alpha", option.get().getAlpha(), val -> {
+		alpha = new IntegerOption("option.alpha", option.getOriginal().getAlpha(), val -> {
 			option.getOriginal().setAlpha(val);
 			children().forEach(e -> {
 				if (e instanceof TextFieldWidget) {
-					((TextFieldWidget) e).setText(option.get().toString().split(";")[0]);
+					((TextFieldWidget) e).setText(option.getOriginal().toString().split(";")[0]);
 				}
 			});
 		}, 0, 255);
