@@ -412,7 +412,7 @@ public class Color implements Runnable {
 
 		@Override
 		public Color mutable() {
-			return new Color(getRed(), getBlue(), getGreen(), getAlpha(), isChroma(), getChromaSpeed());
+			return new Color(getRed(), getGreen(), getBlue(), getAlpha(), isChroma(), getChromaSpeed());
 		}
 	}
 }
