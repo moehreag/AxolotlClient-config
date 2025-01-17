@@ -145,6 +145,11 @@ public class EntryListWidget extends ElementListWidget<EntryListWidget.Entry> {
 		return super.getScrollbarPositionX() + 38;
 	}
 
+	@Override
+	public boolean mouseScrolled(double mouseX, double mouseY, double scrollY) {
+		return getHoveredEntry() != null && getHoveredEntry().mouseScrolled(mouseX, mouseY, scrollY) || super.mouseScrolled(mouseX, mouseY, scrollY);
+	}
+
 	protected static class Entry extends ElementListWidget.Entry<Entry> {
 
 

@@ -22,12 +22,14 @@
 
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.rounded.widgets;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import io.github.axolotlclient.AxolotlClientConfig.impl.options.StringArrayOption;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.navigation.CommonInputs;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Mth;
 import org.apache.commons.lang3.ArrayUtils;
 
 public class StringArrayButtonWidget extends RoundedButtonWidget {
@@ -49,24 +51,63 @@ public class StringArrayButtonWidget extends RoundedButtonWidget {
 	}
 
 	@Override
-	public void onPress() {
-		cycle(Screen.hasShiftDown() ? -1 : 1);
+	public boolean mouseClicked(double mouseX, double mouseY, int button) {
+		if (this.active && this.visible) {
+			if (this.isValidClickButton(button)) {
+				boolean bl = this.isMouseOver(mouseX, mouseY);
+				if (bl) {
+					this.playDownSound(Minecraft.getInstance().getSoundManager());
+					this.cycle(button == 0 ? 1 : -1, true);
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
-	private void cycle(int delta) {
+	@Override
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+		if (!this.active || !this.visible) {
+			return false;
+		} else if (CommonInputs.selected(keyCode) || keyCode == InputConstants.KEY_RIGHT) {
+			if (this.cycle(1, false)) {
+				this.playDownSound(Minecraft.getInstance().getSoundManager());
+				return true;
+			}
+		} else if (keyCode == InputConstants.KEY_LEFT) {
+			if (this.cycle(-1, false)) {
+				this.playDownSound(Minecraft.getInstance().getSoundManager());
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	protected boolean isValidClickButton(int button) {
+		return button == 0 || button == 1;
+	}
+
+	private boolean cycle(int step, boolean wrap) {
+		if (Screen.hasShiftDown()) {
+			step *= -1;
+		}
 		String[] values = option.getValues();
 		int i = ArrayUtils.indexOf(values, option.get());
-		i = Mth.positiveModulo(i + delta, values.length);
-		option.set(values[i]);
-		setMessage(Component.translatable(option.get()));
+		if (!wrap && (i == 0 || i == values.length-1)) {
+			return false;
+		}
+		option.set(values[Math.floorMod(i + step, values.length)]);
+		setMessage(Component.translatable(String.valueOf(option.get())));
+		return true;
 	}
 
 	@Override
 	public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
 		if (scrollY > 0.0) {
-			this.cycle(-1);
+			this.cycle(-1, true);
 		} else if (scrollY < 0.0) {
-			this.cycle(1);
+			this.cycle(1, true);
 		}
 
 		return true;

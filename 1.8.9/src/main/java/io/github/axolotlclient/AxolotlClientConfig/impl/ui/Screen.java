@@ -68,8 +68,10 @@ public abstract class Screen extends net.minecraft.client.gui.screen.Screen impl
 	public void handleMouse() {
 		super.handleMouse();
 		int scroll = Mouse.getDWheel();
+		int x = Mouse.getEventX() * this.width / this.minecraft.width;
+		int y = this.height - Mouse.getEventY() * this.height / this.minecraft.height - 1;
 		if (scroll != 0) {
-			children.forEach(e -> e.mouseScrolled(minecraft.mouse.dx, minecraft.mouse.dy, 0, scroll));
+			children.forEach(e -> e.mouseScrolled(x, y, 0, scroll));
 		}
 	}
 

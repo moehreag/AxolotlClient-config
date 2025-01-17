@@ -91,6 +91,9 @@ public class Example implements ClientModInitializer {
 		example.add(new StringOption("string option", "default value"));
 		example.add(new BooleanOption("option", false));
 		example.add(new BooleanOption("other option", true));
+		example.add(new GraphicsOption("graphics", 40, 40));
+		example.add(new EnumOption<>("enum", TestEnum.class, TestEnum.TEST_ENUM1));
+		example.add(new StringArrayOption("another string array", "value 1", "value 2", "value 3"));
 
 		KeyBinding binding = new KeyBinding("test", -1, "test");
 		KeyBindingHelper.registerKeyBinding(binding);
@@ -122,5 +125,9 @@ public class Example implements ClientModInitializer {
 			manager.getRoot(), parent);
 	}
 
-
+	public enum TestEnum {
+		TEST_ENUM1,
+		TEST_ENUM2,
+		TEST_ENUM3,
+	}
 }

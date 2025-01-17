@@ -132,7 +132,7 @@ public abstract class EntryListWidget<E extends EntryListWidget.Entry<E>> extend
 	}
 
 	protected E getEntry(int index) {
-		return (E) this.children().get(index);
+		return this.children().get(index);
 	}
 
 	protected int addEntry(E entry) {
@@ -169,9 +169,9 @@ public abstract class EntryListWidget<E extends EntryListWidget.Entry<E>> extend
 		int l = j + i;
 		int m = MathHelper.floor(y - (double) this.top) - this.headerHeight + (int) this.getScrollAmount() - 4;
 		int n = m / this.itemHeight;
-		return (E) (x < (double) this.getScrollbarPositionX() && x >= (double) k && x <= (double) l && n >= 0 && m >= 0 && n < this.getEntryCount()
+		return x < (double) this.getScrollbarPositionX() && x >= (double) k && x <= (double) l && n >= 0 && m >= 0 && n < this.getEntryCount()
 			? this.children().get(n)
-			: null);
+			: null;
 	}
 
 	public void updateSize(int width, int height, int top, int bottom) {
@@ -211,7 +211,7 @@ public abstract class EntryListWidget<E extends EntryListWidget.Entry<E>> extend
 		int j = i + 6;
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferBuilder = tessellator.getBuilder();
-		this.hoveredEntry = this.isMouseOver((double) mouseX, (double) mouseY) ? this.getEntryAtPosition((double) mouseX, (double) mouseY) : null;
+		this.hoveredEntry = this.isMouseOver(mouseX, mouseY) ? this.getEntryAtPosition(mouseX, mouseY) : null;
 		if (this.renderBackground) {
 			this.client.getTextureManager().bind(GuiElement.BACKGROUND_LOCATION);
 			GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -289,7 +289,7 @@ public abstract class EntryListWidget<E extends EntryListWidget.Entry<E>> extend
 	}
 
 	protected void centerScrollOn(E entry) {
-		this.setScrollAmount((double) (this.children().indexOf(entry) * this.itemHeight + this.itemHeight / 2 - (this.bottom - this.top) / 2));
+		this.setScrollAmount(this.children().indexOf(entry) * this.itemHeight + this.itemHeight / 2 - (this.bottom - this.top) / 2);
 	}
 
 	protected void ensureVisible(E entry) {
@@ -314,7 +314,7 @@ public abstract class EntryListWidget<E extends EntryListWidget.Entry<E>> extend
 	}
 
 	public void setScrollAmount(double amount) {
-		this.scrollAmount = MathHelper.clamp(amount, 0.0, (double) this.getMaxScroll());
+		this.scrollAmount = MathHelper.clamp(amount, 0.0, this.getMaxScroll());
 	}
 
 	public int getMaxScroll() {
@@ -433,7 +433,7 @@ public abstract class EntryListWidget<E extends EntryListWidget.Entry<E>> extend
 					break;
 				}
 
-				E entry = (E) this.children().get(k);
+				E entry = this.children().get(k);
 				if (predicate.test(entry)) {
 					this.setSelected(entry);
 					this.ensureVisible(entry);
@@ -522,7 +522,7 @@ public abstract class EntryListWidget<E extends EntryListWidget.Entry<E>> extend
 	protected boolean removeEntry(E entry) {
 		boolean bl = this.children.remove(entry);
 		if (bl && entry == this.getSelectedOrNull()) {
-			this.setSelected((E) null);
+			this.setSelected(null);
 		}
 
 		return bl;
@@ -537,9 +537,9 @@ public abstract class EntryListWidget<E extends EntryListWidget.Entry<E>> extend
 		entry.parentList = this;
 	}
 
-	protected static enum MoveDirection {
+	protected enum MoveDirection {
 		UP,
-		DOWN;
+		DOWN
 	}
 
 	public abstract static class Entry<E extends Entry<E>> implements Element {
@@ -557,10 +557,10 @@ public abstract class EntryListWidget<E extends EntryListWidget.Entry<E>> extend
 	}
 
 	class Entries extends AbstractList<E> {
-		private final List<E> entries = Lists.<E>newArrayList();
+		private final List<E> entries = Lists.newArrayList();
 
 		public E get(int i) {
-			return (E) this.entries.get(i);
+			return this.entries.get(i);
 		}
 
 		public int size() {
@@ -568,7 +568,7 @@ public abstract class EntryListWidget<E extends EntryListWidget.Entry<E>> extend
 		}
 
 		public E set(int i, E entry) {
-			E entry2 = (E) this.entries.set(i, entry);
+			E entry2 = this.entries.set(i, entry);
 			EntryListWidget.this.setEntryParentList(entry);
 			return entry2;
 		}
@@ -579,7 +579,7 @@ public abstract class EntryListWidget<E extends EntryListWidget.Entry<E>> extend
 		}
 
 		public E remove(int i) {
-			return (E) this.entries.remove(i);
+			return this.entries.remove(i);
 		}
 	}
 }

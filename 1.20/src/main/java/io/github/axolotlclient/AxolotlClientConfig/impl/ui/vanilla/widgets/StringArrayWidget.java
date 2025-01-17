@@ -23,9 +23,14 @@
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets;
 
 import io.github.axolotlclient.AxolotlClientConfig.impl.options.StringArrayOption;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.CommonInputs;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
+import org.apache.commons.lang3.ArrayUtils;
+import org.lwjgl.glfw.GLFW;
 
 public class StringArrayWidget extends ButtonWidget {
 
@@ -46,17 +51,65 @@ public class StringArrayWidget extends ButtonWidget {
 	}
 
 	@Override
-	public void onClick(double mouseX, double mouseY) {
+	public boolean mouseClicked(double mouseX, double mouseY, int button) {
+		if (this.active && this.visible) {
+			if (this.isValidClickButton(button)) {
+				boolean bl = this.isMouseOver(mouseX, mouseY);
+				if (bl) {
+					this.playDownSound(MinecraftClient.getInstance().getSoundManager());
+					this.cycle(button == 0 ? 1 : -1, true);
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+		if (!this.active || !this.visible) {
+			return false;
+		} else if (CommonInputs.isToggle(keyCode) || keyCode == GLFW.GLFW_KEY_RIGHT) {
+			if (this.cycle(1, false)) {
+				this.playDownSound(MinecraftClient.getInstance().getSoundManager());
+				return true;
+			}
+		} else if(keyCode == GLFW.GLFW_KEY_LEFT) {
+			if (this.cycle(-1, false)) {
+				this.playDownSound(MinecraftClient.getInstance().getSoundManager());
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	protected boolean isValidClickButton(int button) {
+		return button == 0 || button == 1;
+	}
+
+	private boolean cycle(int step, boolean wrap) {
+		if (Screen.hasShiftDown()) {
+			step *= -1;
+		}
 		String[] values = option.getValues();
-		int i = 0;
-		while (!values[i].equals(option.get())) {
-			i += 1;
+		int i = ArrayUtils.indexOf(values, option.get());
+		if (!wrap && (i == 0 || i == values.length-1)) {
+			return false;
 		}
-		i += 1;
-		if (i >= values.length) {
-			i = 0;
+		option.set(values[Math.floorMod(i + step, values.length)]);
+		setMessage(Text.translatable(String.valueOf(option.get())));
+		return true;
+	}
+
+	@Override
+	public boolean mouseScrolled(double mouseX, double mouseY, double scrollY) {
+		if (scrollY > 0.0) {
+			this.cycle(-1, true);
+		} else if (scrollY < 0.0) {
+			this.cycle(1, true);
 		}
-		option.set(values[i]);
-		setMessage(Text.translatable(option.get()));
+
+		return true;
 	}
 }

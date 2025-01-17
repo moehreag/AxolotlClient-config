@@ -151,6 +151,11 @@ public class ButtonListWidget extends ElementListWidget<ButtonListWidget.Entry> 
 		DrawUtil.popScissor();
 	}
 
+	@Override
+	public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+		return getHoveredEntry() != null && getHoveredEntry().mouseScrolled(mouseX, mouseY, scrollX, scrollY) || super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+	}
+
 	protected static class Entry extends ElementListWidget.Entry<Entry> {
 
 

@@ -89,6 +89,7 @@ public class Example implements ClientModInitializer {
 		example.add(new BooleanOption("other option", true));
 		example.add(new GraphicsOption("graphics", 40, 40));
 		example.add(new EnumOption<>("enum", TestEnum.class, TestEnum.TEST_ENUM1));
+		example.add(new StringArrayOption("another string array", "value 1", "value 2", "value 3"));
 
 		KeyBinding binding = new KeyBinding("test", 0, "test");
 		KeyBindingEvents.REGISTER_KEYBINDS.register((registry) -> registry.register(binding));
@@ -122,6 +123,7 @@ public class Example implements ClientModInitializer {
 
 	public enum TestEnum {
 		TEST_ENUM1,
-		TEST_ENUM2
+		TEST_ENUM2,
+		TEST_ENUM3,
 	}
 }

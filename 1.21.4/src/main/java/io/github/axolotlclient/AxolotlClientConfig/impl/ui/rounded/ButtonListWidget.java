@@ -171,6 +171,11 @@ public class ButtonListWidget extends ContainerObjectSelectionList<ButtonListWid
 		popScissor(NVGHolder.getContext());
 	}
 
+	@Override
+	protected boolean isValidClickButton(int button) {
+		return true;
+	}
+
 	protected static class Entry extends ContainerObjectSelectionList.Entry<Entry> {
 
 

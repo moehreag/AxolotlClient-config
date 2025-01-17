@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021-2024 moehreag <moehreag@gmail.com> & Contributors
+ * Copyright © 2021-2025 moehreag <moehreag@gmail.com> & Contributors
  *
  * This file is part of AxolotlClient.
  *
@@ -20,29 +20,5 @@
  * For more information, see the LICENSE file.
  */
 
-package io.github.axolotlclient.AxolotlClientConfig.api.util;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-
-public class AlphabeticalComparator implements Comparator<String> {
-
-
-	@Override
-	public int compare(String s1, String s2) {
-		return cmp(s1, s2);
-	}
-
-	public static int cmp(String s1, String s2) {
-		if (s1.equals(s2))
-			return 0;
-		String[] strings = {s1, s2};
-		Arrays.sort(strings, Collections.reverseOrder());
-
-		if (strings[0].equals(s1))
-			return 1;
-		else
-			return -1;
-	}
-}
+@SuppressWarnings("unused")
+package io.github.axolotlclient.AxolotlClientConfig.impl;

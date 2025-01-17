@@ -89,7 +89,7 @@ public class RoundedButtonWidget extends ButtonWidget implements DrawingUtil, Dr
 	}
 
 	public boolean isHovered() {
-		return hovered;
+		return hovered || isFocused();
 	}
 
 	@Override

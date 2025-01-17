@@ -38,7 +38,7 @@ public class VanillaButtonWidget extends ButtonWidget implements Selectable {
 	}
 
 	public boolean isHovered() {
-		return hovered;
+		return hovered || isFocused();
 	}
 
 	public int getX() {

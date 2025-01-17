@@ -23,7 +23,11 @@
 package io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets;
 
 import io.github.axolotlclient.AxolotlClientConfig.impl.options.EnumOption;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resource.language.I18n;
+import org.apache.commons.lang3.ArrayUtils;
+import org.lwjgl.input.Keyboard;
 
 public class EnumWidget<T extends Enum<T>> extends VanillaButtonWidget {
 	private final EnumOption<T> option;
@@ -35,17 +39,65 @@ public class EnumWidget<T extends Enum<T>> extends VanillaButtonWidget {
 	}
 
 	@Override
-	public void onClick(double mouseX, double mouseY) {
+	public boolean mouseClicked(double mouseX, double mouseY, int button) {
+		if (this.active && this.visible) {
+			if (this.isValidClickButton(button)) {
+				boolean bl = this.isMouseOver(mouseX, mouseY);
+				if (bl) {
+					this.playDownSound(Minecraft.getInstance().getSoundManager());
+					this.cycle(button == 0 ? 1 : -1, true);
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+		if (!this.active || !this.visible) {
+			return false;
+		} else if (keyCode == Keyboard.KEY_RETURN || keyCode == Keyboard.KEY_SPACE || keyCode == Keyboard.KEY_NUMPADENTER || keyCode == Keyboard.KEY_RIGHT) {
+			if (this.cycle(1, false)) {
+				this.playDownSound(Minecraft.getInstance().getSoundManager());
+				return true;
+			}
+		} else if (keyCode == Keyboard.KEY_LEFT) {
+			if (this.cycle(-1, false)) {
+				this.playDownSound(Minecraft.getInstance().getSoundManager());
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	protected boolean isValidClickButton(int button) {
+		return button == 0 || button == 1;
+	}
+
+	private boolean cycle(int step, boolean wrap) {
+		if (Screen.isShiftDown()) {
+			step *= -1;
+		}
 		T[] values = option.getClazz().getEnumConstants();
-		int i = 0;
-		while (!values[i].equals(option.get())) {
-			i += 1;
+		int i = ArrayUtils.indexOf(values, option.get());
+		if (!wrap && (i == 0 || i == values.length-1)) {
+			return false;
 		}
-		i += 1;
-		if (i >= values.length) {
-			i = 0;
-		}
-		option.set(values[i]);
+		option.set(values[Math.floorMod(i + step, values.length)]);
 		setMessage(I18n.translate(String.valueOf(option.get())));
+		return true;
+	}
+
+	@Override
+	public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+		if (scrollY > 0.0) {
+			this.cycle(-1, true);
+		} else if (scrollY < 0.0) {
+			this.cycle(1, true);
+		}
+
+		return true;
 	}
 }

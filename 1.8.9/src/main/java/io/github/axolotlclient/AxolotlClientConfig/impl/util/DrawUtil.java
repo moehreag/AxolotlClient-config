@@ -184,21 +184,22 @@ public class DrawUtil extends GuiElement implements DrawingUtil {
 		}
 	}
 
-	public static void drawScrollingText(DrawingUtil drawingUtil, NVGFont font, String text, int i, int j, int k, int l, int m, Color color) {
+	public static void drawScrollingText(DrawingUtil drawingUtil, NVGFont font, String text, int center, int left, int top, int right, int bottom, Color color) {
 		float textWidth = font.getWidth(text);
-		int y = (k + m - 9) / 2 + 1;
-		int width = l - j;
+		int y = (top + bottom - 9) / 2 + 1;
+		int width = right - left;
 		if (textWidth > width) {
 			float r = textWidth - width;
 			double d = (double) Minecraft.getTime() / 1000.0;
 			double e = Math.max((double) r * 0.5, 3.0);
 			double f = Math.sin((Math.PI / 2) * Math.cos((Math.PI * 2) * d / e)) / 2.0 + 0.5;
 			double g = MathHelper.clampedLerp(f, 0.0, r);
-			drawingUtil.pushScissor(NVGHolder.getContext(), j, k, l, m);
-			drawingUtil.drawString(NVGHolder.getContext(), font, text, j - (int) g, y, color);
+			drawingUtil.pushScissor(NVGHolder.getContext(), left, top, right-left, bottom-top);
+			drawingUtil.drawString(NVGHolder.getContext(), font, text, left - (int) g, y, color);
 			drawingUtil.popScissor(NVGHolder.getContext());
 		} else {
-			float centerX = MathHelper.clamp(i, j + textWidth / 2, l - textWidth / 2);
+			float min = left + textWidth / 2;
+			float centerX = (float) center < min ? min : Math.min((float) center, right - textWidth / 2);
 			drawingUtil.drawCenteredString(NVGHolder.getContext(), font, text, centerX, y, color);
 		}
 	}
