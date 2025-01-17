@@ -49,6 +49,7 @@ public class VanillaButtonWidget extends ButtonWidget implements Selectable {
 		return y;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		MinecraftClient minecraftClient = MinecraftClient.getInstance();
