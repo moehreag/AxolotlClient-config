@@ -56,9 +56,9 @@ public class ColorSelectionScreen extends Screen implements DrawingUtil {
 	private final ColorOption option;
 	private final Screen parent;
 	private NVGPaint paint;
-	private BooleanOption chroma;
-	private FloatOption speed;
-	private IntegerOption alpha;
+	private final BooleanOption chroma;
+	private final FloatOption speed;
+	private final IntegerOption alpha;
 	private int selectorRadius;
 	private float selectorX;
 	private float selectorY;
@@ -68,15 +68,8 @@ public class ColorSelectionScreen extends Screen implements DrawingUtil {
 		super(Text.translatable("select_color"));
 		this.option = option;
 		this.parent = parent;
-	}
-
-	@Override
-	public void init() {
-		addDrawableSelectableElement(new RoundedButtonWidget(width / 2 - 75, height - 40, Text.translatable("gui.back"),
-			button -> MinecraftClient.getInstance().setScreen(parent)));
-
-		chroma = new BooleanOption("option.chroma", option.getOriginal().isChroma(), option.getOriginal()::setChroma);
-		speed = new FloatOption("option.speed", option.getOriginal().getChromaSpeed(), option.getOriginal()::setChromaSpeed, 0f, 4f);
+		chroma = new BooleanOption("option.chroma", option.getOriginal().isChroma(), v -> option.getOriginal().setChroma(v));
+		speed = new FloatOption("option.speed", option.getOriginal().getChromaSpeed(), v -> option.getOriginal().setChromaSpeed(v), 0f, 4f);
 		alpha = new IntegerOption("option.alpha", option.getOriginal().getAlpha(), val -> {
 			option.getOriginal().setAlpha(val);
 			children().forEach(e -> {
@@ -85,6 +78,12 @@ public class ColorSelectionScreen extends Screen implements DrawingUtil {
 				}
 			});
 		}, 0, 255);
+	}
+
+	@Override
+	public void init() {
+		addDrawableSelectableElement(new RoundedButtonWidget(width / 2 - 75, height - 40, Text.translatable("gui.back"),
+			button -> MinecraftClient.getInstance().setScreen(parent)));
 
 		selectorRadius = Math.max(Math.min(width / 4 - 10, (height) / 2 - 60), 75);
 		selectorX = width / 4f - selectorRadius;//width/2f-selectorRadius*2;

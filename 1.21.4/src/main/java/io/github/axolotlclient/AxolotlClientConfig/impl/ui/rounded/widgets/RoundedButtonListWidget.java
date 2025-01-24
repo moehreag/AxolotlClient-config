@@ -73,6 +73,11 @@ public class RoundedButtonListWidget extends ButtonListWidget {
 		}
 	}
 
+	@Override
+	protected void enableScissor(GuiGraphics guiGraphics) {
+
+	}
+
 	private class RoundedOptionEntry extends Entry implements DrawingUtil {
 
 		private final Option<?> option;
