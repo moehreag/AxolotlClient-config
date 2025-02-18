@@ -42,8 +42,7 @@ public class ResetButtonWidget<T> extends RoundedButtonWidget {
 			Window window = new Window(Minecraft.getInstance());
 			double i = window.getScaledWidth();
 			double j = window.getScaledHeight();
-			Screen current = (Screen) Minecraft.getInstance().screen;
-			if (current != null) {
+			if (Minecraft.getInstance().screen instanceof Screen current) {
 				AtomicDouble scroll = new AtomicDouble();
 				current.children().stream()
 					.filter(e -> e instanceof RoundedButtonListWidget)

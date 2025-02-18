@@ -24,6 +24,7 @@ package io.github.axolotlclient.AxolotlClientConfig.impl.ui;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,35 +33,36 @@ import org.lwjgl.nanovg.NVGColor;
 import org.lwjgl.nanovg.NanoVG;
 
 public class FormattingUtil implements DrawingUtil {
+	private final Random random = new Random();
 	private static final FormattingUtil INSTANCE = new FormattingUtil();
 	private static final Pattern FORMATTING_CODE_PATTERN = Pattern.compile("(?i)§[0-9A-FK-OR]");
 	private static final Pattern PARAGRAPH_PATTERN = Pattern.compile("§");
-	private final Map<Character, NVGColor> MINECRAFT_COLOR_CODES;
+	private final Map<Character, Color> MINECRAFT_COLOR_CODES;
+
 
 	static FormattingUtil getInstance() {
 		return INSTANCE;
 	}
 
 	private FormattingUtil() {
-		Map<Character, NVGColor> map = new HashMap<>();
-		map.put('0', toNVGColor(0)); // black
-		map.put('1', toNVGColor(179)); // dark blue
-		map.put('2', toNVGColor(43520)); // dark green
-		map.put('3', toNVGColor(43690)); // dark aqua
-		map.put('4', toNVGColor(11141120)); // dark red
-		map.put('5', toNVGColor(11141290)); // dark purple
-		map.put('6', toNVGColor(16755200)); // gold
-		map.put('7', toNVGColor(11184810)); // gray
-		map.put('8', toNVGColor(5592405)); // dark gray
-		map.put('9', toNVGColor(5592575)); // blue
-		map.put('a', toNVGColor(5635925)); // green
-		map.put('b', toNVGColor(5636095)); // aqua
-		map.put('c', toNVGColor(16733525)); // red
-		map.put('d', toNVGColor(16733695)); // light_purple
-		map.put('e', toNVGColor(16777045)); // yellow
-		map.put('f', toNVGColor(16777215)); // white
+		Map<Character, Color> map = new HashMap<>();
+		map.put('0', new Color(0)); // black
+		map.put('1', new Color(0xFF0000B3)); // dark blue
+		map.put('2', new Color(0xFF00AA00)); // dark green
+		map.put('3', new Color(0xFF00AAAA)); // dark aqua
+		map.put('4', new Color(0xFFAA0000)); // dark red
+		map.put('5', new Color(0xFFAA00AA)); // dark purple
+		map.put('6', new Color(0xFFFFAA00)); // gold
+		map.put('7', new Color(0xFFAAAAAA)); // gray
+		map.put('8', new Color(0xFF555555)); // dark gray
+		map.put('9', new Color(0xFF5555FF)); // blue
+		map.put('a', new Color(0xFF55FF55)); // green
+		map.put('b', new Color(0xFF55FFFF)); // aqua
+		map.put('c', new Color(0xFFFF5555)); // red
+		map.put('d', new Color(0xFFFF55FF)); // light_purple
+		map.put('e', new Color(0xFFFFFF55)); // yellow
+		map.put('f', new Color(0xFFFFFFFF)); // white
 		MINECRAFT_COLOR_CODES = map;
-		MINECRAFT_COLOR_CODES.values().forEach(c -> c.a(1));
 	}
 
 
@@ -83,29 +85,41 @@ public class FormattingUtil implements DrawingUtil {
 					switch (first) {
 						case 'm':
 							strikethrough = true;
+							part = part.substring(1);
 							break;
 						case 'k': // obfuscated
+							part = part.substring(1);
+							part = obfuscateString(font, part);
 							break;
 						case 'l':
 							bold = boldItalicSupported;
+							part = part.substring(1);
 							break;
 						case 'n':
 							underlined = true;
+							part = part.substring(1);
 							break;
 						case 'o':
 							italic = boldItalicSupported;
+							part = part.substring(1);
 							break;
 						case 'r':
 							strikethrough = italic = bold = underlined = false;
+							part = part.substring(1);
 							break;
 						default:
-							textColor = MINECRAFT_COLOR_CODES.getOrDefault(first, color.toNVG());
+							if (MINECRAFT_COLOR_CODES.containsKey(first)) {
+								textColor = MINECRAFT_COLOR_CODES.get(first).withAlpha(color.getAlpha()).toNVG();
+								part = part.substring(1);
+							} else {
+								textColor = color.toNVG();
+							}
 					}
 					NanoVG.nvgFillColor(ctx, textColor);
 					if (bold || italic) { // bold and italic actually are separate fonts
-						partX = ((VariantFont) font).renderString(part.substring(1), lastPartX = partX, y, italic, bold);
+						partX = ((VariantFont) font).renderString(part, lastPartX = partX, y, italic, bold);
 					} else {
-						partX = font.renderString(part.substring(1), lastPartX = partX, y);
+						partX = font.renderString(part, lastPartX = partX, y);
 					}
 					if (underlined || strikethrough) {
 						NanoVG.nvgBeginPath(ctx);
@@ -126,5 +140,19 @@ public class FormattingUtil implements DrawingUtil {
 		NanoVG.nvgFillColor(ctx, color.toNVG());
 		font.bind();
 		return font.renderString(text, x, y);
+	}
+
+	private String obfuscateString(NVGFont font, String s) {
+		String characters = "ÀÁÂÈÊËÍÓÔÕÚßãõğİıŒœŞşŴŵžȇ !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~ÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜø£Ø×ƒáíóúñÑªº¿®¬½¼¡«»░▒▓│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌█▄▌▐▀αβΓπΣσμτΦΘΩδ∞∅∈∩≡±≥≤⌠⌡÷≈°∙·√ⁿ²■";
+		StringBuilder builder = new StringBuilder(s.length());
+		for (char c : s.toCharArray()) {
+			float width = font.getWidth(String.valueOf(c));
+			char n;
+			do {
+				n = characters.charAt(random.nextInt(characters.length()));
+			} while (font.getWidth(String.valueOf(n)) != width);
+			builder.append(n);
+		}
+		return builder.toString();
 	}
 }

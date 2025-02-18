@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.util.function.Consumer;
 
 import io.github.axolotlclient.AxolotlClientConfig.api.util.WindowPropertiesProvider;
+import lombok.Getter;
 import org.lwjgl.nanovg.NanoVG;
 import org.lwjgl.nanovg.NanoVGGL3;
 
@@ -34,6 +35,8 @@ public class NVGMC {
 	private static long nvgContext;
 	private static boolean initialized;
 	private static WindowPropertiesProvider propertiesProvider;
+	@Getter
+	private static boolean active;
 
 	public static void setWindowPropertiesProvider(WindowPropertiesProvider provider) {
 		propertiesProvider = provider;
@@ -82,6 +85,7 @@ public class NVGMC {
 		NanoVG.nvgBeginFrame(ctx, width,
 			height,
 			(float) width / height);
+		active = true;
 
 		if (scale) {
 			float factor = propertiesProvider.getScaleFactor();
@@ -90,6 +94,7 @@ public class NVGMC {
 
 		run.accept(ctx);
 
+		active = false;
 		NanoVG.nvgEndFrame(ctx);
 	}
 }

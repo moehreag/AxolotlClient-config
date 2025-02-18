@@ -74,8 +74,9 @@ public class Example implements ClientModInitializer {
 		sub2.add(new BooleanOption("§dcolored 14", false));
 		sub2.add(new BooleanOption("§ecolored 15", false));
 		sub2.add(new BooleanOption("§fcolored 16", false));
-		sub2.add(new BooleanOption("§mstrikethrough", false));
+		sub2.add(new BooleanOption("§kobfuscated", false));
 		sub2.add(new BooleanOption("§lbold", false));
+		sub2.add(new BooleanOption("§mstrikethrough", false));
 		sub2.add(new BooleanOption("§nunderlined", false));
 		sub2.add(new BooleanOption("§oitalic", false));
 		sub2.add(new BooleanOption("§rreset", false));
